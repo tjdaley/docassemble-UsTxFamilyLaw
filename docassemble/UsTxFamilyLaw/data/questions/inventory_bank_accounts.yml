@@ -1,7 +1,3 @@
-metadata:
-  title: Bank Account List
-  short title: Bank  Accounts
----
 objects:
   - bankaccount: DAList.using(object_type=DAObject)
 ---

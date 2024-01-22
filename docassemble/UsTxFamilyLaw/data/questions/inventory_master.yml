@@ -10,12 +10,12 @@ mandatory: true
 question: |
   Property List
 subquestion: |
-  ## Real Property
+  #### Real Property
   
   ${ realproperty.table }
   ${ realproperty.add_action() }
   
-  ## Bank Accounts
+  #### Bank Accounts
   
   ${ bankaccount.table }
   ${ bankaccount.add_action() }

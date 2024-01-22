@@ -1,7 +1,3 @@
-metadata:
-  title: Real Property List
-  short title: Real Property List
----
 modules:
   - docassemble.UsTxFamilyLaw.functions
 ---
@@ -17,21 +13,34 @@ subquestion: |
 yesno: realproperty.there_are_any
 ---
 question: |
+  What country is the ${ ordinal(i) } property located in?
+fields:
+  - Country: realproperty[i].country
+    code: |
+      countries_list()
+    required: True
+    default: US
+---
+question: |
+  What state, territory, or proviince is the ${ ordinal(i) } property located in?
+fields:
+  - State: realproperty[i].state
+    code: |
+      states_list(realproperty[i].country)
+    required: True
+---
+question: |
   Describe the ${ ordinal(i) } real property?
 fields:
-  - Short namne: realproperty[i].short_name
+  - Short name: realproperty[i].short_name
   - Street address: realproperty[i].address
   - Unit: realproperty[i].unit
     required: False
   - City: realproperty[i].city
-  - State: realproperty[i].state
+  - County: realproperty[i].county
     code: |
-      states_list()
+      us_counties(realproperty[i].state)
   - Postal Code: realproperty[i].postal_code
-    required: False
-  - Country: realproperty[i].country
-    code: |
-      countries_list()
     required: False
   - Estimated value: realproperty[i].estimated_value
     required: False
