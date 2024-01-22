@@ -2,13 +2,13 @@
 functions.py - functions for use in docassemble
 """
 
-def us_counties(state):
+def us_counties(state) ->dict:
     """
-    Get a list of counties for the given state.
+    Return a dict of counties for the given state.
 
     :param state: The two-letter state code.
     :type state: str
-    :rtype: list
+    :rtype: dict
     """
 
     import json
