@@ -1,6 +1,7 @@
 modules:
   - docassemble.UsTxFamilyLaw.functions
----objects:
+---
+objects:
   - bankaccount: DAList.using(object_type=DAObject)
 ---
 question: |
