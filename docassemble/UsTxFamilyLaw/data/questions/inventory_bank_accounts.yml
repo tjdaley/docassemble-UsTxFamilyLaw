@@ -1,0 +1,44 @@
+metadata:
+  title: Bank Account List
+  short title: Bank  Accounts
+---
+objects:
+  - bankaccount: DAList.using(object_type=DAObject)
+---
+question: |
+  Does the community estate own any bank accounts?
+subquestion: |
+  Include banks, credit unions, cash management accounts.
+  Do **NOT** include brokerage accounts or retirement accounts.
+  If there is a separate property claim on the account, include the account
+  here and indicate that there is a separate property claim.
+yesno: bankaccount.there_are_any
+---
+question: |
+  Describe the ${ ordinal(i) } account?
+fields:
+  - Short name: bankaccount[i].short_name
+  - Institution name: bankaccount[i].institution_name
+  - Account number: bankaccount[i].account_number
+    required: False
+  - Account type: bankaccount[i].account_type
+    required: False
+  - Balance: bankaccount[i].current_balance
+    datatype: currency
+  - As of date: bankaccount[i].balance_as_of_date
+    datatype: date
+  - Names on account: bankaccount[i].names_account
+    required: False
+  - Who claims a separate property interest (blank for None): bankaccount[i].sp_claimant
+    required: False
+---
+question: |
+  Are there any more accounts
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for acct in bankaccount:
+  * ${acct.short_name}
+  % endfor
+yesno: bankaccount.there_is_another

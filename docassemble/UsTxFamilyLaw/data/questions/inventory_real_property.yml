@@ -1,0 +1,71 @@
+metadata:
+  title: Real Property List
+  short title: Real Property List
+---
+include:
+  - docassemble.UsTxFamilyLaw.functions
+---
+objects:
+  - realproperty: DAList.using(object_type=Address)
+---
+question: |
+  Does the community estate own any real estate?
+subquestion: |
+  Include houses, condominiums, undeveloped land, and deeded timeshares.
+  If there is a separate property claim on the property, include the property
+  here and indicate that there is a separate property claim.
+yesno: realproperty.there_are_any
+---
+question: |
+  Describe the ${ ordinal(i) } real property?
+fields:
+  - Short namne: realproperty[i].short_name
+  - Street address: realproperty[i].address
+  - Unit: realproperty[i].unit
+    required: False
+  - City: realproperty[i].city
+  - State: realproperty[i].state
+    code: |
+      states_list()
+  - Postal Code: realproperty[i].postal_code
+    required: False
+  - Country: realproperty[i].country
+    code: |
+      countries_list()
+    required: False
+  - Estimated value: realproperty[i].estimated_value
+    required: False
+    datatype: currency
+  - Balance of all liens: realproperty[i].lien_balances
+    required: False
+    datatype: currency
+  - Property taxes due: realproperty[i].taxes_due
+    required: False
+    datatype: currency
+  - Names on title deed: realproperty[i].names_title
+    required: False
+  - Names on loans: realproperty[i].names_loan
+    required: False
+  - Who claims a separate property interest (blank for None): realproperty[i].sp_claimant
+    required: False
+---
+question: |
+  What county within ${ realproperty[i].state } is ${ realproperty[i].short_name } located?
+fields:
+  - County: realproperty[i].county
+    code: |
+      counties(${ realproperty[i].state })
+---
+code: |
+  realproperty[i].equity_value = realproperty[i].estimated_value - realproperty[i].lien_balances - realproperty[i].taxes_due
+---
+question: |
+  Are there any more properties
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for prop in realproperty:
+  * ${prop}
+  % endfor
+yesno: realproperty.there_is_another

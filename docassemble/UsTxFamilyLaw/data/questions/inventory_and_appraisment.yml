@@ -1,0 +1,84 @@
+metadata:
+  title: Inventory and Appraisment
+  short title: I&amp;A
+---
+question: |
+  Account Description
+fields:
+  - 'Institution': Institution_Name
+  - 'Account type': Account_Type
+  - 'Account number': Account_Number
+---
+question: |
+  Account owner
+subquestion: |
+  Whose name(s) is/are on ${ Institution_Name } ${ Account_Type} #${ Account_Number}?
+fields:
+  - 'Owner': Account_Owner_Names
+---
+question: |
+  Alignment
+subquestion: |
+  Are you the Petitioner or the Respondent?
+fields:
+  - 'Alignment': Alignment
+    input type: radio
+    choices:
+      - "Petitioner": petitioner
+      - "Respondent": respondent
+      - "Interventor": intervenor
+---
+question: |
+  Account Balance
+fields:
+  - 'Balance': Current_Balance
+    datatype: currency
+  - 'As of date': Balance_As_Of_Date
+    datatype: date
+---
+question: |
+  Address
+subquestion: |
+  This is the postal address of the property.
+fields:
+  - 'Street': Street
+  - 'City': City
+  - 'County': County
+  - 'State': State
+  - 'ZIP': ZIP
+---
+code: |
+  Equity_Value = Fair_Market_Value - Mortgage_Balance - Property_Taxes_Due - Other_Lien_Amount
+---
+question: |
+  Equity Value
+fields:
+  - 'Fair market value': Fair_Market_Value
+    datatype: currency
+  - 'Mortgage balance': Mortgage_Balance
+    datatype: currency
+  - 'Other lien amount': Other_Lien_Amount
+    datatype: currency
+  - 'Property taxes due': Property_Taxes_Due
+    datatype: currency
+  - 'Separate property claim': Separate_Property_Claim
+    datatype: currency
+---
+question: |
+  Name(s) on title and debt
+fields:
+  - 'Names on title': Names_on_Title
+  - 'Names on mortgage': Names_on_Mortgage
+---
+mandatory: True
+question: |
+  Your inventory & appraisement is ready.
+subquestion: |
+  Thank you for all your effort.
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachments:
+  - name: Original Inventory and Appraisement
+    filename: Original_Inventory_and_Appraisal
+    docx template file: 200_-_ORIGINAL_INVENTORY_AND_APPRAISMENT_0.01.docx
