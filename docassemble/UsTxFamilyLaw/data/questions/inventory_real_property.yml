@@ -2,7 +2,7 @@ metadata:
   title: Real Property List
   short title: Real Property List
 ---
-include:
+modules:
   - docassemble.UsTxFamilyLaw.functions
 ---
 objects:
@@ -54,7 +54,7 @@ question: |
 fields:
   - County: realproperty[i].county
     code: |
-      counties(${ realproperty[i].state })
+      us_counties(realproperty[i].state)
 ---
 code: |
   realproperty[i].equity_value = realproperty[i].estimated_value - realproperty[i].lien_balances - realproperty[i].taxes_due
@@ -69,3 +69,4 @@ subquestion: |
   * ${prop}
   % endfor
 yesno: realproperty.there_is_another
+---

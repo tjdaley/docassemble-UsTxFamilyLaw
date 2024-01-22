@@ -17,4 +17,7 @@ def us_counties(state):
     data_file = os.path.join(os.path.dirname(__file__), 'data', 'us_counties.json')
     with open(data_file) as f:
         counties_by_state = json.load(f)
-    return counties_by_state.get(state.upper(), [])
+
+    counties = counties_by_state.get(state.upper(), [])
+    county_dict = {x: x for x in counties}
+    return county_dict
