@@ -21,3 +21,18 @@ def us_counties(state) ->dict:
     counties = counties_by_state.get(state.upper(), [])
     county_dict = {x: x for x in counties}
     return county_dict
+
+
+def bank_account_types() ->dict:
+    """
+    Return a dict of bank account types.
+
+    :rtype: dict
+    """
+    return {
+        'checking': 'Checking',
+        'savings': 'Savings',
+        'money_market': 'Money Market',
+        'cd': 'Certificate of Deposit',
+        'other': 'Other',
+    }

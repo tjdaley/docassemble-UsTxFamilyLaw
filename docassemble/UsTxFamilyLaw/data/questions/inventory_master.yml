@@ -3,7 +3,7 @@ metadata:
   short title: I&A
 ---
 include:
-  - docassemble.playground1:inventory_real_property.yml
+  - docassemble.UsTxFamilyLaw:inventory_real_property.yml
   - docassemble.UsTxFamilyLaw:inventory_bank_accounts.yml
 ---
 mandatory: true
