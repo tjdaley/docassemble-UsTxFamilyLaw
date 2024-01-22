@@ -1,4 +1,6 @@
-objects:
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+---objects:
   - bankaccount: DAList.using(object_type=DAObject)
 ---
 question: |
@@ -18,7 +20,8 @@ fields:
   - Account number: bankaccount[i].account_number
     required: False
   - Account type: bankaccount[i].account_type
-    required: False
+    code: |
+      bank_account_types()
   - Balance: bankaccount[i].current_balance
     datatype: currency
   - As of date: bankaccount[i].balance_as_of_date
