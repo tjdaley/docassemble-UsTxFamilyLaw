@@ -4,8 +4,9 @@ modules:
 objects:
   - realproperty: DAList.using(object_type=Address)
 ---
+decoration: fa-house
 question: |
-  <i class="fa-solid fa-house" style="color: #63E6BE;"></i> Does the community estate own any real estate?
+  Does the community estate own any real estate?
 subquestion: |
   Include houses, condominiums, undeveloped land, and deeded timeshares.
   If there is a separate property claim on the property, include the property
