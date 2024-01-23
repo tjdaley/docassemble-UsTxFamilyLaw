@@ -11,7 +11,7 @@ class BankAccount(DAObject):
     def init(self, *pargs, **kwargs):
         super().init(*pargs, **kwargs)
 
-    def short_name(self):
+    def as_short_name(self):
         if isinstance(self.short_name, str):
             return self.short_name
         elif isinstance(self.account_number, str) and isinstance(self.institution_name, str):
@@ -19,4 +19,4 @@ class BankAccount(DAObject):
         return f'**BLANK**'
     
     def __str__(self):
-        return self.short_name()
+        return self.as_short_name()
