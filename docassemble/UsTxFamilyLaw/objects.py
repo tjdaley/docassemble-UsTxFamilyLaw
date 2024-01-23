@@ -15,3 +15,6 @@ class BankAccount(DAObject):
         if self.short_name:
             return self.short_name
         return f'{self.institution_name} {self.account_number[-4:]}'
+    
+    def __str__(self):
+        return self.short_name()

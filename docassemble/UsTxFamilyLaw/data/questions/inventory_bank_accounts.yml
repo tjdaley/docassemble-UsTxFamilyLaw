@@ -3,7 +3,7 @@ modules:
   - docassemble.UsTxFamilyLaw.objects
 ---
 objects:
-  - bankaccount: DAList.using(object_type=Address)
+  - bankaccount: DAList.using(object_type=BankAccount)
 ---
 decoration: fa-vault
 question: |
