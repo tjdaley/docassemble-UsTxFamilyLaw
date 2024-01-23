@@ -2,7 +2,7 @@ modules:
   - docassemble.UsTxFamilyLaw.functions
 ---
 objects:
-  - bankaccount: DAList
+  - bankaccount: DAList.using(object_type=BankAccount)
 ---
 decoration: fa-vault
 question: |
