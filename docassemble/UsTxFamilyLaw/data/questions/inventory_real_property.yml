@@ -12,8 +12,9 @@ subquestion: |
   here and indicate that there is a separate property claim.
 yesno: realproperty.there_are_any
 ---
+decoration: fa-globe
 question: |
-  <i class="fa-solid fa-globe" style="color: #63E6BE;"></i> What country is the ${ ordinal(i) } property located in?
+  What country is the ${ ordinal(i) } property located in?
 fields:
   - Country: realproperty[i].country
     code: |
@@ -21,8 +22,9 @@ fields:
     required: True
     default: US
 ---
+decoration: fa-flag-usa
 question: |
-  <i class="fa-solid fa-flag-usa" style="color: #63E6BE;"></i> What state, territory, or proviince is the ${ ordinal(i) } property located in?
+  What state, territory, or proviince is the ${ ordinal(i) } property located in?
 fields:
   - State: realproperty[i].state
     code: |
@@ -63,8 +65,9 @@ fields:
 code: |
   realproperty[i].equity_value = realproperty[i].estimated_value - realproperty[i].lien_balances - realproperty[i].taxes_due
 ---
+decoration: fa-circle-plus
 question: |
-  <i class="fa-solid fa-circle-plus" style="color: #e66565;"></i> Are there any more properties
+  Are there any more properties
   you would like to mention?
 subquestion: |
   So far, you've listed:

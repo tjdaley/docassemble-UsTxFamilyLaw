@@ -2,8 +2,9 @@ modules:
   - docassemble.UsTxFamilyLaw.functions
 ---
 objects:
-  - bankaccount: DAList.using(object_type=DAObject)
+  - bankaccount: DAList
 ---
+decoration: fa-vault
 question: |
   Does the community estate own any bank accounts?
 subquestion: |
@@ -32,8 +33,9 @@ fields:
   - Who claims a separate property interest (blank for None): bankaccount[i].sp_claimant
     required: False
 ---
+decoration: fa-circle-plus
 question: |
-  <i class="fa-solid fa-circle-plus" style="color: #e66565;"></i> Are there any more accounts
+  Are there any more accounts
   you would like to mention?
 subquestion: |
   So far, you've listed:
