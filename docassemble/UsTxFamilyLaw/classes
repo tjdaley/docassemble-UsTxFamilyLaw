@@ -1,0 +1,18 @@
+"""
+classes.py - Classes introduced by UsTxFamilyLaw
+"""
+from datetime import date
+from docassemble.base.util import DAObject
+
+class BankAccount(DAObject):
+    """A bank account"""
+    def init(self, *pargs, **kwargs):
+        super().init(*pargs, **kwargs)
+        self.initializeAttribute('short_name', '')
+        self.initializeAttribute('institution_name', '')
+        self.initializeAttribute('account_number', '')
+        self.initializeAttribute('account_type', '')
+        self.initializeAttribute('current_balance', 0.00)
+        self.initializeAttribute('balance_as_of_date', date.today())
+        self.initializeAttribute('names_account', '')
+        self.initializeAttribute('sp_claimant', '')
