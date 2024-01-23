@@ -8,29 +8,18 @@ include:
 ---
 mandatory: true
 question: |
-  Property List
+  <i class="fa-solid fa-list-check" style="color: #63E6BE;"></i> Property List
 subquestion: |
-  #### Real Property
+  #### <i class="fa-solid fa-house" style="color: #63E6BE;"></i> Real Property
   
   ${ realproperty.table }
   ${ realproperty.add_action() }
   
-  #### Bank Accounts
+  #### <i class="fa-solid fa-vault" style="color: #63E6BE;"></i> Bank Accounts
   
   ${ bankaccount.table }
   ${ bankaccount.add_action() }
----
-table: realproperty.table
-rows: realproperty
-columns:
-  - Property: |
-      row_item.short_name
-  - Location: |
-      row_item.county
-  - Value: |
-      row_item.estimated_value
-edit:
-  - short_name
+
 ---
 table: bankaccount.table
 rows: bankaccount
@@ -39,6 +28,16 @@ columns:
       row_item.short_name
   - Balance: |
       row_item.current_balance
+edit:
+  - short_name
+---
+table: realproperty.table
+rows: realproperty
+columns:
+  - Property: |
+      row_item.short_name
+  - Value: |
+      row_item.estimated_value
 edit:
   - short_name
 ---

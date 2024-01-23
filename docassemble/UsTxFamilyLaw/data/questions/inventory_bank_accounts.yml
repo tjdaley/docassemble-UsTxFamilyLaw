@@ -14,7 +14,7 @@ subquestion: |
 yesno: bankaccount.there_are_any
 ---
 question: |
-  Describe the ${ ordinal(i) } account?
+  <i class="fa-solid fa-vault" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } account?
 fields:
   - Short name: bankaccount[i].short_name
   - Institution name: bankaccount[i].institution_name
@@ -33,7 +33,7 @@ fields:
     required: False
 ---
 question: |
-  Are there any more accounts
+  <i class="fa-solid fa-circle-plus" style="color: #e66565;"></i> Are there any more accounts
   you would like to mention?
 subquestion: |
   So far, you've listed:

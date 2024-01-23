@@ -5,7 +5,7 @@ objects:
   - realproperty: DAList.using(object_type=Address)
 ---
 question: |
-  Does the community estate own any real estate?
+  <i class="fa-solid fa-house" style="color: #63E6BE;"></i> Does the community estate own any real estate?
 subquestion: |
   Include houses, condominiums, undeveloped land, and deeded timeshares.
   If there is a separate property claim on the property, include the property
@@ -13,7 +13,7 @@ subquestion: |
 yesno: realproperty.there_are_any
 ---
 question: |
-  What country is the ${ ordinal(i) } property located in?
+  <i class="fa-solid fa-globe" style="color: #63E6BE;"></i> What country is the ${ ordinal(i) } property located in?
 fields:
   - Country: realproperty[i].country
     code: |
@@ -22,15 +22,16 @@ fields:
     default: US
 ---
 question: |
-  What state, territory, or proviince is the ${ ordinal(i) } property located in?
+  <i class="fa-solid fa-flag-usa" style="color: #63E6BE;"></i> What state, territory, or proviince is the ${ ordinal(i) } property located in?
 fields:
   - State: realproperty[i].state
     code: |
       states_list(realproperty[i].country)
     required: True
+    default: TX
 ---
 question: |
-  Describe the ${ ordinal(i) } real property?
+  <i class="fa-solid fa-house" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } real property?
 fields:
   - Short name: realproperty[i].short_name
   - Street address: realproperty[i].address
@@ -40,6 +41,7 @@ fields:
   - County: realproperty[i].county
     code: |
       us_counties(realproperty[i].state)
+    default: realproperty[i-1].county
   - Postal Code: realproperty[i].postal_code
     required: False
   - Estimated value: realproperty[i].estimated_value
@@ -58,18 +60,11 @@ fields:
   - Who claims a separate property interest (blank for None): realproperty[i].sp_claimant
     required: False
 ---
-question: |
-  What county within ${ realproperty[i].state } is ${ realproperty[i].short_name } located?
-fields:
-  - County: realproperty[i].county
-    code: |
-      us_counties(realproperty[i].state)
----
 code: |
   realproperty[i].equity_value = realproperty[i].estimated_value - realproperty[i].lien_balances - realproperty[i].taxes_due
 ---
 question: |
-  Are there any more properties
+  <i class="fa-solid fa-circle-plus" style="color: #e66565;"></i> Are there any more properties
   you would like to mention?
 subquestion: |
   So far, you've listed:
