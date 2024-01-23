@@ -7,6 +7,8 @@ from distutils.util import convert_path
 standard_exclude = ('*.pyc', '*~', '.*', '*.bak', '*.swp*')
 standard_exclude_directories = ('.*', 'CVS', '_darcs', './build', './dist', 'EGG-INFO', '*.egg-info')
 
+VERSION = '1.0.1'
+
 def find_package_data(where='.', package='', exclude=standard_exclude, exclude_directories=standard_exclude_directories):
     out = {}
     stack = [(convert_path(where), '', package)]
@@ -44,11 +46,11 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.UsTxFamilyLaw',
-      version='1.0',
+      version=VERSION,
       description=('Texas Family Law Forms'),
       long_description='# US-TX-Family_Law\r\n## Docassemble Package for Family Law forms in Texas, United States\r\n### Author: Thomas J. Daley, J.D.\r\n\r\n# Available Interviews\r\n\r\n## Inventory & Appraisement\r\n\r\n## Notice to Vacate\r\n\r\n## Promissory Note for Loan for Legal Fees\r\n\r\n## Roommate Early Move Out Incentive Agreement\r\n',
       long_description_content_type='text/markdown',
-      author='Thomas Daley',
+      author='Thomas J. Daley, J.D.',
       author_email='tom@powerdaley.com',
       license='The MIT License',
       url='https://da.jdbot.us',
