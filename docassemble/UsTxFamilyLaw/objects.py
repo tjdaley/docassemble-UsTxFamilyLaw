@@ -1,9 +1,10 @@
 """
 classes.py - Classes introduced by UsTxFamilyLaw
 """
-from docassemble.base.util import DAObject
+# Ignore imoprt error on the next line.  It's a false positive.
+from docassemble.base.util import DAObject  # type: ignore
 
-__all__ = ['BankAccount']
+__all__ = ['BankAccount', 'RetirementAccount']
 
 class BankAccount(DAObject):
     """A bank account"""
