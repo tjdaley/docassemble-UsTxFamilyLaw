@@ -9,6 +9,7 @@ metadata:
 include:
   - docassemble.UsTxFamilyLaw:inventory_real_property.yml
   - docassemble.UsTxFamilyLaw:inventory_bank_accounts.yml
+  - docassemble.UsTxFamilyLaw:inventory_retirement_accounts.yml
 ---
 mandatory: true
 question: |
