@@ -1,0 +1,48 @@
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+  - docassemble.UsTxFamilyLaw.objects
+---
+objects:
+  - bankaccount: DAList.using(object_type=RetirementAccount)
+---
+decoration: fa-tree
+question: |
+  Does the community estate own any retirement accounts?
+subquestion: |
+  Include all tax-deferred accounts and pensions.
+  Do **NOT** include brokerage accounts.
+  If there is a separate property claim on the account, include the account
+  here and indicate that there is a separate property claim.
+yesno: RetirementAccount.there_are_any
+---
+question: |
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } account?
+fields:
+  - Short name: RetirementAccount[i].short_name
+  - Institution name: RetirementAccount[i].institution_name
+  - Account number: RetirementAccount[i].account_number
+    required: False
+  - Account type: RetirementAccount[i].account_type
+    code: |
+      retirement_account_types()
+  - Balance: RetirementAccount[i].current_balance
+    datatype: currency
+  - As of date: RetirementAccount[i].balance_as_of_date
+    datatype: date
+  - Participant: RetirementAccount[i].names_account
+    required: False
+  - Is there a separate property claim: RetirementAccount[i].is_sp_claimant
+    datatype: yesno
+---
+decoration: fa-circle-plus
+question: |
+  Are there any more accounts
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for acct in RetirementAccount:
+  * ${acct.short_name}
+  % endfor
+yesno: RetirementAccount.there_is_another
+---

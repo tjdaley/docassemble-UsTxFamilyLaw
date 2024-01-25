@@ -4,7 +4,7 @@ metadata:
   authors:
     - name: Thomas J. Daley, J.D.
       organization: jdbot.us
-  revision_date: 2024-01-22
+  revision_date: 2024-01-24
 ---
 include:
   - docassemble.UsTxFamilyLaw:inventory_real_property.yml
@@ -24,6 +24,11 @@ subquestion: |
   ${ bankaccount.table }
   ${ bankaccount.add_action() }
 
+  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Retirement Accounts
+  
+  ${ retirementaccount.table }
+  ${ retirementaccount.add_action() }
+
 ---
 table: bankaccount.table
 rows: bankaccount
@@ -31,7 +36,7 @@ columns:
   - Account: |
       row_item.short_name
   - Balance: |
-      row_item.current_balance
+      currency(row_item.current_balance) if row_item.current_balance else ''
 edit:
   - short_name
 ---
@@ -41,7 +46,17 @@ columns:
   - Property: |
       row_item.short_name
   - Value: |
-      row_item.estimated_value
+      currency(row_item.estimated_value) if row_item.estimated_value else ''
+edit:
+  - short_name
+---
+table: retirementaccount.table
+rows: retirementaccount
+columns:
+  - Property: |
+      row_item.short_name
+  - Value: |
+      currency(row_item.current_balance) if row_item.current_balance else ''
 edit:
   - short_name
 ---
