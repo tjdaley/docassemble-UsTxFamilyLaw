@@ -1,7 +1,6 @@
 """
 classes.py - Classes introduced by UsTxFamilyLaw
 """
-from datetime import date
 from docassemble.base.util import DAObject
 
 __all__ = ['BankAccount']
