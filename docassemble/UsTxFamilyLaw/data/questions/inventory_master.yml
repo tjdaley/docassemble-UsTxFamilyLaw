@@ -18,7 +18,19 @@ fields:
   - Alignment: alignment
     code: |
       alignment_list()
-
+---
+event: assemble_report
+question: |
+  <i class="fa-solid fa-list-check" style="color: #63E6BE;"></i> Here is your Inventory & Appraisement
+subquestion: |
+  blah blah blah
+attachment:
+  name: Inventory and Appraisement
+  filename: inventory_and_appraisement
+  docx template file: 200_-_ORIGINAL_INVENTORY_AND_APPRAISMENT_0.01.docx
+  valid formats:
+    - docx
+    - pdf
 ---
 mandatory: true
 question: |
@@ -38,7 +50,8 @@ subquestion: |
   
   ${ retirementaccount.table }
   ${ retirementaccount.add_action() }
-
+buttons:
+  - Assemble Report: assemble_report
 ---
 table: bankaccount.table
 rows: bankaccount
