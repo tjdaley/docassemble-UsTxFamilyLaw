@@ -44,7 +44,6 @@ fields:
   - County: realproperty[i].county
     code: |
       us_counties(realproperty[i].state)
-    default: realproperty[i-1].county
   - Postal Code: realproperty[i].postal_code
     required: False
   - Estimated value: realproperty[i].estimated_value

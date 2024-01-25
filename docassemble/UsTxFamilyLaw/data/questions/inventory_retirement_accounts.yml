@@ -31,7 +31,7 @@ fields:
     datatype: date
   - Participant: retirementaccount[i].names_account
     required: False
-  - Is there a separate property claim: retirementaccount[i].is_sp_claimant
+  - There is there a separate property claim: retirementaccount[i].is_sp_claimant
     datatype: yesno
 ---
 decoration: fa-circle-plus

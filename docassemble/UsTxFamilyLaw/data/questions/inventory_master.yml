@@ -11,6 +11,15 @@ include:
   - docassemble.UsTxFamilyLaw:inventory_bank_accounts.yml
   - docassemble.UsTxFamilyLaw:inventory_retirement_accounts.yml
 ---
+question: |
+  About this Inventory & Appraisement
+fields:
+  - Your name: name
+  - Alignment: alignment
+    code: |
+      alignment_list()
+
+---
 mandatory: true
 question: |
   <i class="fa-solid fa-list-check" style="color: #63E6BE;"></i> Property List

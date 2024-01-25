@@ -22,6 +22,18 @@ def us_counties(state) ->dict:
     county_dict = {x: x for x in counties}
     return county_dict
 
+def alignment_list() ->dict:
+    """
+    Return a dict of alignment options.
+
+    :rtype: dict
+    """
+    return __sorted_dict({
+        'p': 'Petitioner',
+        'r': 'Respondent',
+        'i': 'Intervenor',
+        't': 'Third Party'
+    })
 
 def bank_account_types() ->dict:
     """
