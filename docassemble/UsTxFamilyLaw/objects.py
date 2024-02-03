@@ -4,7 +4,14 @@ classes.py - Classes introduced by UsTxFamilyLaw
 # Ignore imoprt error on the next line.  It's a false positive.
 from docassemble.base.util import DAObject  # type: ignore
 
-__all__ = ['BankAccount', 'RetirementAccount']
+__all__ = [
+    'MotorVehicle',
+    'Automobile',
+    'Boat',
+    'Airplane',
+    'BankAccount',
+    'RetirementAccount'
+]
 
 class BankAccount(DAObject):
     """A bank account"""
