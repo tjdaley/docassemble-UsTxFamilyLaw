@@ -40,7 +40,7 @@ fields:
     datatype: yesno
 ---
 code: |
-  watercraft[i].short_name watercraft[i].short_name()
+  watercraft[i].short_name = watercraft[i].short_name()
 ---
 decoration: fa-circle-plus
 question: |
