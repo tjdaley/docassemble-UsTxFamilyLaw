@@ -30,7 +30,7 @@ fields:
     default: No
   - Sponsoring employer name: retirementaccount[i].sponsor_name
     required: False
-    show_if:
+    show if:
       variable: retirementaccount[i].is_employer_sponsored
       is: Yes
   - Balance: retirementaccount[i].current_balance
