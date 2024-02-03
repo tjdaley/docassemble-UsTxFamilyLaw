@@ -27,7 +27,7 @@ fields:
   - Registration number: watercraft[i].registration_number
     required: False
   - Location: watercraft[i].location
-  - Title holder: boat[i].title_holder
+  - Title holder: watercraft[i].title_holder
     required: False
   - In possession of: watercraft[i].in_possession_of
   - Location: watercraft[i].location
