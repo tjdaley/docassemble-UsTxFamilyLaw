@@ -1,0 +1,52 @@
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+  - docassemble.UsTxFamilyLaw.objects
+---
+objects:
+  - aircraft: DAList.using(object_type=Airplane)
+---
+decoration: fa-tree
+question: |
+  Does the community estate own any ${x.object_name}s?
+subquestion: |
+  Include all vehicles used for air transportation, including airplanes, helicopters, and drones.
+yesno: aircraft.there_are_any
+---
+question: |
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } ${x.object_name}?
+fields:
+  - Type: aircraft[i].type
+    code: |
+      aircraft_types()
+  - Manufacturer: aircraft[i].manufacturer
+  - Model: aircraft[i].model
+  - Year: aircraft[i].year
+    datatype: year
+  - Serial number: aircraft[i].serial_number
+    required: False
+  - Registration number: aircraft[i].registration_number
+    required: False
+  - Title holder: boat[i].title_holder
+    required: False
+  - In possession of: boat[i].in_possession_of
+  - Location: boat[i].location
+  - Current value: boat[i].current_value
+    datatype: currency
+  - Balance of all liens: boat[i].lien_balances
+    required: False
+    datatype: currency
+  - There is there a separate property claim: boat[i].is_sp_claimant
+    datatype: yesno
+---
+decoration: fa-circle-plus
+question: |
+  Are there any more ${x.object_name}s
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for a in aircraft:
+  * ${a.short_name}
+  % endfor
+yesno: aircraft.there_is_another
+---

@@ -25,6 +25,14 @@ fields:
   - Account type: retirementaccount[i].account_type
     code: |
       retirement_account_types()
+  - Employer sponsored: retirementaccount[i].is_employer_sponsored
+    datatype: yesno
+    default: No
+  - Sponsoring employer name: retirementaccount[i].sponsor_name
+    required: False
+    show_if:
+      variable: retirementaccount[i].is_employer_sponsored
+      is: Yes
   - Balance: retirementaccount[i].current_balance
     datatype: currency
   - As of date: retirementaccount[i].balance_as_of_date

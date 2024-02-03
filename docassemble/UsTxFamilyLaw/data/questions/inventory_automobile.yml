@@ -1,0 +1,48 @@
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+  - docassemble.UsTxFamilyLaw.objects
+---
+objects:
+  - automobile: DAList.using(object_type=Automobile)
+---
+decoration: fa-tree
+question: |
+  Does the community estate own any automobiles?
+subquestion: |
+  Include all vehicles used for land transportation, including cars, trucks, motorcycles, and trailers.
+yesno: automobile.there_are_any
+---
+question: |
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } ${x.object_name}?
+fields:
+  - Manufacturer: automobile[i].manufacturer
+  - Model: automobile[i].model
+  - Year: automobile[i].year
+    datatype: year
+  - Vehicle identification number (VIN): automobile[i].vin
+    required: False
+  - License plate number: automobile[i].license_plate
+    required: False
+  - Title holder: automobile[i].title_holder
+    required: False
+  - In possession of: automobile[i].in_possession_of
+  - Current value: automobile[i].current_value
+    datatype: currency
+  - Balance of all liens: automobile[i].lien_balances
+    required: False
+    datatype: currency
+  - There is there a separate property claim: automobile[i].is_sp_claimant
+    datatype: yesno
+---
+decoration: fa-circle-plus
+question: |
+  Are there any more ${x.object_name}s
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for auto in automobile:
+  * ${auto.short_name}
+  % endfor
+yesno: automobile.there_is_another
+---

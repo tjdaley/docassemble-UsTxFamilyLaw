@@ -1,0 +1,53 @@
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+  - docassemble.UsTxFamilyLaw.objects
+---
+objects:
+  - watercraft: DAList.using(object_type=Boat)
+---
+decoration: fa-tree
+question: |
+  Does the community estate own any ${x.object_name}s?
+subquestion: |
+  Include all vehicles used for water transportation, including boats, jet skis, and yachts.
+yesno: watercraft.there_are_any
+---
+question: |
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } ${x.object_name}?
+fields:
+  - Type: watercraft[i].type
+    code: |
+      watercraft_types()
+  - Manufacturer: watercraft[i].manufacturer
+  - Model: watercraft[i].model
+  - Year: watercraft[i].year
+    datatype: year
+  - Hull identification number (HIN): watercraft[i].hin
+    required: False
+  - Registration number: watercraft[i].registration_number
+    required: False
+  - Location: watercraft[i].location
+  - Title holder: boat[i].title_holder
+    required: False
+  - In possession of: watercraft[i].in_possession_of
+  - Location: watercraft[i].location
+  - Current value: watercraft[i].current_value
+    datatype: currency
+  - Balance of all liens: watercraft[i].lien_balances
+    required: False
+    datatype: currency
+  - There is there a separate property claim: watercraft[i].is_sp_claimant
+    datatype: yesno
+---
+decoration: fa-circle-plus
+question: |
+  Are there any more ${x.object_name}s
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for b in watercraft:
+  * ${b.short_name}
+  % endfor
+yesno: watercraft.there_is_another
+---

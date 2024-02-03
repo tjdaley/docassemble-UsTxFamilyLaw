@@ -1,6 +1,12 @@
 """
 functions.py - functions for use in docassemble
 """
+ALIGNMENTS = ({
+    'p': 'Petitioner',
+    'r': 'Respondent',
+    'i': 'Intervenor',
+    't': 'Third Party'
+})
 
 def us_counties(state) ->dict:
     """
@@ -28,12 +34,17 @@ def alignment_list() ->dict:
 
     :rtype: dict
     """
-    return __sorted_dict({
-        'p': 'Petitioner',
-        'r': 'Respondent',
-        'i': 'Intervenor',
-        't': 'Third Party'
-    })
+    return __sorted_dict(ALIGNMENTS)
+
+def translate_alignment(align:str) ->str:
+    """
+    Return the full name of an alignment.
+
+    :param align: The alignment code from the ALIGNMENTS dict.
+    :type align: str
+    :rtype: str
+    """
+    return ALIGNMENTS.get(align, 'Unknown')
 
 def bank_account_types() ->dict:
     """
@@ -72,6 +83,38 @@ def retirement_account_types() ->dict:
         'tesrs': 'TESRS',
         'tmrs': 'TMRS',
         'tsa': 'TSA',
+        'other': 'Other',
+    })
+
+def aircraft_types() ->dict:
+    """
+    Return a dict of aircraft types.
+
+    :rtype: dict
+    """
+    return __sorted_dict({
+        'airplane': 'Airplane',
+        'helicopter': 'Helicopter',
+        'glider': 'Glider',
+        'ultralight': 'Ultralight',
+        'balloon': 'Balloon',
+        'other': 'Other',
+    })
+
+def watercraft_types() ->dict:
+    """
+    Return a dict of watercraft types.
+
+    :rtype: dict
+    """
+    return __sorted_dict({
+        'sailboat': 'Sailboat',
+        'powerboat': 'Powerboat',
+        'jet_ski': 'Jet Ski',
+        'canoe': 'Canoe',
+        'kayak': 'Kayak',
+        'paddleboard': 'Paddleboard',
+        'yacht': 'Yacht',
         'other': 'Other',
     })
 

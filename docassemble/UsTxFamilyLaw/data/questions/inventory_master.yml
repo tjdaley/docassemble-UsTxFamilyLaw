@@ -10,6 +10,9 @@ include:
   - docassemble.UsTxFamilyLaw:inventory_real_property.yml
   - docassemble.UsTxFamilyLaw:inventory_bank_accounts.yml
   - docassemble.UsTxFamilyLaw:inventory_retirement_accounts.yml
+  - docassemble.UsTxFamilyLaw:inventory_automobile.yml
+  - docassemble.UsTxFamilyLaw:inventory_boat.yml
+  - docassemble.UsTxFamilyLaw:inventory_aircraft.yml
 ---
 question: |
   About this Inventory & Appraisement
@@ -50,6 +53,21 @@ subquestion: |
   
   ${ retirementaccount.table }
   ${ retirementaccount.add_action() }
+
+  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Automobiles
+  
+  ${ automobile.table }
+  ${ automobile.add_action() }
+
+  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Boats and Watercraft
+
+  ${ boat.table }
+  ${ boat.add_action() }
+
+  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Aircraft
+
+  ${ aircraft.table }
+  ${ aircraft.add_action() }
 buttons:
   - Assemble Report: assemble_report
 ---
@@ -82,4 +100,34 @@ columns:
       currency(row_item.current_balance) if row_item.current_balance else ''
 edit:
   - short_name
+---
+table: automobile.table
+row: automobile
+columns:
+  - Vehicle: |
+      row_item.short_name
+  - Value: |
+      currency(row_item.current_value) if row_item.current_value else ''
+edit:
+  - manufacturer
+---
+table: boat.table
+row: boat
+columns:
+  - Boat: |
+      row_item.short_name
+  - Value: |
+      currency(row_item.current_value) if row_item.current_value else ''
+edit:
+  - manufacturer
+---
+table: aircraft.table
+row: aircraft
+columns:
+  - Aircraft: |
+      row_item.short_name
+  - Value: |
+      currency(row_item.current_value) if row_item.current_value else ''
+edit:
+  - manufacturer
 ---

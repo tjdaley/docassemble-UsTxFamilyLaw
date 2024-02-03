@@ -35,3 +35,36 @@ class RetirementAccount(DAObject):
     
     def __str__(self):
         return self.as_short_name()
+
+class MotorVehicle(DAObject):
+    """A motor vehicle"""
+    def init(self, *pargs, **kwargs):
+        super().init(*pargs, **kwargs)
+
+    def as_short_name(self):
+        name_parts = [self.year or '', self.manufacturer or '', self.model or '']
+        return ' '.join(name_parts)
+    
+    def __str__(self):
+        return self.as_short_name()
+    
+class Automobile(MotorVehicle):
+    """An automobile"""
+    def init(self, *pargs, **kwargs):
+        if 'type' not in kwargs:
+            kwargs['type'] = 'automobile'
+        super().init(*pargs, **kwargs)
+
+class Boat(MotorVehicle):
+    """A boat"""
+    def init(self, *pargs, **kwargs):
+        if 'type' not in kwargs:
+            kwargs['type'] = 'boat'
+        super().init(*pargs, **kwargs)
+
+class Airplane(MotorVehicle):
+    """An airplane"""
+    def init(self, *pargs, **kwargs):
+        if 'type' not in kwargs:
+            kwargs['type'] = 'airplane'
+        super().init(*pargs, **kwargs)
