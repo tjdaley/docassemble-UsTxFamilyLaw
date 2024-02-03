@@ -26,16 +26,16 @@ fields:
     required: False
   - Registration number: aircraft[i].registration_number
     required: False
-  - Title holder: boat[i].title_holder
+  - Title holder: aircraft[i].title_holder
     required: False
-  - In possession of: boat[i].in_possession_of
-  - Location: boat[i].location
-  - Current value: boat[i].current_value
+  - In possession of: aircraft[i].in_possession_of
+  - Location: aircraft[i].location
+  - Current value: aircraft[i].current_value
     datatype: currency
-  - Balance of all liens: boat[i].lien_balances
+  - Balance of all liens: aircraft[i].lien_balances
     required: False
     datatype: currency
-  - There is there a separate property claim: boat[i].is_sp_claimant
+  - There is there a separate property claim: aircraft[i].is_sp_claimant
     datatype: yesno
 ---
 code: |

@@ -30,7 +30,6 @@ fields:
   - Title holder: watercraft[i].title_holder
     required: False
   - In possession of: watercraft[i].in_possession_of
-  - Location: watercraft[i].location
   - Current value: watercraft[i].current_value
     datatype: currency
   - Balance of all liens: watercraft[i].lien_balances
