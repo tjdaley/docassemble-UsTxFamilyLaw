@@ -35,7 +35,7 @@ fields:
     datatype: yesno
 ---
 code: |
-  automobile[i].short_name = automobile[i].short_name()
+  automobile[i].short_name = str(automobile[i])
 ---
 decoration: fa-circle-plus
 question: |

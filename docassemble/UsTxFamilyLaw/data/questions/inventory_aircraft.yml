@@ -39,7 +39,7 @@ fields:
     datatype: yesno
 ---
 code: |
-  aircraft[i].short_name = aircraft[i].short_name()
+  aircraft[i].short_name = str(aircraft)
 ---
 decoration: fa-circle-plus
 question: |
