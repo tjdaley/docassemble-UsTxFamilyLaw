@@ -38,6 +38,9 @@ fields:
   - There is there a separate property claim: boat[i].is_sp_claimant
     datatype: yesno
 ---
+code: |
+  aircraft[i].short_name aircraft[i].short_name()
+---
 decoration: fa-circle-plus
 question: |
   Are there any more aircraft

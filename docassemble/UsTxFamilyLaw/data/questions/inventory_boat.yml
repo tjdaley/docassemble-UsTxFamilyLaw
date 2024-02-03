@@ -39,6 +39,9 @@ fields:
   - There is there a separate property claim: watercraft[i].is_sp_claimant
     datatype: yesno
 ---
+code: |
+  watercraft[i].short_name watercraft[i].short_name()
+---
 decoration: fa-circle-plus
 question: |
   Are there any more watercraft
