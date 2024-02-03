@@ -13,7 +13,7 @@ subquestion: |
 yesno: automobile.there_are_any
 ---
 question: |
-  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } ${x.object_name}?
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } automobile?
 fields:
   - Manufacturer: automobile[i].manufacturer
   - Model: automobile[i].model
@@ -36,7 +36,7 @@ fields:
 ---
 decoration: fa-circle-plus
 question: |
-  Are there any more ${x.object_name}s
+  Are there any more automobiles
   you would like to mention?
 subquestion: |
   So far, you've listed:

@@ -7,13 +7,13 @@ objects:
 ---
 decoration: fa-tree
 question: |
-  Does the community estate own any ${x.object_name}s?
+  Does the community estate own any aircraft?
 subquestion: |
   Include all vehicles used for air transportation, including airplanes, helicopters, and drones.
 yesno: aircraft.there_are_any
 ---
 question: |
-  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } ${x.object_name}?
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } aircraft?
 fields:
   - Type: aircraft[i].type
     code: |
@@ -40,7 +40,7 @@ fields:
 ---
 decoration: fa-circle-plus
 question: |
-  Are there any more ${x.object_name}s
+  Are there any more aircraft
   you would like to mention?
 subquestion: |
   So far, you've listed:

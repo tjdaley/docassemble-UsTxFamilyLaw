@@ -7,13 +7,13 @@ objects:
 ---
 decoration: fa-tree
 question: |
-  Does the community estate own any ${x.object_name}s?
+  Does the community estate own any watercraft?
 subquestion: |
   Include all vehicles used for water transportation, including boats, jet skis, and yachts.
 yesno: watercraft.there_are_any
 ---
 question: |
-  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } ${x.object_name}?
+  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } watercraft?
 fields:
   - Type: watercraft[i].type
     code: |
@@ -41,7 +41,7 @@ fields:
 ---
 decoration: fa-circle-plus
 question: |
-  Are there any more ${x.object_name}s
+  Are there any more watercraft
   you would like to mention?
 subquestion: |
   So far, you've listed:
