@@ -5,7 +5,7 @@ modules:
 objects:
   - watercraft: DAList.using(object_type=Boat)
 ---
-decoration: fa-tree
+decoration: fa-sailboat
 question: |
   Does the community estate own any watercraft?
 subquestion: |
@@ -13,7 +13,7 @@ subquestion: |
 yesno: watercraft.there_are_any
 ---
 question: |
-  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } watercraft?
+  <i class="fa-solid fa-sailboat" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } watercraft?
 fields:
   - Type: watercraft[i].type
     code: |

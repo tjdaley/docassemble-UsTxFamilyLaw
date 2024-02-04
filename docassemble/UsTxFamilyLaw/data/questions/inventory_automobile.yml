@@ -5,7 +5,7 @@ modules:
 objects:
   - automobile: DAList.using(object_type=Automobile)
 ---
-decoration: fa-tree
+decoration: fa-car-side
 question: |
   Does the community estate own any automobiles?
 subquestion: |
@@ -13,7 +13,7 @@ subquestion: |
 yesno: automobile.there_are_any
 ---
 question: |
-  <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } automobile?
+  <i class="fa-solid fa-car-side" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } automobile?
 fields:
   - Manufacturer: automobile[i].manufacturer
   - Model: automobile[i].model

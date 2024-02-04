@@ -21,6 +21,7 @@ fields:
   - Alignment: alignment
     code: |
       alignment_list()
+  - Fuck!: Alignment
 ---
 event: assemble_report
 question: |
@@ -39,7 +40,7 @@ mandatory: true
 question: |
   <i class="fa-solid fa-list-check" style="color: #63E6BE;"></i> Property List
 subquestion: |
-  #### <i class="fa-solid fa-house" style="color: #63E6BE;"></i> Real Property
+  #### <i class="fa-solid fa-house" style="color: #63E6BE;"></i> Real Property ${realproperty.number()}
   
   ${ realproperty.table }
   ${ realproperty.add_action() }
@@ -54,17 +55,17 @@ subquestion: |
   ${ retirementaccount.table }
   ${ retirementaccount.add_action() }
 
-  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Automobiles
+  #### <i class="fa-solid fa-car-side" style="color: #63E6BE;"></i> Automobiles
   
   ${ automobile.table }
   ${ automobile.add_action() }
 
-  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Boats and Watercraft
+  #### <i class="fa-solid fa-sailboat" style="color: #63E6BE;"></i> Boats and Watercraft
 
   ${ watercraft.table }
   ${ watercraft.add_action() }
 
-  #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Aircraft
+  #### <i class="fa-solid fa-plane" style="color: #63E6BE;"></i> Aircraft
 
   ${ aircraft.table }
   ${ aircraft.add_action() }
