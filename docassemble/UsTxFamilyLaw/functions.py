@@ -1,12 +1,12 @@
 """
 functions.py - functions for use in docassemble
 """
-ALIGNMENTS = ({
+ALIGNMENTS = {
     'p': 'Petitioner',
     'r': 'Respondent',
     'i': 'Intervenor',
     't': 'Third Party'
-})
+}
 
 def us_counties(state) ->dict:
     """

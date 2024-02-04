@@ -61,15 +61,21 @@ subquestion: |
 
   #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Boats and Watercraft
 
-  ${ boat.table }
-  ${ boat.add_action() }
+  ${ watercraft.table }
+  ${ watercraft.add_action() }
 
   #### <i class="fa-solid fa-tree" style="color: #63E6BE;"></i> Aircraft
 
   ${ aircraft.table }
   ${ aircraft.add_action() }
+field: user_choice
 buttons:
-  - Assemble Report: assemble_report
+  - Assemble Report: do_assemble_report
+---
+mandatory: True
+code: |
+  if user_choice == 'do_assemble_report':
+    assemble_report
 ---
 table: bankaccount.table
 rows: bankaccount
@@ -102,7 +108,7 @@ edit:
   - short_name
 ---
 table: automobile.table
-row: automobile
+rows: automobile
 columns:
   - Vehicle: |
       row_item.short_name
@@ -111,8 +117,8 @@ columns:
 edit:
   - manufacturer
 ---
-table: boat.table
-row: boat
+table: watercraft.table
+rows: watercraft
 columns:
   - Boat: |
       row_item.short_name
@@ -122,7 +128,7 @@ edit:
   - manufacturer
 ---
 table: aircraft.table
-row: aircraft
+rows: aircraft
 columns:
   - Aircraft: |
       row_item.short_name
