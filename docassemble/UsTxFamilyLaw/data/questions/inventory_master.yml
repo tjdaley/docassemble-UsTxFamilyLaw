@@ -30,7 +30,7 @@ subquestion: |
 attachment:
   name: Inventory and Appraisement
   filename: inventory_and_appraisement
-  docx template file: 200_-_ORIGINAL_INVENTORY_AND_APPRAISMENT_0.01.docx
+  docx template file: docassemble.UsTxFamilyLaw:200_-_ORIGINAL_INVENTORY_AND_APPRAISEMENT_0.02.docx
   valid formats:
     - docx
     - pdf
