@@ -73,7 +73,7 @@ subquestion: |
   So far, you've listed:
   
   % for prop in realproperty:
-  * ${prop}
+  * ${prop}, Equity: ${currency(prop.equity_value)}
   % endfor
 yesno: realproperty.there_is_another
 ---
