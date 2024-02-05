@@ -94,7 +94,7 @@ columns:
   - Property: |
       row_item.short_name
   - Value: |
-      currency(row_item.estimated_value) if row_item.estimated_value else ''
+      currency(row_item.equity_value) if row_item.equity_value else ''
 edit:
   - short_name
 ---
