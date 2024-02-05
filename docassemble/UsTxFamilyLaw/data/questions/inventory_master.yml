@@ -21,7 +21,6 @@ fields:
   - Alignment: alignment
     code: |
       alignment_list()
-  - Fuck!: Alignment
 ---
 event: assemble_report
 question: |
