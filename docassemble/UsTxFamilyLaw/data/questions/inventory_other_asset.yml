@@ -17,6 +17,7 @@ fields:
   - Value: otherasset[i].current_value
     datatype: currency
   - As of date: otherasset[i].value_as_of_date
+    datatype: date
   - Location: otherasset[i].location
   - Title holder: otherasset[i].title_holder
     required: False
