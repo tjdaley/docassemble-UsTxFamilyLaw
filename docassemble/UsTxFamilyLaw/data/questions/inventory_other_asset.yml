@@ -18,12 +18,11 @@ fields:
     datatype: currency
   - As of date: otherasset[i].value_as_of_date
     datatype: date
-  - Location: otherasset[i].location
   - Title holder: otherasset[i].title_holder
     required: False
   - In possession of: otherasset[i].in_possession_of
-  - Current value: otherasset[i].current_value
-    datatype: currency
+  - Location: otherasset[i].location
+    required: False
   - Balance of all liens: otherasset[i].lien_balances
     required: False
     datatype: currency

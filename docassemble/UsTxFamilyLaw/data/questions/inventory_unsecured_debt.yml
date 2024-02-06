@@ -21,6 +21,9 @@ fields:
     datatype: currency
   - As of date: unsecureddebt[i].balance_as_of_date
     datatype: date
+  - Amount owed on filing date: unsecureddebt[i].owed_on_filing_date
+    datatype: currency
+    required: False
   - Monthly payment: unsecureddebt[i].monthly_payment
     datatype: currency
   - Interest rate: unsecureddebt[i].interest_rate
@@ -41,7 +44,7 @@ subquestion: |
   So far, you've listed:
   
   % for debt in unsecureddebt:
-  * ${debt}
+  * ${debt} x${debt.account_number if debt.account_number else '####'} ${debt.current_balance}
   % endfor
 yesno: unsecureddebt.there_is_another
 ---
