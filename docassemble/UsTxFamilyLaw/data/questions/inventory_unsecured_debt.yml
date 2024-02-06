@@ -1,0 +1,47 @@
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+  - docassemble.UsTxFamilyLaw.objects
+---
+objects:
+  - unsecureddebt: DAList.using(object_type=UnsecuredDebt)
+---
+decoration: fa-credit-card
+question: |
+  Does the community estate owe any unsecured debts?
+subquestion: |
+  Unsecured debts are those that are not secured by property, such as credit card debt, medical bills,
+  student loans, and personal loans.
+yesno: unsecureddebt.there_are_any
+---
+question: |
+  <i class="fa-regular fa-credit-card" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } unsecured debt?
+fields:
+  - Payable to: unsecureddebt[i].creditor_name
+  - Amount owed: unsecureddebt[i].current_balance
+    datatype: currency
+  - As of date: unsecureddebt[i].balance_as_of_date
+    datatype: date
+  - Monthly payment: unsecureddebt[i].monthly_payment
+    datatype: currency
+  - Interest rate: unsecureddebt[i].interest_rate
+    datatype: percentage
+    required: False
+  - Account number: unsecureddebt[i].account_number
+    required: False
+  - Account type: unsecureddebt[i].account_type
+    code: |
+      unsecured_debt_types()
+  - Owed by: unsecureddebt[i].owed_by
+---
+decoration: fa-circle-plus
+question: |
+  Are there any more unsecured
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for debt in unsecureddebt:
+  * ${debt}
+  % endfor
+yesno: unsecureddebt.there_is_another
+---

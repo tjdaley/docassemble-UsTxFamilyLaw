@@ -4,7 +4,7 @@ metadata:
   authors:
     - name: Thomas J. Daley, J.D.
       organization: jdbot.us
-  revision_date: 2024-01-24
+  revision_date: 2024-02-05
 ---
 include:
   - docassemble.UsTxFamilyLaw:inventory_real_property.yml
@@ -13,6 +13,8 @@ include:
   - docassemble.UsTxFamilyLaw:inventory_automobile.yml
   - docassemble.UsTxFamilyLaw:inventory_boat.yml
   - docassemble.UsTxFamilyLaw:inventory_aircraft.yml
+  - docassemble.UsTxFamilyLaw:inventory_other_asset.yml
+  - docassemble.UsTxFamilyLaw:inventory_unsecured_debt.yml
 ---
 question: |
   About this Inventory & Appraisement
@@ -68,6 +70,17 @@ subquestion: |
 
   ${ aircraft.table }
   ${ aircraft.add_action() }
+
+  #### <i class="fa-solid fa-shopping-basket" style="color: #63E6BE;"></i> Other Assets
+
+  ${ otherasset.table }
+  ${ otherasset.add_action() }
+
+  #### <i class="fa-solid fa-credit-card" style="color: #E66579;"></i> Unsecured Debts
+
+  ${ unsecureddebt.table }
+  ${ unsecureddebt.add_action() }
+
 field: user_choice
 buttons:
   - Assemble Report: do_assemble_report
@@ -136,4 +149,24 @@ columns:
       currency(row_item.current_value) if row_item.current_value else ''
 edit:
   - manufacturer
+---
+table: otherasset.table
+rows: otherasset
+columns:
+  - Asset: |
+      row_item.description
+  - Value: |
+      currency(row_item.current_value) if row_item.current_value else ''
+edit:
+  - description
+---
+table: unsecureddebt.table
+rows: unsecureddebt
+columns:
+  - Creditor: |
+      row_item.creditor_name
+  - Amount: |
+      currency(row_item.current_balance) if row_item.current_balance else ''
+edit:
+  - creditor_name
 ---

@@ -29,10 +29,7 @@ fields:
     datatype: yesno
     default: No
   - Sponsoring employer name: retirementaccount[i].sponsor_name
-    required: False
-    show if:
-      variable: retirementaccount[i].is_employer_sponsored
-      is: Yes
+    show if: retirementaccount[i].is_employer_sponsored
   - Balance: retirementaccount[i].current_balance
     datatype: currency
   - As of date: retirementaccount[i].balance_as_of_date

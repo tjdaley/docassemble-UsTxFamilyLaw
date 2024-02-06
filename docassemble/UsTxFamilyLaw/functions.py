@@ -118,6 +118,20 @@ def watercraft_types() ->dict:
         'other': 'Other',
     })
 
+def unsecured_debt_types() ->dict:
+    """
+    Return a dict of unsecured debt types.
+
+    :rtype: dict
+    """
+    return __sorted_dict({
+        'credit_card': 'Credit Card',
+        'medical': 'Medical',
+        'personal_loan': 'Personal Loan',
+        'student_loan': 'Student Loan',
+        'other': 'Other',
+    })
+
 def __sorted_dict(d:dict) -> dict:
     """
     Return a dict sorted by key.

@@ -5,15 +5,54 @@ classes.py - Classes introduced by UsTxFamilyLaw
 from docassemble.base.util import DAObject  # type: ignore
 
 __all__ = [
+    'Asset',
     'MotorVehicle',
     'Automobile',
     'Boat',
     'Airplane',
     'BankAccount',
-    'RetirementAccount'
+    'OtherAsset',
+    'RetirementAccount',
+    'Liability',
+    'UnsecuredDebt'
 ]
 
-class BankAccount(DAObject):
+class Asset(DAObject):
+    """An asset"""
+    def init(self, *pargs, **kwargs):
+        super().init(*pargs, **kwargs)
+
+    def as_short_name(self):
+        return self.short_name or '**BLANK**'
+    
+    def __str__(self):
+        return self.as_short_name()
+
+class Liability(DAObject):
+    """A liability"""
+    def init(self, *pargs, **kwargs):
+        super().init(*pargs, **kwargs)
+
+    def as_short_name(self):
+        return self.short_name or '**BLANK**'
+    
+    def __str__(self):
+        return self.as_short_name()
+
+class UnsecuredDebt(Liability):
+    """An unsecured debt"""
+    def init(self, *pargs, **kwargs):
+        super().init(*pargs, **kwargs)
+    
+    def as_short_name(self):
+        return self.creditor_name or '**BLANK**'
+
+class OtherAsset(Asset):
+    """An asset of an unspecified type"""
+    def init(self, *pargs, **kwargs):
+        super().init(*pargs, **kwargs)
+
+class BankAccount(Asset):
     """A bank account"""
     def init(self, *pargs, **kwargs):
         super().init(*pargs, **kwargs)
@@ -28,7 +67,7 @@ class BankAccount(DAObject):
     def __str__(self):
         return self.as_short_name()
 
-class RetirementAccount(DAObject):
+class RetirementAccount(Asset):
     """A retirement account"""
     def init(self, *pargs, **kwargs):
         super().init(*pargs, **kwargs)
@@ -43,7 +82,7 @@ class RetirementAccount(DAObject):
     def __str__(self):
         return self.as_short_name()
 
-class MotorVehicle(DAObject):
+class MotorVehicle(Asset):
     """A motor vehicle"""
     def init(self, *pargs, **kwargs):
         super().init(*pargs, **kwargs)

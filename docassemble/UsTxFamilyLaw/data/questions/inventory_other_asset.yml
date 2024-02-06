@@ -1,0 +1,46 @@
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+  - docassemble.UsTxFamilyLaw.objects
+---
+objects:
+  - otherasset: DAList.using(object_type=OtherAsset)
+---
+decoration: fa-basket-shopping
+question: |
+  Does the community estate own any other assets?
+yesno: otherasset.there_are_any
+---
+question: |
+  <i class="fa-solid fa-basket-shopping" style="color: #63E6BE;"></i> Describe the ${ ordinal(i) } miscellaneous asset?
+fields:
+  - Description: otherasset[i].description
+  - Value: otherasset[i].current_value
+    datatype: currency
+  - As of date: otherasset[i].value_as_of_date
+  - Location: otherasset[i].location
+  - Title holder: otherasset[i].title_holder
+    required: False
+  - In possession of: otherasset[i].in_possession_of
+  - Current value: otherasset[i].current_value
+    datatype: currency
+  - Balance of all liens: otherasset[i].lien_balances
+    required: False
+    datatype: currency
+  - As of date: otherasset[i].lien_balances_as_of_date
+    required: False
+    datatype: date
+  - There is there a separate property claim: otherasset[i].is_sp_claimant
+    datatype: yesno
+---
+decoration: fa-circle-plus
+question: |
+  Are there any more miscellaneous assets
+  you would like to mention?
+subquestion: |
+  So far, you've listed:
+  
+  % for asst in otherasset:
+  * ${asst.description}
+  % endfor
+yesno: otherasset.there_is_another
+---
