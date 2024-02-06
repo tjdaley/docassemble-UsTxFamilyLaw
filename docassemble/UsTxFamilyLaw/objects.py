@@ -52,6 +52,9 @@ class OtherAsset(Asset):
     def init(self, *pargs, **kwargs):
         super().init(*pargs, **kwargs)
 
+    def as_short_name(self):
+        return self.description or '**BLANK**'
+
 class BankAccount(Asset):
     """A bank account"""
     def init(self, *pargs, **kwargs):
