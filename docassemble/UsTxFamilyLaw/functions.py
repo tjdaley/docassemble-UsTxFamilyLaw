@@ -8,6 +8,24 @@ ALIGNMENTS = {
     't': 'Third Party'
 }
 
+def nested_attr(obj, attr:str, default=None):
+    """
+    Return the value of a nested attribute.
+
+    :param obj: The object to search.
+    :type obj: object
+    :param attr: The attribute to search for.
+    :type attr: str
+    :param default: The default value to return if the attribute is not found.
+    :rtype: object
+    """
+    try:
+        for a in attr.split('.'):
+            obj = getattr(obj, a)
+        return obj
+    except AttributeError:
+        return default
+
 def us_counties(state) ->dict:
     """
     Return a dict of counties for the given state.

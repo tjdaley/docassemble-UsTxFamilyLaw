@@ -1,0 +1,128 @@
+include:
+  - basic-questions.yml
+---
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+---
+objects: 
+  - parties: DAList.using(object_type=Individual,
+                          complete_attribute='complete',
+                          gathered=True)
+  - db: DAGlobal.using(base='global', key=case.cause_number)
+---
+code: |
+  parties[i].name.first
+  parties[i].role
+  parties[i].complete = True
+---
+mandatory: True
+question: |
+  Cause number
+fields:
+  - Cause number: case.cause_number
+    input type: combobox
+    code: |
+      DAGlobal.keys('global')
+---
+mandatory: True
+question: |
+  Case Information
+fields:
+  - Court: case.court_id
+    required: False
+    default: ${nested_attr(db, 'case.court_id')}
+  - County: case.county
+    default: ${nested_attr(db, 'case.county')}
+    code: |
+      us_counties("TX")
+  - Dissolution: case.is_dissolution
+    datatype: yesnoradio
+    default: ${nested_attr(db, 'case.is_dissolution', True)}
+---
+mandatory: True
+question: |
+  Parties to the case
+subquestion: |
+  % if db.case.parties.number() > 0:
+  ${parties_loaded}
+  ${ parties.table }
+
+  ${ parties.add_action(label="Add another party") }
+  % else:
+  Add parties to this case.
+  
+  ${ parties.add_action(label="Add a party") }
+  % endif
+continue button field: parties.reviewed
+hide continue button: |
+  parties.number() == 0
+---
+code: |
+  parties = db.case.parties
+  # case = db.case
+  parties_loaded = True
+---
+table: parties.table
+rows: parties
+columns:
+  - Name: row_item
+  - Role: row_item.role
+  - Client?: row_item.our_client
+edit:
+  - name.first
+  - role
+---
+question: |
+  What is the name of the ${ ordinal(i) } party?
+fields:
+  - First name: parties[i].name.first
+  - Last name: parties[i].name.last
+  - Role: parties[i].role
+    choices:
+    - Petitioner: petitioner
+    - Respondent: respondent
+    - Child: child
+    - Intervenor: intervenor
+    - Joined party: joined
+  - Our client?: parties[i].our_client
+    choices:
+    - Yes
+    - No
+---
+# event: final_screen
+question: |
+  Summary of case
+subquestion: |
+  Cause Number: **${case.cause_number}**
+  Court: **${case.court_id}**
+  County: **${case.county}**
+
+  % for role_name in ('petitioner', 'respondent', 'intervenor', 'joined', 'child'):
+    % for party in parties.filter(role=role_name):
+      % if loop.first:
+  The ${ noun_plural(role_name) } are:
+
+      % endif
+    * ${ party }
+    % endfor
+
+  % endfor
+
+field: user_choice
+buttons:
+  - Save: save_case_setup
+---
+event: data_saved
+question: |
+  Your case set up has been saved under cause number ${db.case.cause_number}.
+---
+mandatory: True
+code: |
+  # parties.reviewed
+  case.cause_number
+  if user_choice == "save_case_setup":
+    db.case = case
+    db.case.parties = parties
+    db.case.client = parties.filter(our_client="Yes")
+    data_saved
+---
