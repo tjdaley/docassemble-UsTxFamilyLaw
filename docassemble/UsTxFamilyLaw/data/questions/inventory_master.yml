@@ -1,12 +1,15 @@
 metadata:
-  title: Inventory & Appraisement
-  short title: I&A
+  title: Inventory &amp; Appraisement
+  short title: I&amp;A
   authors:
     - name: Thomas J. Daley, J.D.
       organization: jdbot.us
   revision_date: 2024-02-05
+  footer: |
+    <span class="text-primary">Inventory</span> <span class="text-dark">* da.jdbot.us * Copyright &copy; 2024 by Thomas J. Daley, J.D. All Rights Reserved</span>
 ---
 include:
+  - basic-questions.yml
   - docassemble.UsTxFamilyLaw:inventory_real_property.yml
   - docassemble.UsTxFamilyLaw:inventory_bank_accounts.yml
   - docassemble.UsTxFamilyLaw:inventory_retirement_accounts.yml
@@ -15,6 +18,20 @@ include:
   - docassemble.UsTxFamilyLaw:inventory_aircraft.yml
   - docassemble.UsTxFamilyLaw:inventory_other_asset.yml
   - docassemble.UsTxFamilyLaw:inventory_unsecured_debt.yml
+---
+mandatory: true
+objects: 
+  - parties: DAList.using(object_type=Individual,
+                          complete_attribute='complete',
+                          gathered=True)
+  - db: DAGlobal.using(base='global', key=case.cause_number)
+---
+id: cause_number
+question: |
+  Cause number
+fields:
+  - Cause number: case.cause_number
+    choices: ${DAGlobal.keys('global')}
 ---
 question: |
   About this Inventory & Appraisement
@@ -88,6 +105,8 @@ buttons:
 mandatory: True
 code: |
   if user_choice == 'do_assemble_report':
+    db.case = case
+    db.case.property = DAList([realproperty, bankaccount, retirementaccount, automobile, watercraft, aircraft, otherasset, unsecureddebt])
     assemble_report
 ---
 table: bankaccount.table

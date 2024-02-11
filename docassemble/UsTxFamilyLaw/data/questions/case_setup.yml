@@ -1,9 +1,17 @@
+metadata:
+  title: Case Setup
+  short title: Case Setup
+  footer: |
+    <span class="text-primary">Case Setup</span> <span class="text-dark">* da.jdbot.us * Copyright &copy; 2024 by Thomas J. Daley, J.D. All Rights Reserved</span>
+  
+---
 include:
   - basic-questions.yml
 ---
 modules:
   - docassemble.UsTxFamilyLaw.functions
 ---
+mandatory: true
 objects: 
   - parties: DAList.using(object_type=Individual,
                           complete_attribute='complete',
@@ -12,10 +20,8 @@ objects:
 ---
 code: |
   parties[i].name.first
-  parties[i].role
   parties[i].complete = True
 ---
-mandatory: True
 question: |
   Cause number
 fields:
@@ -25,12 +31,18 @@ fields:
       DAGlobal.keys('global')
 ---
 mandatory: True
+code: |
+  if not isinstance(nested_attr(db, "case.parties"), DAList):
+    db.case = case
+    db.case.parties = parties
+---
+mandatory: True
 question: |
   Case Information
 fields:
   - Court: case.court_id
     required: False
-    default: ${nested_attr(db, 'case.court_id')}
+    default: ${nested_attr(db, 'case.court_id', '')}
   - County: case.county
     default: ${nested_attr(db, 'case.county')}
     code: |
@@ -59,7 +71,6 @@ hide continue button: |
 ---
 code: |
   parties = db.case.parties
-  # case = db.case
   parties_loaded = True
 ---
 table: parties.table
@@ -73,7 +84,7 @@ edit:
   - role
 ---
 question: |
-  What is the name of the ${ ordinal(i) } party?
+  Who is the ${ ordinal(i) } party?
 fields:
   - First name: parties[i].name.first
   - Last name: parties[i].name.last
@@ -89,7 +100,6 @@ fields:
     - Yes
     - No
 ---
-# event: final_screen
 question: |
   Summary of case
 subquestion: |

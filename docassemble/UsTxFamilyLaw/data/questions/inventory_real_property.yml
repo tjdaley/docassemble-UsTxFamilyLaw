@@ -4,6 +4,15 @@ modules:
 objects:
   - realproperty: DAList.using(object_type=Address)
 ---
+mandatory: True
+code: |
+  if not isinstance(nested_attr(db, "case.property.realproperty"), DAList):
+    db.case = case
+    db.case.property.realproperty = realproperty
+  else:
+    realproperty = db.case.property.realproperty
+    realproperty.complete = True
+---
 decoration: fa-house
 question: |
   Does the community estate own any real estate?
