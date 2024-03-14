@@ -1,0 +1,43 @@
+metadata:
+  title: Motion for New Trial
+  short title: MNT
+  authors:
+    - name: Thomas J. Daley, J.D.
+      organization: jdbot.us
+  revision_date: 2024-03-14
+  footer: |
+    <span class="text-primary">Motion for New Trial</span> <span class="text-dark">* da.jdbot.us * Copyright &copy; 2024 by Thomas J. Daley, J.D. All Rights Reserved</span>
+---
+mandatory: True
+question: |
+  Your Motion for New Trial is ready.
+subquestion: |
+  Thank you for using this interview.
+attachments:
+  - name: Motion for New Trial
+    filename: Motion_For_New_Trial
+    docx template file: docassemble.UsTxFamilyLaw:701_-_Motion_for_New_Trial.docx
+---
+question: |
+  Form Fields
+fields:
+  - Cause number: cause_number
+  - Court number: court_number
+  - County: county
+  - Petitioner: petitioner_name
+  - Respondent: respondent_name
+  - Movant: movant_alignment
+    choices:
+      - Petitioner: Petitioner
+      - Respondent: Respondent
+  - OC Name: oc_name
+  - OC Email: oc_email
+  - Date judgment was signed: judgment_date
+---
+ question: |
+   Do you want to draft this in VERBOSE MODE?
+ field: verbose
+ buttons:
+   - "Yes, I get paid by the word": True
+   - "No, I respect everyone's time": False
+---
