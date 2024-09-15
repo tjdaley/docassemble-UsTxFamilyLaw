@@ -1,0 +1,48 @@
+metadata:
+  title: Agreement for Early Move-Out Incentive and General Release
+  short title: Moveout and Release Agreement
+---
+mandatory: True
+question: |
+  Your document is ready.
+subquestion: |
+  Thank you for using JDBOT.US forms.
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachments:
+  - name: Agreement for Early Move-Out Incentive and General Release
+    filename: Agreement_for_Early_MoveOut_Incentive_and_General_Release
+    docx template file: Agreement for Early Move-Out Incentive and General Release.docx
+---
+question: |
+  Incentive Schedule
+fields:
+  - 'First move-out date': first_moveout_date
+    datatype: date
+  - 'Incentive payment': first_moveout_incentive
+    datatype: currency
+  - 'Second move-out date': second_moveout_date
+    datatype: date
+  - 'Incentive payment': second_moveout_incentive
+    datatype: currency
+  - 'Third move-out date': third_moveout_date
+    datatype: date
+  - 'Incentive payment': third_moveout_incentive
+    datatype: currency
+  - 'Deadline to vacate': vacate_deadline
+    datatype: date
+---
+question: |
+  Parties' Names
+fields:
+  - "Host's full legal name": host_name
+  - "Guest's full legal name": guest_name
+---
+question: |
+  Lease Details
+fields:
+  - 'Street address and unit number': rental_street_unit
+  - 'Rental city, state and ZIP': rental_city_state_zip
+  - 'Lease expiration date': lease_expiration_date
+    datatype: date
