@@ -77,7 +77,7 @@ class DAStripe(DAObject):
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
   var options = {
     mode: 'payment',
-    amount: """ + str(intent.amount) + """,
+    amount: """ + str(self.intent.amount) + """,
     currency: 'usd',
     appearance: {theme: 'stripe'}
   };
