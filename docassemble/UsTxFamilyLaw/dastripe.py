@@ -35,6 +35,7 @@ class DAStripe(DAObject):
       self.setup()
     return """\
 <div id="stripe-card-element" class="mt-2"></div>
+<div id="stipe-expresscheckout-element" class="mt-2"></div>
 <div id="stripe-card-errors" class="mt-2 mb-2 text-alert" role="alert"></div>
 <button class="btn """ + BUTTON_STYLE + self.button_color + " " + BUTTON_CLASS + '"' + """ id="stripe-submit">""" + word(self.button_label) + """</button>"""
 
@@ -88,7 +89,9 @@ class DAStripe(DAObject):
     }
   };
   //var card = elements.create("card", { style: style });
-  var card = elements.create("expressCheckout");
+  var express = elements.create("expressCheckout");
+  express.mount("#stripe-expresscheckout-element");
+  var card = elements.create('payment', options);
   card.mount("#stripe-card-element");
   card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('stripe-card-errors');
