@@ -1,0 +1,63 @@
+metadata:
+  title: Promissory Note - Legal Fees
+  short title: Note for Legal Fees
+---
+mandatory: True
+question: |
+  Your document is ready.
+subquestion: |
+  Thank you for using JDBOT.
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachments:
+  - name: Promissory Notes for Legal Fees
+    filename: Promissory_Notes_for_Legal_Fees
+    docx template file: docassemble.UsTxFamilyLaw:Promissory Note for Legal Fees.docx
+---
+question: |
+  Terms
+fields:
+  - 'Amount borrowed': amount_borrowed
+    datatype: currency
+  - 'First payment due date': date_first_payment_due
+    datatype: date
+  - 'Maturity date': maturity_date
+    datatype: date
+  - 'Monthly payment': monthly_payment
+    datatype: currency
+  - 'Interest rate BEFORE maturity date': interest_rate_before_maturity
+    datatype: number
+  - 'Interest rate AFTER maturity date': interest_rate_after_maturity
+    datatype: number
+---
+question: |
+  Case Information
+fields:
+  - 'Cause number': cause_number
+  - 'Case style': case_style
+    input type: area
+  - 'Court ordinal (e.g. 416th)': court_number
+  - 'County where case is pending': litigation_county
+---
+question: |
+  Date Note will be Signed
+fields:
+  - no label: date_signed
+    datatype: date
+---
+question: |
+  Lender Information
+fields:
+  - 'Full name': lender_name
+  - 'Street': lender_street
+  - 'City, State ZIP': lender_city_state_zip
+  - 'County': lender_county
+---
+question: |
+  Borrower Information
+fields:
+  - 'Name': maker_name
+  - 'Street': maker_street
+  - 'City, State ZIP': maker_city_state_zip
+  - 'County': maker_county
