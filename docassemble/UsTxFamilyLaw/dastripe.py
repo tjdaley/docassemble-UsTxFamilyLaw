@@ -34,7 +34,7 @@ class DAStripe(DAObject):
     if not self.is_setup:
       self.setup()
     return """\
-<div id="stripe-card-element" class="mt-2"></div>
+<div id="stripe-payment-element" class="mt-2"></div>
 <div id="stripe-card-errors" class="mt-2 mb-2 text-alert" role="alert"></div>
 <button class="btn """ + BUTTON_STYLE + self.button_color + " " + BUTTON_CLASS + '"' + """ id="stripe-submit">""" + word(self.button_label) + """</button>"""
 
@@ -84,12 +84,17 @@ class DAStripe(DAObject):
       spacedAccordionItems: true},
     business: {name: "JDBOT.US - MarriageDocs.Store"}
   };
-  const appearance = {
-    theme: 'stripe'
-  };
-  var elements = stripe.elements({appearance: appearance, clientSecret: client_secret, currency: 'usd'});
+  const elements_options = {
+    mode: 'payment',
+    amount: """ + str(self.amount) + """,
+    currency: 'usd',
+    appearance: {theme: 'stripe'}
+  }
+
+  const elements = stripe.elements(elements_options);
   var card = elements.create('payment', payment_options);
-  card.mount("#stripe-card-element");
+  card.mount("#stripe-payment-element");
+
   card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('stripe-card-errors');
     if (error) {
