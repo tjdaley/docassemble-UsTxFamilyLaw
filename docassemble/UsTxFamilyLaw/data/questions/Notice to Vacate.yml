@@ -1,0 +1,84 @@
+metadata:
+  title: Notice to Vacate
+  short title: Notice to Vacate
+---
+mandatory: True
+question: |
+  Your notice is ready.
+subquestion: |
+  Thank you for using JDBOT.
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachments:
+  - name: Notice to Vacate
+    filename: Notice_to_Vacate
+    docx template file: Notice_to_Vacate.docx
+---
+question: |
+  Service Method
+field: method_of_service
+choices:
+  - USPS First Class Mail
+  - USPS Certified Mail
+  - Personal Service
+  - Hand Delivery
+  - Affixing to Inside of Front Door
+  - Affixing to Outside of Front Door
+---
+code: |
+  if method_of_service == 'USPS Certified Mail':
+    certified = True
+  else:
+    certified = False
+---
+question: |
+  Certified mail item number
+fields:
+  - no label: item_number
+---
+question: |
+  Date Notice will be Signed
+fields:
+  - no label: date_signed
+    datatype: date
+---
+question: |
+  Occupant and Location
+fields:
+  - "Occupant's full name": guest_name
+  - 'Street address and unit number of rental unit': rental_street_unit
+  - 'City, State ZIP of rental unit': rental_city_state_zip
+  - 'Is there a security deposit?': guest_has_security_deposit
+    datatype: yesno
+  - 'Deadline to vacate': vacate_deadline
+    datatype: date
+---
+question: |
+  Person Giving Notice
+fields:
+  - 'Email': host_email
+    datatype: email
+  - 'Full name': host_name
+  - 'Telephone': host_telephone
+---
+signature: host_signature
+question: |
+  Your Signature
+subquestion: |
+  Sign using your tablet's pen, your finger, or mouse pointer.
+under: |
+  ${host_name}
+---
+question: |
+  Reason for Notice
+field: reason
+choices:
+  - expiration of lease
+  - failure to pay rent as required under the lease agreement
+  - sale of residence
+  - damage to property
+  - condemnation of property
+  - non-compliance with lease agreement
+  - termination of tennancy at will
+  - OTHER REASON FOR NOTICE
