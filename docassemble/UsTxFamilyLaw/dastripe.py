@@ -91,7 +91,7 @@ class DAStripe(DAObject):
   //var card = elements.create("card", { style: style });
   var express = elements.create("expressCheckout");
   express.mount("#stripe-expresscheckout-element");
-  var card = elements.create('payment', options);
+  var card = elements.create('payment');
   card.mount("#stripe-card-element");
   card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('stripe-card-errors');
