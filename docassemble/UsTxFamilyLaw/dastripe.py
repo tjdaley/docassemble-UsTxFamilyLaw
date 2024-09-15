@@ -76,22 +76,20 @@ class DAStripe(DAObject):
     return """\
 <script>
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
-  var options = {
-    mode: 'payment',
-    amount: """ + str(self.intent.amount) + """,
-    currency: 'usd',
-    appearance: {theme: 'stripe'}
+  var client_secret = '""" + get_config('stripe secret key') + """'
+  const payment_options = {
+    layout: {
+      type: 'accordion',
+      defaultCollapsed: false,
+      radios: false,
+      spacedAccordionItems: true},
+    business: "JDBOT.US - MarriageDocs.Store"
   };
-  var elements = stripe.elements(options);
-  var style = {
-    base: {
-      color: "#32325d",
-    }
+  const appearance = {
+    theme: 'stripe'
   };
-  //var card = elements.create("card", { style: style });
-  var express = elements.create("expressCheckout");
-  express.mount("#stripe-expresscheckout-element");
-  var card = elements.create('payment');
+  var elements = stripe.elements({client_secret, appearance});
+  var card = elements.create('payment', payment_options);
   card.mount("#stripe-card-element");
   card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('stripe-card-errors');
