@@ -87,7 +87,7 @@ class DAStripe(DAObject):
   const appearance = {
     theme: 'stripe'
   };
-  var elements = stripe.elements({client_secret, appearance});
+  var elements = stripe.elements(appearance, client_secret);
   var card = elements.create('payment', payment_options);
   card.mount("#stripe-card-element");
   card.addEventListener('change', ({error}) => {
