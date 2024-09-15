@@ -75,13 +75,19 @@ class DAStripe(DAObject):
     return """\
 <script>
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
-  var elements = stripe.elements();
+  var options = {
+    mode: 'payment',
+    currency: 'usd',
+    appearance: {theme: 'stripe'}
+  };
+  var elements = stripe.elements(options);
   var style = {
     base: {
       color: "#32325d",
     }
   };
-  var card = elements.create("card", { style: style });
+  //var card = elements.create("card", { style: style });
+  var card = elements.create("expressCheckout");
   card.mount("#stripe-card-element");
   card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('stripe-card-errors');
