@@ -35,7 +35,6 @@ class DAStripe(DAObject):
       self.setup()
     return """\
 <div id="stripe-card-element" class="mt-2"></div>
-<div id="stripe-expresscheckout-element" class="mt-2"></div>
 <div id="stripe-card-errors" class="mt-2 mb-2 text-alert" role="alert"></div>
 <button class="btn """ + BUTTON_STYLE + self.button_color + " " + BUTTON_CLASS + '"' + """ id="stripe-submit">""" + word(self.button_label) + """</button>"""
 
@@ -83,7 +82,7 @@ class DAStripe(DAObject):
       defaultCollapsed: false,
       radios: false,
       spacedAccordionItems: true},
-    business: "JDBOT.US - MarriageDocs.Store"
+    business: {name: "JDBOT.US - MarriageDocs.Store"}
   };
   const appearance = {
     theme: 'stripe'
