@@ -25,11 +25,10 @@ class DAStripe(DAObject):
     str(self.currency)
     result = stripe.Customer.search(query=f'email:"{self.payor.email}"')
     customers = result.get('data', [])
-    print(result)
     if not customers:
       customer = stripe.Customer.create(description=self.payor.description, email=self.payor.email, name=str(self.payor))
     else:
-      customer = customers[1]
+      customer = customers[0]
     coupon = customer.get('discount', {}).get('coupon', {})
     if coupon:
       coupon_id = coupon.get('id','')
