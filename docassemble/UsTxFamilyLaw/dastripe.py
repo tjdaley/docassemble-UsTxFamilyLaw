@@ -23,7 +23,7 @@ class DAStripe(DAObject):
   def setup(self):
     float(self.amount)
     str(self.currency)
-    result = stripe.Customer.search(query=f'email="{self.payor.email}"')
+    result = stripe.Customer.search(query=f'email:"{self.payor.email}"')
     customers = result.get('data', [])
     if not customers:
       customer = stripe.Customer.create(description=self.payor.description, email=self.payor.email, name=str(self.payor))
