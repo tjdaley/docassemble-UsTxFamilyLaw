@@ -137,9 +137,9 @@ class DAStripe(DAObject):
     elements,
     clientSecret: '""" + self.intent.client_secret + """',
     confirmParams: {
-      return_url: 'https://da.jdbot.us',
-      redirect: 'if_required'
+      return_url: 'https://da.jdbot.us'
     },
+    redirect: 'if_required'
   });
 
   if (error) {
