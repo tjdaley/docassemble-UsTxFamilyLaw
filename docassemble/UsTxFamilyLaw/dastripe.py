@@ -104,19 +104,19 @@ class DAStripe(DAObject):
     }
   });
 
-  var submitButton = document.getElementById('stripe-submit');
+  const submitButton = document.getElementById('stripe-submit');
   submitButton.addEventListener('click', async (event) => {
   // We don't want to let default form submission happen here,
   // which would refresh the page.
   event.preventDefault();
 
   // Prevent multiple form submissions
-  if (submitBtn.disabled) {
+  if (submitButton.disabled) {
     return;
   }
 
   // Disable form submission while loading
-  submitBtn.disabled = true;
+  submitButton.disabled = true;
 
   // Trigger form validation and wallet collection
   const {error: submitError} = await elements.submit();
