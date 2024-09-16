@@ -26,7 +26,7 @@ class DAStripe(DAObject):
     result = stripe.Customer.search(query=f'email="{self.payor.email}"')
     customers = result.get('data', [])
     if not customers:
-      customer = stripe.Customer.create(description='JDBOT Customer', email=self.payor.email, name=str(self.payor))
+      customer = stripe.Customer.create(description=self.payor.description, email=self.payor.email, name=str(self.payor))
     else:
       customer = customers[1]
     self.intent = stripe.PaymentIntent.create(
@@ -127,7 +127,7 @@ class DAStripe(DAObject):
   });
 
   submitButton.addEventListener('click', async (event) => {
-  // We don't want to let default form submission happen here,
+  // We dont want to let default form submission happen here,
   // which would refresh the page.
   event.preventDefault();
 
