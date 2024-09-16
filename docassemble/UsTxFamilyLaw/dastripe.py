@@ -47,13 +47,16 @@ class DAStripe(DAObject):
 
     if self.amount < .25:
       self.amount = 0
+      self.is_setup = True  # prevent creating an intent
+      self.payment_successful = True  # force self.paid to be True
+      self.result = {'payment_successful': True}
 
     return self.amount
 
   def setup(self):
     float(self.amount)
     str(self.currency)
-    if not self.paid:
+    if not self.paid and self.amount > 0.0:
       self.intent = stripe.PaymentIntent.create(
         amount=int(float('%.2f' % float(self.amount))*100.0),
         currency=str(self.currency),
@@ -204,6 +207,7 @@ class DAStripe(DAObject):
       self.payment_successful = True
       return True
     return False
+
   def process(self):
     self.result = action_argument('result')
     self.paid
