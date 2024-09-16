@@ -44,7 +44,7 @@ class DAStripe(DAObject):
         self.amount -= amount_off
 
     if self.amount < .25:
-      self.payment.paid = True
+      self.paid = True
     else:
       self.intent = stripe.PaymentIntent.create(
         amount=int(float('%.2f' % float(self.amount))*100.0),
