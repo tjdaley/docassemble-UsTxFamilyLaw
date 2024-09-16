@@ -38,15 +38,18 @@ class DAStripe(DAObject):
         amount_off = float('%.2f' % float(percent_off / 1000 * self.amount))
       if amount_off:
         self.amount -= amount_off
-        
-    self.intent = stripe.PaymentIntent.create(
-      amount=int(float('%.2f' % float(self.amount))*100.0),
-      currency=str(self.currency),
-      statement_descriptor_suffix=self.description,
-      description=self.description,
-      customer=customer.get('id'),
-      automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
-    )
+
+    if self.amount < .25:
+      self.payment.paid = True
+    else:
+      self.intent = stripe.PaymentIntent.create(
+        amount=int(float('%.2f' % float(self.amount))*100.0),
+        currency=str(self.currency),
+        statement_descriptor_suffix=self.description,
+        description=self.description,
+        customer=customer.get('id'),
+        automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
+      )
     self.is_setup = True
 
   @property
