@@ -86,8 +86,8 @@ class DAStripe(DAObject):
   };
   const elements_options = {
     mode: 'payment',
-    amount: """ + str(self.amount) + """,
-    currency: 'usd',
+    amount: """ + str(self.intent.amount) + """,
+    currency: '""" + self.intent.currency +"""',
     appearance: {theme: 'stripe'}
   }
 
@@ -103,23 +103,47 @@ class DAStripe(DAObject):
       displayError.textContent = '';
     }
   });
+
   var submitButton = document.getElementById('stripe-submit');
-  submitButton.addEventListener('click', function(ev) {
-    stripe.confirmCardPayment(""" + json.dumps(self.intent.client_secret) + """, {
-      payment_method: {
-        card: card,
-        billing_details: """ + json.dumps(billing_details) + """
-      }
-    }).then(function(result) {
-      if (result.error) {
-        flash(result.error.message + "  " + """ + json.dumps(word(self.error_message)) + """, "danger");
-      } else {
-        if (result.paymentIntent.status === 'succeeded') {
-          action_perform(""" + json.dumps(self.instanceName + '.success') + """, {result: result})
-        }
-      }
-    });
+  submitButton.addEventListener('click', async (event) => {
+  // We don't want to let default form submission happen here,
+  // which would refresh the page.
+  event.preventDefault();
+
+  // Prevent multiple form submissions
+  if (submitBtn.disabled) {
+    return;
+  }
+
+  // Disable form submission while loading
+  submitBtn.disabled = true;
+
+  // Trigger form validation and wallet collection
+  const {error: submitError} = await elements.submit();
+  if (submitError) {
+    handleError(submitError);
+    return;
+  }
+
+  // Confirm the PaymentIntent using the details collected by the Payment Element
+  const {error} = await stripe.confirmPayment({
+    elements,
+    clientSecret: '""" + self.intent.client_secret + """',
+    confirmParams: {
+      return_url: '#',
+    },
   });
+
+  if (error) {
+    // This point is only reached if there's an immediate error when
+    // confirming the payment. Show the error to your customer (for example, payment details incomplete)
+    handleError(error);
+  } else {
+    // Your customer is redirected to your `return_url`. For some payment
+    // methods like iDEAL, your customer is redirected to an intermediate
+    // site first to authorize the payment, then redirected to the `return_url`.
+  }
+});
 </script>
     """
   @property
