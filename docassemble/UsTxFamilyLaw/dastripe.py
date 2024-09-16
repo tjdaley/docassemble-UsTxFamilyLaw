@@ -46,7 +46,6 @@ class DAStripe(DAObject):
         self.amount -= amount_off
 
     if self.amount < .25:
-      self.paid = True
       self.amount = 0
 
     return self.amount
