@@ -2,6 +2,7 @@ import stripe
 import json
 from docassemble.base.util import word, get_config, action_argument, DAObject, prevent_going_back
 from docassemble.base.standardformatter import BUTTON_STYLE, BUTTON_CLASS
+from docassemble.base.util import user_info
 
 stripe.api_key = get_config('stripe secret key')
 
@@ -23,10 +24,12 @@ class DAStripe(DAObject):
   def setup(self):
     float(self.amount)
     str(self.currency)
-    result = stripe.Customer.search(query=f'email:"{self.payor.email}"')
+    user_details = user_info()
+    user_email = user_details.email
+    result = stripe.Customer.search(query=f'email:"{user_email}"')
     customers = result.get('data', [])
     if not customers:
-      customer = stripe.Customer.create(description=self.payor.description, email=self.payor.email, name=str(self.payor))
+      customer = stripe.Customer.create(description=self.payor.description, email=user_email, name=str(self.payor))
     else:
       customer = customers[0]
     coupon = customer.get('discount', {}).get('coupon', {})
