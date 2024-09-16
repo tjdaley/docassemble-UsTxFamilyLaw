@@ -149,7 +149,7 @@ class DAStripe(DAObject):
     // Your customer is redirected to your `return_url`. For some payment
     // methods like iDEAL, your customer is redirected to an intermediate
     // site first to authorize the payment, then redirected to the `return_url`.
-    action_perform(""" + json.dumps(self.instanceName + '.success') + """, {result: {payment_successful: 1})
+    action_perform(""" + json.dumps(self.instanceName + '.success') + """, {result: {payment_successful: 1}});
   }
 });
 </script>
