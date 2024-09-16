@@ -137,7 +137,8 @@ class DAStripe(DAObject):
     elements,
     clientSecret: '""" + self.intent.client_secret + """',
     confirmParams: {
-      return_url: 'https://da.jdbot.us/interview?i=docassemble.playground1:teststripe.yaml#page4',
+      return_url: 'https://da.jdbot.us',
+      redirect: 'if_required'
     },
   });
 
