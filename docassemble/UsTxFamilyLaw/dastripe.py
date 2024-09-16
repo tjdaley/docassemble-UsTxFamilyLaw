@@ -35,7 +35,7 @@ class DAStripe(DAObject):
       self.setup()
     return """\
 <div id="stripe-payment-element" class="mt-2"></div>
-<div id="stripe-card-errors" class="mt-2 mb-2 text-alert" role="alert"></div>
+<div id="stripe-errors" class="mt-2 mb-2 text-alert" role="alert"></div>
 <button class="btn """ + BUTTON_STYLE + self.button_color + " " + BUTTON_CLASS + '"' + """ id="stripe-submit">""" + word(self.button_label) + """</button>"""
 
   @property
@@ -74,6 +74,14 @@ class DAStripe(DAObject):
       pass
     return """\
 <script>
+  const submitButton = document.getElementById('stripe-submit');
+
+  const handleError = (error) => {
+    const messageContainer = document.querySelector('#stripe-errors');
+    messageContainer.textContent = error.message;
+    submitButton.disabled = false;
+  }
+
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
   var client_secret = '""" + get_config('stripe secret key') + """'
   const payment_options = {
@@ -96,7 +104,7 @@ class DAStripe(DAObject):
   card.mount("#stripe-payment-element");
 
   card.addEventListener('change', ({error}) => {
-    const displayError = document.getElementById('stripe-card-errors');
+    const displayError = document.getElementById('stripe-errors');
     if (error) {
       displayError.textContent = error.message;
     } else {
@@ -104,7 +112,6 @@ class DAStripe(DAObject):
     }
   });
 
-  const submitButton = document.getElementById('stripe-submit');
   submitButton.addEventListener('click', async (event) => {
   // We don't want to let default form submission happen here,
   // which would refresh the page.
@@ -128,10 +135,10 @@ class DAStripe(DAObject):
   // Confirm the PaymentIntent using the details collected by the Payment Element
   const {error} = await stripe.confirmPayment({
     elements,
-    clientSecret: '""" + self.intent.client_secret + """',
-    confirmParams: {
-      return_url: '#',
-    },
+    clientSecret: '""" + self.intent.client_secret + """'
+    //confirmParams: {
+    //  return_url: '#',
+    //},
   });
 
   if (error) {
@@ -142,6 +149,7 @@ class DAStripe(DAObject):
     // Your customer is redirected to your `return_url`. For some payment
     // methods like iDEAL, your customer is redirected to an intermediate
     // site first to authorize the payment, then redirected to the `return_url`.
+    action_perform(""" + json.dumps(self.instanceName + '.success') + """, {result: {payment_successful: 1})
   }
 });
 </script>
