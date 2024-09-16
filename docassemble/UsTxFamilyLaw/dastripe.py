@@ -21,17 +21,19 @@ class DAStripe(DAObject):
       self.error_message = "Please try another payment method."
     self.is_setup = False
 
-  def setup(self):
+  def discounted_price(self):
     float(self.amount)
     str(self.currency)
     user_details = user_info()
     user_email = user_details.email
+    self.payor.email = user_email
     result = stripe.Customer.search(query=f'email:"{user_email}"')
     customers = result.get('data', [])
     if not customers:
       customer = stripe.Customer.create(description=self.payor.description, email=user_email, name=str(self.payor))
     else:
       customer = customers[0]
+    self.stripe_customer = customer
     discount = customer.get('discount', {}) or {}
     coupon = discount.get('coupon')
     if coupon:
@@ -45,13 +47,20 @@ class DAStripe(DAObject):
 
     if self.amount < .25:
       self.paid = True
-    else:
+      self.amount = 0
+
+    return self.amount
+
+  def setup(self):
+    float(self.amount)
+    str(self.currency)
+    if not self.paid:
       self.intent = stripe.PaymentIntent.create(
         amount=int(float('%.2f' % float(self.amount))*100.0),
         currency=str(self.currency),
         statement_descriptor_suffix=self.description,
         description=self.description,
-        customer=customer.get('id'),
+        customer=self.stripe_customer.get('id'),
         automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
       )
     self.is_setup = True
