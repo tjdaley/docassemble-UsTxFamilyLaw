@@ -32,7 +32,8 @@ class DAStripe(DAObject):
       customer = stripe.Customer.create(description=self.payor.description, email=user_email, name=str(self.payor))
     else:
       customer = customers[0]
-    coupon = customer.get('discount', {}).get('coupon', {})
+    discount = customer.get('discount', {}) or {}
+    coupon = discount.get('coupon')
     if coupon:
       coupon_id = coupon.get('id','')
       percent_off = coupon.get('percent_off', 0.0) or 0.0
