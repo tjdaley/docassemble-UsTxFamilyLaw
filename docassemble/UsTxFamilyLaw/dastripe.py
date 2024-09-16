@@ -37,7 +37,7 @@ class DAStripe(DAObject):
     discount = customer.get('discount', {}) or {}
     coupon = discount.get('coupon')
     list_price = self.amount
-    discounted_price = list_price
+    discount_price = list_price
     if coupon:
       coupon_id = coupon.get('id','')
       percent_off = coupon.get('percent_off', 0.0) or 0.0
@@ -45,16 +45,16 @@ class DAStripe(DAObject):
       if percent_off:
         amount_off = float('%.2f' % float(percent_off / 100.0 * list_price))
       if amount_off:
-        discounted_price = list_price - amount_off
+        discount_price = list_price - amount_off
 
-    if discounted_price < .25:
-      discounted_price = 0.0
+    if discount_price < .25:
+      discount_price = 0.0
       self.amount = 0.0
       self.is_setup = True  # prevent creating an intent
       self.payment_successful = True  # force self.paid to be True
       self.result = {'payment_successful': True}
 
-    return discounted_priced
+    return discount_priced
 
   def setup(self):
     float(self.amount)
