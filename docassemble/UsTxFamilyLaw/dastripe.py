@@ -135,10 +135,10 @@ class DAStripe(DAObject):
   // Confirm the PaymentIntent using the details collected by the Payment Element
   const {error} = await stripe.confirmPayment({
     elements,
-    clientSecret: '""" + self.intent.client_secret + """'
-    //confirmParams: {
-    //  return_url: '#',
-    //},
+    clientSecret: '""" + self.intent.client_secret + """',
+    confirmParams: {
+      return_url: 'https://da.jdbot.us/interview?i=docassemble.playground1:teststripe.yaml#page4',
+    },
   });
 
   if (error) {
