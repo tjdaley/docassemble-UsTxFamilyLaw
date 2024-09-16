@@ -29,6 +29,16 @@ class DAStripe(DAObject):
       customer = stripe.Customer.create(description=self.payor.description, email=self.payor.email, name=str(self.payor))
     else:
       customer = customers[1]
+    coupon = customer.get('discount', {}).get('coupon', {})
+    if coupon:
+      coupon_id = coupon.get('id','')
+      percent_off = coupon.get('percent_off', 0.0) or 0.0
+      amount_off = coupon.get('amount_off', 0) or 0.0
+      if percent_off:
+        amount_off = float('%.2f' % float(percent_off / 1000 * self.amount))
+      if amount_off:
+        self.amount -= amount_off
+        
     self.intent = stripe.PaymentIntent.create(
       amount=int(float('%.2f' % float(self.amount))*100.0),
       currency=str(self.currency),
