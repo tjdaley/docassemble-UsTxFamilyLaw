@@ -39,7 +39,7 @@ class DAStripe(DAObject):
       percent_off = coupon.get('percent_off', 0.0) or 0.0
       amount_off = coupon.get('amount_off', 0) or 0.0
       if percent_off:
-        amount_off = float('%.2f' % float(percent_off / 1000 * self.amount))
+        amount_off = float('%.2f' % float(percent_off / 100.0 * self.amount))
       if amount_off:
         self.amount -= amount_off
 
