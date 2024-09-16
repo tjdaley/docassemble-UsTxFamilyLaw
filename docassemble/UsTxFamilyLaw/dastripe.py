@@ -95,9 +95,6 @@ class DAStripe(DAObject):
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
   var client_secret = '""" + get_config('stripe secret key') + """'
 
-  // Retrieve the client's record
-  const client_record = stripe.Customer.retrieve('""" + self.
-  
   const payment_options = {
     layout: {
       type: 'accordion',
