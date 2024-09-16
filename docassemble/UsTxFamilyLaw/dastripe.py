@@ -54,7 +54,7 @@ class DAStripe(DAObject):
       self.payment_successful = True  # force self.paid to be True
       self.result = {'payment_successful': True}
 
-    return discount_priced
+    return discount_price
 
   def setup(self):
     float(self.amount)
