@@ -23,12 +23,18 @@ class DAStripe(DAObject):
   def setup(self):
     float(self.amount)
     str(self.currency)
+    result = stripe.Customer.search(query=f'email="{self.payor.email}"')
+    customers = result.get('data', [])
+    if not customers:
+      customer = stripe.Customer.create(description='JDBOT Customer', email=self.payor.email, name=str(self.payor))
+    else:
+      customer = customers[1]
     self.intent = stripe.PaymentIntent.create(
       amount=int(float('%.2f' % float(self.amount))*100.0),
       currency=str(self.currency),
       statement_descriptor_suffix=self.description,
       description=self.description,
-      customer=str(self.payor),
+      customer=customer.get('id'),
       automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
     )
     self.is_setup = True
@@ -88,6 +94,10 @@ class DAStripe(DAObject):
 
   var stripe = Stripe(""" + json.dumps(get_config('stripe public key')) + """);
   var client_secret = '""" + get_config('stripe secret key') + """'
+
+  // Retrieve the client's record
+  const client_record = stripe.Customer.retrieve('""" + self.
+  
   const payment_options = {
     layout: {
       type: 'accordion',
