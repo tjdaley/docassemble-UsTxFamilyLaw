@@ -3,7 +3,7 @@ classes.py - Classes introduced by UsTxFamilyLaw
 """
 __author__ = "Thomas J. Daley, J.D."
 # Ignore imoprt error on the next line.  It's a false positive.
-from docassemble.base.util import DAList, DAObject, IndividualName, Name, Person  # type: ignore
+from docassemble.base.util import Address, DAList, DAObject, IndividualName, LatitudeLongitude, Name, Person  # type: ignore
 
 __all__ = [
     'Asset',
