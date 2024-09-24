@@ -26,7 +26,7 @@ def nested_attr(obj, attr:str, default=None):
     except AttributeError:
         return default
 
-def us_counties(state) ->list:
+def us_counties(filter_state) ->list:
     """
     Return a dict of counties for the given state.
 
@@ -41,17 +41,13 @@ def us_counties(state) ->list:
     with open(data_file) as f:
         # read the file into a list of lines
         lines = f.readlines()
-    counties_by_state = {}
+    counties = {}
     for i, line in enumerate(lines):
         # remove the newline character from each line
-        lines[i] = line.strip()
-        county, us_state = line.split('|')
-        if us_state not in counties_by_state:
-            counties_by_state[us_state] = []
-        counties_by_state[us_state].append(county)
-    filtered = counties_by_state.get(state.upper(), [])
-    sorted_counties = sorted(filtered)
-    counties = {x: x for x in sorted_counties}
+        clean_line = line.strip()
+        county, us_state = clean_line.split('|')
+        if filter_state == us_state:
+            counties[county] = county
     return counties
 
 def alignment_list() ->dict:
