@@ -26,7 +26,7 @@ def nested_attr(obj, attr:str, default=None):
     except AttributeError:
         return default
 
-def us_counties(state) ->dict:
+def us_counties(state) ->list:
     """
     Return a dict of counties for the given state.
 
@@ -35,16 +35,24 @@ def us_counties(state) ->dict:
     :rtype: dict
     """
 
-    import json
     import os
 
-    data_file = os.path.join(os.path.dirname(__file__), 'data', 'us_counties.json')
+    data_file = os.path.join(os.path.dirname(__file__), 'data', 'unique_county_state_list.csv')
     with open(data_file) as f:
-        counties_by_state = json.load(f)
-
-    counties = counties_by_state.get(state.upper(), [])
-    county_dict = {x: x for x in counties}
-    return county_dict
+        # read the file into a list of lines
+        lines = f.readlines()
+    counties_by_state = {}
+    for i, line in enumerate(lines):
+        # remove the newline character from each line
+        lines[i] = line.strip()
+        county, us_state = line.split('|')
+        if us_state not in counties_by_state:
+            counties_by_state[us_state] = []
+        counties_by_state[us_state].append(county)
+    filtered = counties_by_state.get(state.upper(), [])
+    sorted_counties = sorted(filtered)
+    counties = {x: x for x in sorted_counties}
+    return counties
 
 def alignment_list() ->dict:
     """
