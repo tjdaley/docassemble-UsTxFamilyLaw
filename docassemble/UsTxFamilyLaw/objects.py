@@ -2,7 +2,7 @@
 classes.py - Classes introduced by UsTxFamilyLaw
 """
 # Ignore imoprt error on the next line.  It's a false positive.
-from docassemble.base.util import DAObject  # type: ignore
+from docassemble.base.util import DAIndividual, DAList, DAObject, IndividualName  # type: ignore
 
 __all__ = [
     'Asset',
@@ -14,8 +14,46 @@ __all__ = [
     'OtherAsset',
     'RetirementAccount',
     'Liability',
-    'UnsecuredDebt'
+    'UnsecuredDebt',
+    'Attorney',
+    'AttorneyList'
 ]
+
+class Attorney(DAIndividual):
+    """Represents a natural person who is an attorney."""
+    NameClass = Name
+    AddressClass = Address
+    LatitudeLongitudeClass = LatitudeLongitude
+
+    def init(self, *pargs, **kwargs):
+        if not hasattr(self, 'name') and 'name' not in kwargs:
+            self.initializeAttribute('name', self.NameClass)
+        if 'address' not in kwargs:
+            self.initializeAttribute('address', self.AddressClass)
+        if 'bar_no' not in kwargs:
+            self.bar_no = ''
+        if 'firm_name' not in kwargs:
+            self.firm_name = ''
+        if 'phone_number' not in kwargs:
+            self.phone_number = ''
+        if 'fax_number' not in kwargs:
+            self.fax_number = ''
+        if 'location' not in kwargs:
+            self.initializeAttribute('location', self.LatitudeLongitudeClass)
+        if 'name' in kwargs and isinstance(kwargs['name'], str):
+            if not hasattr(self, 'name'):
+                self.initializeAttribute('name', self.NameClass)
+            self.name.text = kwargs['name']
+            del kwargs['name']
+        super().init(*pargs, **kwargs)
+
+class AttorneyList(DAList):
+    """Represents a list of attorneys."""
+    AttorneyClass = Attorney
+
+    def init(self, *pargs, **kwargs):
+        self.object_type = self.AttorneyClass
+        super().init(*pargs, **kwargs)
 
 class Asset(DAObject):
     """An asset"""
