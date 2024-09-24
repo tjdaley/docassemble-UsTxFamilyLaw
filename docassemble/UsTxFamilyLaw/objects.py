@@ -2,7 +2,7 @@
 classes.py - Classes introduced by UsTxFamilyLaw
 """
 # Ignore imoprt error on the next line.  It's a false positive.
-from docassemble.base.util import DAIndividual, DAList, DAObject, IndividualName  # type: ignore
+from docassemble.base.util import DAList, DAObject, IndividualName, Person  # type: ignore
 
 __all__ = [
     'Asset',
@@ -19,7 +19,7 @@ __all__ = [
     'AttorneyList'
 ]
 
-class Attorney(DAIndividual):
+class Attorney(Person):
     """Represents a natural person who is an attorney."""
     NameClass = Name
     AddressClass = Address
