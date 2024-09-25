@@ -1,0 +1,179 @@
+---
+metadata:
+  title: |
+    Case Setup
+  tags:
+    - 000:SETUP
+---
+include:
+  - basic-questions.yml
+  - docassemble.AssemblyLine:assembly_line.yml
+---
+modules:
+  - docassemble.UsTxFamilyLaw.objects
+  - docassemble.UsTxFamilyLaw.functions
+---
+objects: 
+  - case: Case
+  - document: Document
+---
+mandatory: True
+code: |
+  if user_logged_in() and user_has_privilege('advocate'):
+    multicase_user = True
+  else:
+    multicase_user = False
+---
+mandatory: True
+code: |
+  document.title = "Case Information"
+  del case.plaintiff
+  del case.defendant
+  case.initializeAttribute('petitioner', PartyList)
+  case.petitioner.there_are_any = True
+  case.petitioner.initializeAttribute('attorney', AttorneyList)
+  case.initializeAttribute('respondent', PartyList)
+  case.respondent.there_are_any = True
+  case.respondent.initializeAttribute('attorney', AttorneyList)
+  case.initializeAttribute('child', ChildList)
+  case.firstParty = case.petitioner
+  case.secondParty = case.respondent
+  case.initializeAttribute('client', Individual)  # Initialize client property
+---
+mandatory: True
+code: |
+  if not multicase_user:
+    user_understands_no_attorney_client_relationship
+    if not user_understands_no_attorney_client_relationship:
+      dont_understand
+  case.us_state = "TX"
+  case.county
+  case.id
+  case.court.number
+  case.petitioner.gather()
+  case.respondent.gather()
+  case.petitioner.attorney.gather()
+  case.respondent.attorney.gather()
+  case.child.gather()
+  case.client = our_client
+  date_retained
+  answers_saved
+  outro_message
+---
+code: |
+  # The user's answers are saved to the "saved session" area
+  if user_logged_in:
+    if multicase_user:
+      case_title = f'{case.us_state}-{case.county}-{case.id}: {case.petitioner[0].name} v {case.respondent[0].name}'
+    else:
+      case_title = user
+    save_interview_answers(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", metadata = {"title": case_title } )
+    answers_saved = True
+  else:
+    answers_saved = False
+---
+id: idx_state
+question: |
+  Case Jurisdiction - State
+fields:
+  - State: case.us_state
+    code: |
+      states_list()
+---
+id: idx_county
+question: |
+  County within ${case.us_state}
+fields:
+- County: case.county
+  code: |
+    us_counties("TX")
+---
+id: idx_court
+question: |
+  Court Information
+subquestion: |
+   Please provide the case and court details
+fields:
+  - Cause number: case.id
+    required: false
+  - Court type: case.court.type
+    required: true
+  - Court number: case.court.number
+    required: false
+  - Judge name: case.court.judge_name
+    required: false
+---
+question: |
+  Are there any attorneys representing petitioners?
+yesno: case.petitioner.attorney.there_are_any
+---
+question: |
+  So far, you have mentioned petitioner attorneys ${ case.petitioner.attorney }.
+  Are there any others?
+yesno: case.petitioner.attorney.there_is_another
+---
+question: |
+  Are there any attorneys representing respondents?
+yesno: case.respondent.attorney.there_are_any
+---
+question: |
+  So far, you have mentioned respondent attorneys ${ case.respondent.attorney }.
+  Are there any others?
+yesno: case.respondent.attorney.there_is_another
+---
+generic object: Attorney
+question: |
+  What is ${ x.object_possessive('name') }?
+fields:
+  - First Name: x.name.first
+    default: ${ x.first_name_hint() }
+  - Middle Name: x.name.middle
+    required: False
+  - Last Name: x.name.last
+    default: ${ x.last_name_hint() }
+  - Suffix: x.name.suffix
+    required: False
+    code: |
+      name_suffix()
+  - Bar Number: x.bar_no
+  - Telephone: x.phone_number
+  - Fax: x.fax_number
+  - Email: x.email
+    datatype: email
+  - Firm name: x.firm_name
+  - Address: x.address.address
+    address autocomplete: True
+  - City: x.address.city
+  - State: x.address.state
+    code: |
+      states_list()
+  - Zip: x.address.zip
+    required: False
+  - County: x.address.county
+---
+id: idx_select_client
+question: |
+  Please select the client from the following parties:
+fields:
+  - Client: our_client
+    datatype: object
+    choices: case.petitioner + case.respondent
+  - Side: case.client_alignment
+    code: |
+      ALIGNMENTS
+  - Date retained: date_retained
+    datatype: date
+    required: false
+---
+event: dont_understand
+question: |
+  No Attorney-Client Relationship
+subquestion: |
+  The information provided on this website, or any communications made through it, does not create an attorney-client, representative, or fiduciary relationship between you and the website, its owners, operators, or any affiliated entities. The website is for informational purposes only, and any engagement with the site or affiliates does not constitute legal advice or representation. For legal advice or representation, you should consult a qualified attorney in your jurisdiction.
+---
+event: outro_message
+question: |
+  Thank you.
+subquestion: |
+  Your answers have been saved as ${case_title}.
+---
