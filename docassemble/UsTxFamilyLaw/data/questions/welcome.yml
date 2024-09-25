@@ -1,3 +1,16 @@
+---
+metadata:
+  title: |
+    WELCOME
+  short title: |
+    Welcome to JDBOT.US Forms
+  description: |
+    A welcome screen that acts as a landing page.
+  authors:
+    - name: Thomas J. Daley, J.D.
+      organization: JDBOT.US, LLC
+---
+mandatory: True
 question: |
   Welcome to JDBOT.US forms
 subquestion: |
