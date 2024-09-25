@@ -1,0 +1,69 @@
+metadata:
+  title: JDBOT.US
+  require login: True
+  temporary session: True
+  hidden: True
+---
+mandatory: True
+code: |
+  current_page = 0
+  next_id_of_page = [None]
+---
+reconsider: True
+code: |
+  current_info = user_info()
+  list_of_interviews = []
+  (items, next_id) = interview_list(next_id=next_id_of_page[current_page])
+  if len(next_id_of_page) == current_page + 1 and next_id is not None:
+    next_id_of_page.append(next_id)
+  del next_id
+  for info in items:
+    if not info['metadata'].get('hidden', False):
+      list_of_interviews.append(info)
+    del info
+  if len(list_of_interviews) > 0:
+    list_of_interviews += [dict()]
+  set_save_status('overwrite')
+---
+table: session_table
+rows: |
+  list_of_interviews
+columns:
+  - Title: |
+      '<a href="' + interview_url(i=row_item['filename'], session=row_item['session']) + '">' + row_item['title'] + '</a>' if 'title' in row_item else ''
+  - Modified: |
+      row_item['modtime'] if 'modtime' in row_item else ''
+  - Delete: |
+      action_button_html(url_action('delete', filename=row_item['filename'], session=row_item['session']), color='warning', label='Delete') if 'title' in row_item else action_button_html(url_action('delete_all'), color='danger', label='Delete All')
+---
+table css class: table table-striped
+mandatory: True
+question: |
+  Interview/Forms You Have Started
+subquestion: |
+  % if len(list_of_interviews) > 0:
+  Click the title link to resume an interview you already started.
+
+  ${ session_table }
+  % else:
+  You do not have any sessions.
+  % endif
+
+  % if current_page > 0:
+  ${ action_button_html(url_action('change_page', direction=-1), label="Prev", icon='chevron-left', size='md', color='secondary') }
+  % endif
+  % if current_page + 1 < len(next_id_of_page):
+  ${ action_button_html(url_action('change_page', direction=1), label="Next", icon='chevron-right', size='md', color='secondary') }
+  % endif
+---
+event: change_page
+code: |
+  current_page += int(action_argument('direction'))
+---
+event: delete
+code: |
+  if interview_list(
+      action='delete',
+      filename=action_argument('filename'),
+      session=action_argument('session')):
+    log("Deleted interview", "success")
