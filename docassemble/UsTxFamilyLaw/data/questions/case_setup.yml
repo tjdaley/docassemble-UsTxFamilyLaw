@@ -1,10 +1,8 @@
 metadata:
   title: Case Setup
   short title: Case Setup
-  category: STARTUP
-  footer: |
-    <span class="text-primary">Case Setup</span> <span class="text-dark">* da.jdbot.us * Copyright &copy; 2024 by Thomas J. Daley, J.D. All Rights Reserved</span>
-  
+  tags:
+    - 000:STARTUP
 ---
 include:
   - basic-questions.yml
