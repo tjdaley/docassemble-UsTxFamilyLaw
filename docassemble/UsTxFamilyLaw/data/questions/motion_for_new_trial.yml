@@ -1,13 +1,12 @@
 metadata:
   title: Motion for New Trial
   short title: MNT
-  category: POST-JUDGMENT
+  tags:
+    - 700:POST-JUDGMENT
   authors:
     - name: Thomas J. Daley, J.D.
       organization: jdbot.us
   revision_date: 2024-03-14
-  footer: |
-    <span class="text-primary">Motion for New Trial</span> <span class="text-dark">* da.jdbot.us * Copyright &copy; 2024 by Thomas J. Daley, J.D. All Rights Reserved</span>
 ---
 mandatory: True
 question: |
