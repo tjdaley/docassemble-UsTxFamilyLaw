@@ -1,6 +1,7 @@
 metadata:
   title: Promissory Note - Legal Fees
   short title: Note for Legal Fees
+  category: MISCELLANEOUS
 ---
 mandatory: True
 question: |
