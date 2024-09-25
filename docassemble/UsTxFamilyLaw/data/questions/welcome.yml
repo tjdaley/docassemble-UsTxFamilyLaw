@@ -1,19 +1,33 @@
 question: |
   Welcome to JDBOT.US forms
 subquestion: |
-At JDBOT.US, we believe in empowering you to navigate the legal system confidently. We provide professionally vetted legal forms designed specifically for self-represented litigants in Texas.
+  At JDBOT.US, we believe in empowering you to navigate the legal system confidently. We provide professionally vetted legal forms designed specifically for self-represented litigants in Texas.
 
-### What Makes Us Different?
+  ### What Makes Us Different?
 
-Unlike generic, one-size-fits-all forms you might find elsewhere, our forms have been carefully developed by licensed Texas attorneys and experienced paralegals who use these same documents in their daily practice. Each form is tailored to meet the unique customs, standards, and legal requirements of Texas, ensuring they are practical and relevant for your specific needs.
+  Unlike generic, one-size-fits-all forms you might find elsewhere, our forms have been carefully developed by licensed Texas attorneys and experienced paralegals who use these same documents in their daily practice. Each form is tailored to meet the unique customs, standards, and legal requirements of Texas, ensuring they are practical and relevant for your specific needs.
 
-Please Note:
-While our forms are thorough and reliable, we do not provide legal advice. Using these forms does not create an attorney-client relationship. If you need personalized legal guidance, we encourage you to consult a qualified attorney.
+  ### Please Note:
 
-We’re here to help make your legal journey easier and more accessible. Let’s get started!
+  While our forms are thorough and reliable, we do not provide legal advice. Using these forms does not create an attorney-client relationship. If you need personalized legal guidance, we encourage you to consult a qualified attorney.
 
-### Getting Started
+  We’re here to help make your legal journey easier and more accessible. Let’s get started!
 
-If you create an account, you will be able to save your answers and use them across multiple forms. You do not have to create an account, but if you don't, you will have to re-enter your answers every time.
+  ### Getting Started
 
-[Create Account](link)  [Login](link)   [Go To Forms List](/list)
+  If you create an account, you will be able to save your answers and use them across multiple forms. You do not have to create an account, but if you don't, you will have to re-enter your answers every time.
+
+  [Create Account](user/register?next=/)  [Login](/user/sign-in?next=/)   [Go To Forms List](/list)
+action buttons:
+  - label: Create Account
+    action: user/register?next=/
+    color: primary
+    icon: fa-plus
+  - label: Login
+    action: /user/sign-in?next=/
+    color: success
+    icon: fa-arrow-right-to-bracket
+  - label: Go to Forms List
+    action: /list
+    color: info
+    icon: fa-list-ul
