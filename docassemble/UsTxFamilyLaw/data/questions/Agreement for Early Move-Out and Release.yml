@@ -1,7 +1,8 @@
 metadata:
   title: Agreement for Early Move-Out Incentive and General Release
   short title: Moveout and Release Agreement
-  category: LANDLORD-TENANT
+  tags:
+    - 300:LANDLORD-TENANT
 ---
 mandatory: True
 question: |
