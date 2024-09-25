@@ -3,7 +3,7 @@ metadata:
   title: |
     Case Setup
   tags:
-    - 000:SETUP
+    - 000:STARTUP
 ---
 include:
   - basic-questions.yml
