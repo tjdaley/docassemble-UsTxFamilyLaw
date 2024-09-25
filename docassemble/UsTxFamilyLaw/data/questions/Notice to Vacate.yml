@@ -1,6 +1,7 @@
 metadata:
   title: Notice to Vacate
   short title: Notice to Vacate
+  category: LANDLORD-TENANT
 ---
 mandatory: True
 question: |
