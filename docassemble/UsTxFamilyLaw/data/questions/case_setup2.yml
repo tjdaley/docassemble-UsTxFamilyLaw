@@ -3,7 +3,7 @@ metadata:
   title: |
     Case Setup
   tags:
-    - 000:STARTUP
+    - 000:SETUP
 ---
 include:
   - basic-questions.yml
@@ -16,6 +16,10 @@ modules:
 objects: 
   - case: Case
   - document: Document
+---
+mandatory: True
+code: |
+  bg_info = "bg-info"
 ---
 mandatory: True
 code: |
@@ -43,8 +47,7 @@ code: |
 mandatory: True
 code: |
   if not multicase_user:
-    user_understands_no_attorney_client_relationship
-    if not user_understands_no_attorney_client_relationship:
+    if user_understands_no_attorney_client_relationship != 'understands':
       dont_understand
   case.us_state = "TX"
   case.county
@@ -60,17 +63,58 @@ code: |
   answers_saved
   outro_message
 ---
+sets: answers_saved
 code: |
   # The user's answers are saved to the "saved session" area
   if user_logged_in:
     if multicase_user:
       case_title = f'{case.us_state}-{case.county}-{case.id}: {case.petitioner[0].name} v {case.respondent[0].name}'
     else:
-      case_title = user
+      case_title = str(user)
     save_interview_answers(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", metadata = {"title": case_title } )
     answers_saved = True
   else:
     answers_saved = False
+---
+table: case.petitioner.table
+rows: case.petitioner
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - row_item.name.first
+---
+table: case.respondent.table
+rows: case.respondent
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - row_item.name.first
+---
+table: case.petitioner.attorney.table
+rows: case.petitioner.attorney
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - row_item.name.first
+---
+table: case.respondent.attorney.table
+rows: case.respondent.attorney
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - row_item.name.first
+---
+table: case.child.table
+rows: case.child
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - row_item.name.first
 ---
 id: idx_state
 question: |
@@ -108,7 +152,7 @@ question: |
 yesno: case.petitioner.attorney.there_are_any
 ---
 question: |
-  So far, you have mentioned petitioner attorneys ${ case.petitioner.attorney }.
+  So far, you have mentioned petitioner attorneys ${ case.petitioner.attorney.comma_and_list() }.
   Are there any others?
 yesno: case.petitioner.attorney.there_is_another
 ---
@@ -117,7 +161,7 @@ question: |
 yesno: case.respondent.attorney.there_are_any
 ---
 question: |
-  So far, you have mentioned respondent attorneys ${ case.respondent.attorney }.
+  So far, you have mentioned respondent attorneys ${ case.respondent.attorney.comma_and_list() }.
   Are there any others?
 yesno: case.respondent.attorney.there_is_another
 ---
@@ -138,6 +182,7 @@ fields:
   - Bar Number: x.bar_no
   - Telephone: x.phone_number
   - Fax: x.fax_number
+    required: false
   - Email: x.email
     datatype: email
   - Firm name: x.firm_name
@@ -176,4 +221,102 @@ question: |
   Thank you.
 subquestion: |
   Your answers have been saved as ${case_title}.
+action buttons:
+  - label: Review Your Case Setup
+    action: review_case_info
+    color: success
+    icon: pen-to-square
+---
+event: review_petitioners
+question: |
+  Review and Revise Petitioner List
+subquestion: |
+    ${case.petitioner.table}
+    ${case.petitioner.add_action()}
+continue button field: show_review_screen
+---
+event: review_respondents
+question: |
+  Review and Revise Respondent List
+subquestion: |
+    ${case.respondent.table}
+    ${case.respondent.add_action()}
+continue button field: show_review_screen
+---
+event: review_petitioner_attorneys
+question: |
+  Review and Revise Petitioner Attorney List
+subquestion: |
+    ${case.petitioner.attorney.table}
+    ${case.petitioner.attorney.add_action()}
+continue button field: show_review_screen
+---
+event: review_respondent_attorneys
+question: |
+  Review and Revise Respondent Attorney List
+subquestion: |
+    ${case.respondent.attorney.table}
+    ${case.respondent.attorney.add_action()}
+continue button field: show_review_screen
+---
+event: review_children
+question: |
+  Review and Revise Child List
+subquestion: |
+    ${case.child.table}
+    ${case.child.add_action()}
+continue button field: show_review_screen
+---
+event: review_case_info
+skip undefined: false
+question: |
+  Revise Case Information
+review:
+  - Edit: case.id
+    button: |
+      #### Case Information
+      
+      Cause # ${ case.id } in the ${ case.court.number } ${ case.court.type} court, Judge ${case.court.judge_name}.
+  - Edit: case.county
+    button: |
+      #### County within ${case.us_state}
+      
+      ${ case.county}, ${ case.us_state }
+  - Edit: case.client_alignment
+    button: |
+      #### Client Selection
+      
+      Our client is ${case.client}, ${case.client_alignment}
+  - Edit: case.petitioner
+    action: review_petitioners
+    button: |
+      #### Petitioners
+      ${case.petitioner.comma_and_list()}
+  - Edit: case.respondent
+    action: review_respondents
+    button: |
+      #### Respondents
+      ${case.respondent.comma_and_list()}
+  - Edit: case.petitioner.attorney
+    action: review_petitioner_attorneys
+    button: |
+      #### Petitioner Attorneys
+      ${case.petitioner.attorney.comma_and_list()}
+  - Edit: case.respondent.attorney
+    action: review_respondent_attorneys
+    button: |
+      #### Respondent Attorneys
+      ${case.respondent.attorney.comma_and_list()}
+  - Edit: case.child
+    action: review_children
+    button: |
+      #### Children
+      ${case.child.comma_and_list()}
+  - Save: answers_saved
+    action: answers_saved
+    button: |
+      ## Save Your Changes
+      Click SAVE to save your changes.
+tabular: table table-striped
+continue button field: show_review_screen
 ---
