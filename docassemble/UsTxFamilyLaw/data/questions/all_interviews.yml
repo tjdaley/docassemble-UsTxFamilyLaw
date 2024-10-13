@@ -1,0 +1,26 @@
+code: |
+  available_interviews = interview_menu()
+---
+prevent going back: True
+mandatory: True
+question: |
+  Available Forms
+subquestion: |
+  <%
+  grouped_interviews = {}
+  for interview in available_interviews:
+     first_tag = interview['tags'][0] if interview['tags'] else '999:Untagged'
+     if first_tag not in grouped_interviews:
+         grouped_interviews[first_tag] = []
+     grouped_interviews[first_tag].append(interview)
+  sorted_grouped_interviews = dict(sorted(grouped_interviews.items()))
+  %>
+  % for tag, interviews_in_group in sorted_grouped_interviews.items():
+    <h5>${tag[4:]}</h5>
+    <ul>
+    % for interview in interviews_in_group:
+      <li> <a href="${interview['link']}">${interview['title']}</a></li>
+    % endfor
+    </ul>
+  % endfor
+---
