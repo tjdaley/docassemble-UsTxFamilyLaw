@@ -1,3 +1,7 @@
+features:
+  debug: False
+  progress bar: True
+---
 include:
   - basic-questions.yml
   - docassemble.AssemblyLine:assembly_line.yml
