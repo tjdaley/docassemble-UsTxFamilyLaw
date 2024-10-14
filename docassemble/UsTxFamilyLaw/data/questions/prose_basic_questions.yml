@@ -1,0 +1,152 @@
+include:
+  - basic-questions.yml
+  - docassemble.AssemblyLine:assembly_line.yml
+---
+modules:
+  - docassemble.UsTxFamilyLaw.objects
+  - docassemble.UsTxFamilyLaw.functions
+---
+objects: 
+  - case: Case
+  - document: Document
+---
+mandatory: True
+code: |
+  bg_info = "bg-info"
+  document.title = "Motion for New Trial"
+---
+mandatory: True
+code: |
+  del case.plaintiff
+  del case.defendant
+  case.initializeAttribute('client', Individual)
+  case.initializeAttribute('op', Individual)
+  case.initializeAttribute('oc', Individual)
+  case.initializeAttribute('child', ChildList)
+  case.initializeAttribute('petitioner', Individual)
+  case.initializeAttribute('respondent', Individual)
+---
+mandatory: True
+code: |
+  if user_understands_no_attorney_client_relationship != 'understands':
+      dont_understand
+  case.us_state = "TX"
+  case.is_dissolution
+  case.county
+  case.id
+  case.court.number
+  case.client.name.first
+  case.client.alignment
+  case.op.name.first
+  if op_represented:
+    case.oc.name.first
+  else:
+    case.oc = case.op
+  case.child.gather()
+---
+mandatory: true
+code: |
+  if case.client.alignment == "Petitioner":
+    case.petitioner = case.client
+    case.respondent = case.op
+    case.op.alignment = "Respondent"
+  else:
+    case.petitioner = case.op
+    case.respondent = case.client
+    case.op.alignment = "Petitioner"
+---
+id: idx_is_divorce
+question: |
+  Is this a marriage dissolution case?
+subquestion: |
+  If this is a divorce, annulment, or suit to declare marriage void, answer YES, otherwise answer NO.
+yesno: case.is_dissolution
+---
+id: idx_service_type
+question: |
+  How will you serve ${case.op.name.first} with this document?
+fields:
+   - E-File system: service_efile
+     datatype: yesno
+   - Email: service_email
+     datatype: yesno
+   - First class mail: service_first_class
+     datatype: yesno
+   - Certified mail: service_certified
+     datatype: yesno
+---
+id: idx_county
+question: |
+  County within ${case.us_state}
+subquestion: |
+  In which county has your case been filed or will it be filed?
+fields:
+- County: case.county
+  code: |
+    us_counties("TX")
+---
+id: op_represented
+question: |
+  Is ${case.op.name.first} represented by an attorney?
+yesno: op_represented
+---
+id: idx_court
+question: |
+  Court Information
+subquestion: |
+   Please provide the case and court details
+fields:
+  - Cause number: case.id
+    required: false
+  - Court number: case.court.number
+    required: false
+---
+generic object: Individual
+question: |
+  What is ${ x.object_possessive('name') }?
+fields:
+  - First Name: x.name.first
+    required: True
+  - Middle Name: x.name.middle
+    required: False
+  - Last Name: x.name.last
+    required: True
+  - Suffix: x.name.suffix
+    required: False
+    code: |
+      name_suffix()
+  - Bar Number: x.bar_no
+    required: False
+  - Telephone: x.phone_number
+    required: True
+  - Fax: x.fax_number
+    required: False
+  - Email: x.email
+    datatype: email
+    required: True
+  - Firm name: x.firm_name
+    required: False
+  - Address: x.address.address
+    address autocomplete: True
+  - City: x.address.city
+  - State: x.address.state
+    code: |
+      states_list()
+  - Zip: x.address.zip
+    required: False
+  - County: x.address.county
+---
+id: idx_select_alignment
+question: |
+  Please select your role:
+fields:
+  - Alignment: case.client.alignment
+    code: |
+      ALIGNMENTS
+---
+event: dont_understand
+question: |
+  No Attorney-Client Relationship
+subquestion: |
+  The information provided on this website, or any communications made through it, does not create an attorney-client, representative, or fiduciary relationship between you and the website, its owners, operators, or any affiliated entities. The website is for informational purposes only, and any engagement with the site or affiliates does not constitute legal advice or representation. For legal advice or representation, you should consult a qualified attorney in your jurisdiction.
+---
