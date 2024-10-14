@@ -2,10 +2,10 @@
 functions.py - functions for use in docassemble
 """
 ALIGNMENTS = {
-    'p': 'Petitioner',
-    'r': 'Respondent',
-    'i': 'Intervenor',
-    't': 'Third Party'
+    'Petitioner': 'Petitioner',
+    'Respondent': 'Respondent',
+    'Intervenor': 'Intervenor',
+    'Third Party': 'Third Party'
 }
 
 def nested_attr(obj, attr:str, default=None):
