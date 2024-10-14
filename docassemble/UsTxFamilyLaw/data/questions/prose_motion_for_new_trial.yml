@@ -1,5 +1,6 @@
 features:
   hide navbar: True
+  debug: False
 ---
 metadata:
   title: Motion for New Trial
