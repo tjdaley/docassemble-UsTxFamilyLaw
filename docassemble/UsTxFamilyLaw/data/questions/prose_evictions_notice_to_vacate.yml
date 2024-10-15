@@ -1,3 +1,7 @@
+features:
+  hide navbar: True
+  debug: False
+---
 metadata:
   title: Notice to Vacate
   short title: Notice to Vacate
@@ -6,9 +10,9 @@ metadata:
 ---
 mandatory: True
 question: |
-  Your notice is ready.
+  Your notice to vacate is ready.
 subquestion: |
-  Thank you for using JDBOT.
+  Thank you for using this interview.
 buttons:
   - Exit: exit
   - Restart: restart
