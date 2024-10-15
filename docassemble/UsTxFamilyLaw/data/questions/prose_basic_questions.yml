@@ -1,7 +1,3 @@
-features:
-  debug: False
-  progress bar: True
----
 include:
   - basic-questions.yml
   - docassemble.AssemblyLine:assembly_line.yml
@@ -60,6 +56,7 @@ code: |
     case.op.alignment = "Petitioner"
 ---
 id: idx_is_divorce
+decoration: scalesofjustice
 question: |
   Is this a marriage dissolution case?
 subquestion: |
@@ -67,6 +64,7 @@ subquestion: |
 yesno: case.is_dissolution
 ---
 id: idx_service_type
+decoration: home
 question: |
   How will you serve ${case.op.name.first} with this document?
 fields:
@@ -80,6 +78,7 @@ fields:
      datatype: yesno
 ---
 id: idx_county
+decoration: map
 question: |
   County within ${case.us_state}
 subquestion: |
@@ -90,37 +89,86 @@ fields:
     us_counties("TX")
 ---
 id: op_represented
+decoration: scalesofjustice
 question: |
   Is ${case.op.name.first} represented by an attorney?
 yesno: op_represented
 ---
 id: idx_court
+decoration: gaveljudge
 question: |
-  Court Information
+   Court Information
 subquestion: |
-   Please provide the case and court details
+   Please provide the case and court details. If you have not filed your case yet, you can leave this blank.
 fields:
   - Cause number: case.id
     required: false
   - Court number: case.court.number
+    datatype: integer
+    min: 1
+    max: 500
     required: false
 ---
-generic object: Individual
+id: idx_about_you
+decoration: person
 question: |
-  What is ${ x.object_possessive('name') }?
+  About you
 fields:
-  - First Name: x.name.first
+  - First Name: case.client.name.first
     required: True
-  - Middle Name: x.name.middle
+  - Middle Name: case.client.name.middle
     required: False
-  - Last Name: x.name.last
+  - Last Name: case.client.name.last
     required: True
-  - Suffix: x.name.suffix
+  - Suffix: case.client.name.suffix
     required: False
     code: |
       name_suffix()
-  - Bar Number: x.bar_no
+---
+id: idx_about_op
+decoration: person
+question: |
+  About your opposing party
+subquestion:  |
+  This is either your spouse or the other parent of your child(ren)
+fields:
+  - First Name: case.op.name.first
+    required: True
+  - Middle Name: case.op.name.middle
     required: False
+  - Last Name: case.op.name.last
+    required: True
+  - Suffix: case.op.name.suffix
+    required: False
+    code: |
+      name_suffix()
+---
+id: idx_about_oc
+decoration: scalesofjustice
+question: |
+  About $( case.op.object_possession('name') } Attorney
+fields:
+  - First Name: case.oc.name.first
+    required: True
+  - Middle Name: case.oc.name.middle
+    required: False
+  - Last Name: case.oc.name.last
+    required: True
+  - Suffix: case.oc.name.suffix
+    required: False
+    code: |
+      name_suffix()
+  - Bar Number: case.oc.bar_no
+    required: False
+  - Firm name: case.oc.firm_name
+    required: False
+---
+id: idx_contact_info
+decoration: document
+generic object: Individual
+question: |
+  ${ x.object_possessive('name') } contact information
+fields: 
   - Telephone: x.phone_number
     required: True
   - Fax: x.fax_number
@@ -128,8 +176,13 @@ fields:
   - Email: x.email
     datatype: email
     required: True
-  - Firm name: x.firm_name
-    required: False
+---
+id: idx_address
+decoration: map
+generic object: Individual
+question: |
+  ${ x.object_possessive('name') } address
+fields: 
   - Address: x.address.address
     address autocomplete: True
   - City: x.address.city
@@ -141,6 +194,7 @@ fields:
   - County: x.address.county
 ---
 id: idx_select_alignment
+decoration: scalesofjustice
 question: |
   Please select your role:
 fields:
