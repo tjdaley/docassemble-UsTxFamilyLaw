@@ -54,11 +54,11 @@ class TexasJPCourts:
             county = f"{row['County']} County"
             record = {
                 'Court': self._rename_court(row['Court']),
-                'Court Type': row['Court Type'],
+                'Court_Type': row['Court Type'],
                 'Website': row['Website'],
                 'Address': row['Address'],
                 'City': row['City'],
-                'Zip Code': row['Zip Code'],
+                'Zip_Code': row['Zip Code'],
                 'Phone': row['Phone'],
                 'Email': row['Email']
             }
