@@ -1,12 +1,40 @@
 """
 functions.py - functions for use in docassemble
 """
+from courts import TexasJPCourts
+
+JPCOURTS = TexasJPCourts()
+
 ALIGNMENTS = {
     'Petitioner': 'Petitioner',
     'Respondent': 'Respondent',
     'Intervenor': 'Intervenor',
     'Third Party': 'Third Party'
 }
+
+def jp_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
+    """
+    Return a list of justice of the peace courts for the given county.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: list
+    """
+    return JPCOURTS.get_courts_dropdown_by_county(county_name, refresh)
+
+def jp_courts_for_county(county_name:str, refresh:bool = False) ->list:
+    """
+    Return a list of justice of the peace courts for the given county.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: list
+    """
+    return JPCOURTS.get_courts_by_county(county_name, refresh)
 
 def nested_attr(obj, attr:str, default=None):
     """
