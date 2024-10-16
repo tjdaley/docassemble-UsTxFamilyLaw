@@ -15,6 +15,7 @@ ALIGNMENTS = {
 def jp_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
     """
     Return a list of justice of the peace courts for the given county.
+    This will be a list suitable for use in a dropdown.
 
     :param county_name: The name of the county.
     :type county_name: str
@@ -38,7 +39,7 @@ def jp_courts_for_county(county_name:str, refresh:bool = False) ->list:
 
 def jp_court_for_county(county_name:str, court_name:str, refresh:bool = False) ->dict:
     """
-    Return a justice of the peace court for the given county.
+    Return a given justice of the peace court for the given county.
 
     :param county_name: The name of the county.
     :type county_name: str
