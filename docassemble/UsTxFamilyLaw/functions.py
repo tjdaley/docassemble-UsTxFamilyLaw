@@ -2,6 +2,7 @@
 functions.py - functions for use in docassemble
 """
 from docassemble.UsTxFamilyLaw.courts import TexasJPCourts
+from docassemble.base.util import DAObject
 
 JPCOURTS = TexasJPCourts()
 
@@ -37,7 +38,7 @@ def jp_courts_for_county(county_name:str, refresh:bool = False) ->list:
     """
     return JPCOURTS.get_courts_for_county(county_name, refresh)
 
-def jp_court_for_county(county_name:str, court_name:str, refresh:bool = False) ->dict:
+def jp_court_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
     """
     Return a given justice of the peace court for the given county.
 

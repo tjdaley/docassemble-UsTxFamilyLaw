@@ -8,7 +8,7 @@ from io import StringIO
 import os
 import json
 
-from docassemble.base.util import DAFile
+from docassemble.base.util import DAFile, DAObject
 
 __all__ = [
     'TexasJPCourts'
@@ -115,9 +115,13 @@ class TexasJPCourts:
         # Find the court record with the given court name
         for court in courts:
             if court['Court'] == court_name:
-                return court
+                da_court = DAObject('Court')
+                da_court.init(**court)
+                return da_court
             
-        return {}
+        da_court = DAObject('Court')
+        da_court.init(Court="Court not found", Court_Type="", Website="", Address="", City="", Zip_Code="", Phone="", Email="")
+        return da_court
 
 # Example usage:
 if __name__ == "__main__":
