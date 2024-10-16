@@ -8,6 +8,8 @@ from io import StringIO
 import os
 import json
 
+from docassemble.base.util import DAFile
+
 __all__ = [
     'TexasJPCourts'
 ]
@@ -30,15 +32,19 @@ class TexasJPCourts:
 
     def _load_cache(self):
         """Loads the data from the cache file if it exists"""
-        if os.path.exists(self.cache_file):
-            with open(self.cache_file, 'r') as f:
+        da_cache_file = DAFile('jp_court_cache')
+        da_cache_file.initialize(filename=self.cache_file, mimetype='application/json')
+        if os.path.exists(da_cache_file.path()):
+            with open(da_cache_file.path(), 'r', encoding='utf-8') as f:
                 self.courts_data = json.load(f)
             return True
         return False
 
     def _save_cache(self, data):
         """Saves the data to the cache file"""
-        with open(self.cache_file, 'w') as f:
+        da_cache_file = DAFile('jp_court_cache')
+        da_cache_file.initialize(filename=self.cache_file, mimetype='application/json')
+        with open(da_cache_file.path(), 'w', encoding='utf-8') as f:
             json.dump(data, f)
 
     def _transform_data(self, df):
