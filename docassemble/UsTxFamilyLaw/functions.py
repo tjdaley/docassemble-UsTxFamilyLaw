@@ -1,7 +1,7 @@
 """
 functions.py - functions for use in docassemble
 """
-from courts import TexasJPCourts
+from docassemble.UsTxFamilyLaw.courts import TexasJPCourts
 
 JPCOURTS = TexasJPCourts()
 
