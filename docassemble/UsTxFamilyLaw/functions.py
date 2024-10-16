@@ -36,6 +36,20 @@ def jp_courts_for_county(county_name:str, refresh:bool = False) ->list:
     """
     return JPCOURTS.get_courts_for_county(county_name, refresh)
 
+def jp_court_for_county(county_name:str, court_name:str, refresh:bool = False) ->dict:
+    """
+    Return a justice of the peace court for the given county.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param court_name: The name of the court.
+    :type court_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: dict
+    """
+    return JPCOURTS.get_court(county_name, court_name, refresh)
+
 def nested_attr(obj, attr:str, default=None):
     """
     Return the value of a nested attribute.

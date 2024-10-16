@@ -101,12 +101,17 @@ class TexasJPCourts:
         courts = self.courts_data.get(county_name, [])
 
         # Transform list into dict with 'Court' as key
-        return {court['Court']: court for court in courts}
+        return {court: court['Court'] for court in courts}
     
     def get_courts_dropdown_for_county(self, county_name, refresh=False):
         """Returns the list of court records for a given county in a dropdown format"""
-        courts = self.get_courts_by_county(county_name, refresh)
+        courts = self.get_courts_for_county(county_name, refresh)
         return {court['Court']: court['Court'] for court in courts}
+    
+    def get_court(self, county_name, court_name, refresh=False):
+        """Returns the court record for a given court in a county"""
+        courts = self.get_courts_for_county(county_name, refresh)
+        return courts.get(court_name)
 
 # Example usage:
 if __name__ == "__main__":
