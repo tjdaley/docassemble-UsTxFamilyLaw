@@ -23,7 +23,7 @@ def jp_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
     :type refresh: bool
     :rtype: list
     """
-    return JPCOURTS.get_courts_dropdown_for_county(county_name, refresh)
+    return sorted(JPCOURTS.get_courts_dropdown_for_county(county_name, refresh))
 
 def jp_courts_for_county(county_name:str, refresh:bool = False) ->list:
     """

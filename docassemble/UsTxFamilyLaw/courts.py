@@ -110,8 +110,14 @@ class TexasJPCourts:
     
     def get_court(self, county_name, court_name, refresh=False):
         """Returns the court record for a given court in a county"""
-        courts = self.get_courts_for_county(county_name, refresh)
-        return courts.get(court_name)
+        courts: list = self.get_courts_for_county(county_name, refresh)
+
+        # Find the court record with the given court name
+        for court in courts:
+            if court['Court'] == court_name:
+                return court
+            
+        return {}
 
 # Example usage:
 if __name__ == "__main__":
