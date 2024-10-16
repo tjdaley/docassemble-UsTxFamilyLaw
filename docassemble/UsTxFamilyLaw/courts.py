@@ -67,7 +67,7 @@ class TexasJPCourts:
         """Renames the court name to a more readable format"""
         if court_name.lower().startswith('jail'):
             return "(do not use)"
-        if court_name.lower().startswtih('truancy'):
+        if court_name.lower().startswith('truancy'):
             return "(do not use)"
         return court_name
     
