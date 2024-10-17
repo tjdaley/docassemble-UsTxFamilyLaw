@@ -5,6 +5,8 @@ from docassemble.UsTxFamilyLaw.courts import TexasJPCourts, TexasDistrictCourts,
 from docassemble.base.util import DAObject
 
 JPCOURTS = TexasJPCourts()
+DISTRICTCOURTS = TexasDistrictCourts()
+DISTRICTCLERKS = TexasDistrictClerks()
 
 ALIGNMENTS = {
     'Petitioner': 'Petitioner',
@@ -51,7 +53,7 @@ def district_court_choices_for_county(county_name:str, refresh:bool = False) ->l
     :type refresh: bool
     :rtype: list
     """
-    return sorted(TexasDistrictCourts().get_courts_dropdown_for_county(county_name, refresh))
+    return sorted(DISTRICTCOURTS.get_courts_dropdown_for_county(county_name, refresh))
 
 def district_court_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
     """
@@ -65,22 +67,9 @@ def district_court_for_county(county_name:str, court_name:str, refresh:bool = Fa
     :type refresh: bool
     :rtype: dict
     """
-    return TexasDistrictCourts().get_court(county_name, court_name, refresh)
+    return DISTRICTCOURTS.get_court(county_name, court_name, refresh)
 
-def district_clerk_choices_for_county(county_name:str, refresh:bool = False) ->list:
-    """
-    Return a list of district clerks for the given county.
-    This will be a list suitable for use in a dropdown.
-
-    :param county_name: The name of the county.
-    :type county_name: str
-    :param refresh: Whether to refresh the cache. (default: False)
-    :type refresh: bool
-    :rtype: list
-    """
-    return sorted(TexasDistrictClerks().get_courts_dropdown_for_county(county_name, refresh))
-
-def district_clerk_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
+def district_clerk_for_county(county_name:str, refresh:bool = False) -> DAObject:
     """
     Return a given district clerk for the given county.
 
@@ -92,7 +81,7 @@ def district_clerk_for_county(county_name:str, court_name:str, refresh:bool = Fa
     :type refresh: bool
     :rtype: dict
     """
-    return TexasDistrictClerks().get_court(county_name, court_name, refresh)
+    return DISTRICTCLERKS.get_clerk(county_name, refresh)
 
 def nested_attr(obj, attr:str, default=None):
     """
