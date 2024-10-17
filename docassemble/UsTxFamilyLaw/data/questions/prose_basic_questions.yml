@@ -31,18 +31,88 @@ code: |
   if user_understands_no_attorney_client_relationship != 'understands':
       dont_understand
   case.us_state = "TX"
-  case.county
 ---
-mandatory: true
+# Here is an example of how to use this question
+#
+# First, retrieve the court information:
+#
+# ---
+# mandatory: true
+# court_info = district_court_for_county(case.county, district_court)
+# ---
+#
+# Next, use the court information in a template:
+#
+# IN THE DISTRICT COURT
+# ${court_info.Court}
+# ${case.county}, TEXAS
+#
+id: idx_select_distict_court
+decoration: scalesofjustice
+question: |
+  Select the applicable District Court
+subquestion: |
+  If your case has not been filed yet, leave this blank.
+fields:
+  - Court: district_court_name
+    code: |
+      district_court_choices_for_county(case.county)
+---
+mandatory: True
 code: |
-  if case.client.alignment == "Petitioner":
-    case.petitioner = case.client
-    case.respondent = case.op
-    case.op.alignment = "Respondent"
-  else:
-    case.petitioner = case.op
-    case.respondent = case.client
-    case.op.alignment = "Petitioner"
+  if user_understands_no_attorney_client_relationship != 'understands':
+      dont_understand
+  case.us_state = "TX"
+---
+# Here is an example of how to use this question
+#
+# First, retrieve the court information:
+#
+# ---
+# mandatory: true
+# court_info = county_court_at_law_for_county(case.county, county_court_at_law_name)
+# ---
+#
+# Next, use the court information in a template:
+#
+# IN THE COUNTY COURT AT LAW
+# ${court_info.Court}
+# ${case.county}, TEXAS
+#
+id: idx_select_ccl_court
+decoration: scalesofjustice
+question: |
+  Select the applicable County Court at Law
+subquestion: |
+  If your case has not been filed yet, leave this blank.
+fields:
+  - Court: county_court_at_law_name
+    code: |
+      county_court_at_law_choices_for_county(case.county)
+---
+# Here is an example of how to use this question
+#
+# First, retrieve the court information:
+#
+# ---
+# mandatory: true
+# court_info = jp_court_for_county(case.county, justice_court_precinct)
+# ---
+#
+# Next, use the court information in a template:
+#
+# IN THE JUSTICE COURT
+# ${court_info.Court}
+# ${case.county}, TEXAS
+#
+id: idx_select_jp_court
+decoration: scalesofjustice
+question: |
+  Select the applicable Justice of the Peace Court
+fields:
+  - Precinct: justice_court_precinct
+    code: |
+      jp_court_choices_for_county(case.county)
 ---
 id: idx_is_divorce
 decoration: scalesofjustice
@@ -83,12 +153,25 @@ question: |
   Is ${case.op.name.first} represented by an attorney?
 yesno: op_represented
 ---
-id: idx_court
+id: idx_district_court
 decoration: gaveljudge
 question: |
    Court Information
 subquestion: |
-   Please provide the case and court details. If you have not filed your case yet, you can leave this blank.
+   Please select the applicable district court. If you have not filed your case yet, you can leave this blank.
+fields:
+  - Court number: case.court.number
+    datatype: integer
+    min: 1
+    max: 500
+    required: false
+---
+id: idx_cause_number
+decoration: gaveljudge
+question: |
+   Cause Number
+subquestion: |
+   What is the cause number of your case? If you have not filed your case yet, you can leave this blank.
 fields:
   - Cause number: case.id
     required: false
