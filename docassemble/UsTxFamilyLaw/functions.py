@@ -1,7 +1,7 @@
 """
 functions.py - functions for use in docassemble
 """
-from docassemble.UsTxFamilyLaw.courts import TexasJPCourts
+from docassemble.UsTxFamilyLaw.courts import TexasJPCourts, TexasDistrictCourts, TexasDistrictClerks
 from docassemble.base.util import DAObject
 
 JPCOURTS = TexasJPCourts()
@@ -26,18 +26,6 @@ def jp_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
     """
     return sorted(JPCOURTS.get_courts_dropdown_for_county(county_name, refresh))
 
-def jp_courts_for_county(county_name:str, refresh:bool = False) ->list:
-    """
-    Return a list of justice of the peace courts for the given county.
-
-    :param county_name: The name of the county.
-    :type county_name: str
-    :param refresh: Whether to refresh the cache. (default: False)
-    :type refresh: bool
-    :rtype: list
-    """
-    return JPCOURTS.get_courts_for_county(county_name, refresh)
-
 def jp_court_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
     """
     Return a given justice of the peace court for the given county.
@@ -51,6 +39,60 @@ def jp_court_for_county(county_name:str, court_name:str, refresh:bool = False) -
     :rtype: dict
     """
     return JPCOURTS.get_court(county_name, court_name, refresh)
+
+def district_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
+    """
+    Return a list of district courts for the given county.
+    This will be a list suitable for use in a dropdown.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: list
+    """
+    return sorted(TexasDistrictCourts().get_courts_dropdown_for_county(county_name, refresh))
+
+def district_court_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
+    """
+    Return a given district court for the given county.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param court_name: The name of the court.
+    :type court_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: dict
+    """
+    return TexasDistrictCourts().get_court(county_name, court_name, refresh)
+
+def district_clerk_choices_for_county(county_name:str, refresh:bool = False) ->list:
+    """
+    Return a list of district clerks for the given county.
+    This will be a list suitable for use in a dropdown.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: list
+    """
+    return sorted(TexasDistrictClerks().get_courts_dropdown_for_county(county_name, refresh))
+
+def district_clerk_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
+    """
+    Return a given district clerk for the given county.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param court_name: The name of the court.
+    :type court_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: dict
+    """
+    return TexasDistrictClerks().get_court(county_name, court_name, refresh)
 
 def nested_attr(obj, attr:str, default=None):
     """
