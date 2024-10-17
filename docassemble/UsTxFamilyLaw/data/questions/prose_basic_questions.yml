@@ -31,18 +31,7 @@ code: |
   if user_understands_no_attorney_client_relationship != 'understands':
       dont_understand
   case.us_state = "TX"
-  case.is_dissolution
   case.county
-  case.id
-  case.court.number
-  case.client.name.first
-  case.client.alignment
-  case.op.name.first
-  if op_represented:
-    case.oc.name.first
-  else:
-    case.oc = case.op
-  case.child.gather()
 ---
 mandatory: true
 code: |
@@ -102,11 +91,6 @@ subquestion: |
    Please provide the case and court details. If you have not filed your case yet, you can leave this blank.
 fields:
   - Cause number: case.id
-    required: false
-  - Court number: case.court.number
-    datatype: integer
-    min: 1
-    max: 500
     required: false
 ---
 id: idx_about_you

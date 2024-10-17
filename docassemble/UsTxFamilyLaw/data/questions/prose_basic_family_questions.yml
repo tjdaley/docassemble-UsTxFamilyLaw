@@ -23,6 +23,8 @@ code: |
     case.op.alignment = "Petitioner"
 ---
 mandatory: true
+sets: |
+  court_info
 code: |
   clerk_info = district_clerk_for_county(case.county)
 
@@ -46,9 +48,11 @@ code: |
 ---
 id: idx_court_type
 decoration: scalesofjustice
+sets: court_type
 question: |
   What type of court is this?
 field: court_type
+choices:
   - District Court
   - County Court at Law
   - Justice of the Peace Court
