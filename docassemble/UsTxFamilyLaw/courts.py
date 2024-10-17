@@ -99,7 +99,7 @@ class Courts:
             # Load data from cache or download if necessary
             if not self._load_cache():
                 self._refresh_cache()
-        
+
         # Get the list of court records for the given county, or None if the county is not found
         return self.courts_data.get(county_name, [])
 
@@ -107,7 +107,7 @@ class Courts:
         """Returns the list of court records for a given county in a dropdown format"""
         courts = self.get_courts_for_county(county_name, refresh)
         return [court['Court'] for court in courts]
-    
+
     def get_court(self, county_name, court_name, refresh=False) -> DAObject:
         """Returns the court record for a given court in a county"""
         courts = self.get_courts_for_county(county_name, refresh)
@@ -118,7 +118,7 @@ class Courts:
                 da_court = DAObject('Court')
                 da_court.init(**court)
                 return da_court
-            
+
         da_court = DAObject('Court')
         da_court.init(Court="Court not found", Court_Type="", Website="", Address="", City="", Zip_Code="", Phone="", Email="")
         return da_court
@@ -134,6 +134,26 @@ class TexasJPCourts(Courts):
     def _rename_court(self, court_name):
         """Renames the court name to a more readable format"""
         if court_name.lower().startswith('jail') or court_name.lower().startswith('truancy'):
+            return "(do not use)"
+        return court_name
+
+
+class TexasCountyCourtsAtLaw(Courts):
+    def __init__(self):
+        super().__init__(
+            url='https://card.txcourts.gov/ExcelExportPublic.aspx?type=C&export=E&SortBy=tblCounty.Sort_ID,%20tblCourt.Court_Identifier&Active_Flg=true&Court_Type_CD=54&Court_Sub_Type_CD=1613&County_ID=0&City_CD=0&Court=&DistrictPrimaryLocOnly=0&AdminJudicialRegion=0&COADistrictId=0',
+            cache_file='county_courts_cache.json'
+        )
+
+    def _rename_court(self, court_name):
+        """Renames the court name to a more readable format"""
+        lower_court_name = court_name.lower()
+        if lower_court_name.startswith('ccl no.'):
+            # Remove "& Probate Court" from the court name
+            court_name = court_name.replace(' & Probate Court', '')
+            court_name = court_name.replace('CCL No.', 'County Court at Law No.')
+            return court_name
+        if 'criminal' in lower_court_name or 'crim.' in lower_court_name:
             return "(do not use)"
         return court_name
 
@@ -158,7 +178,7 @@ class TexasDistrictClerks(TexasDistrictCourts):
         if court_name.lower().startswith('district clerk'):
             return court_name
         return "(do not use)"
-    
+
     def get_clerk(self, county_name, refresh=False):
         clerk = self.get_court(county_name, 'District Clerk Office', refresh)
         da_clerk = DAObject('DistrictClerk')
@@ -172,14 +192,14 @@ class TexasDistrictClerks(TexasDistrictCourts):
 if __name__ == "__main__":
     jp_courts = TexasJPCourts()
     district_courts = TexasDistrictCourts()
-    
+
     # Example county name
     county_name = 'Anderson'
-    
+
     # Get Justice of the Peace courts for a county
     jp_courts_in_county = jp_courts.get_courts_for_county(county_name)
     print(jp_courts_in_county)
-    
+
     # Get District courts for a county
     district_courts_in_county = district_courts.get_courts_for_county(county_name)
     print(district_courts_in_county)

@@ -1,0 +1,54 @@
+---
+mandatory: True
+code: |
+  case.is_dissolution
+  case.client.name.first
+  case.client.alignment
+  case.op.name.first
+  if op_represented:
+    case.oc.name.first
+  else:
+    case.oc = case.op
+  case.child.gather()
+---
+mandatory: true
+code: |
+  if case.client.alignment == "Petitioner":
+    case.petitioner = case.client
+    case.respondent = case.op
+    case.op.alignment = "Respondent"
+  else:
+    case.petitioner = case.op
+    case.respondent = case.client
+    case.op.alignment = "Petitioner"
+---
+mandatory: true
+code: |
+  clerk_info = district_clerk_for_county(case.county)
+
+  if court_type == "District Court":
+    court_info = district_court_for_county(case.county, district_court_name)
+  elif court_type == "County Court at Law":
+    court_info = county_court_at_law_for_county(case.county, county_court_at_law_name)
+  elif court_type == "Justice of the Peace Court":
+    court_info = justice_of_the_peace_for_county(case.county, justice_court_precinct)
+  else:
+    court_info = DAObject()
+    court_info.initializeAttribute('Court', 'Unknown Court')
+    court_info.initializeAttribute('Court_Type', '***')
+    court_info.initializeAttribute('Address', '***')
+    court_info.initializeAttribute('City', '***')
+    court_info.initializeAttribute('Zip_Code', '***')
+    court_info.initializeAttribute('Phone', '***')
+    court_info.initializeAttribute('Email', '***')
+    court_info.initializeAttribute('Website', '***')
+    court_info = county_court_for_county(case.county)
+---
+id: idx_court_type
+decoration: scalesofjustice
+question: |
+  What type of court is this?
+field: court_type
+  - District Court
+  - County Court at Law
+  - Justice of the Peace Court

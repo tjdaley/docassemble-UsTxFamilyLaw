@@ -1,12 +1,13 @@
 """
 functions.py - functions for use in docassemble
 """
-from docassemble.UsTxFamilyLaw.courts import TexasJPCourts, TexasDistrictCourts, TexasDistrictClerks
+from docassemble.UsTxFamilyLaw.courts import TexasJPCourts, TexasDistrictCourts, TexasDistrictClerks, TexasCountyCourtsAtLaw
 from docassemble.base.util import DAObject
 
 JPCOURTS = TexasJPCourts()
 DISTRICTCOURTS = TexasDistrictCourts()
 DISTRICTCLERKS = TexasDistrictClerks()
+COUNTY_COURTS_AT_LAW = TexasCountyCourtsAtLaw()
 
 ALIGNMENTS = {
     'Petitioner': 'Petitioner',
@@ -68,6 +69,33 @@ def district_court_for_county(county_name:str, court_name:str, refresh:bool = Fa
     :rtype: dict
     """
     return DISTRICTCOURTS.get_court(county_name, court_name, refresh)
+
+def county_court_at_law_choices_for_county(county_name:str, refresh:bool = False) ->list:
+    """
+    Return a list of county courts at law for the given county.
+    This will be a list suitable for use in a dropdown.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: list
+    """
+    return sorted(COUNTY_COURTS_AT_LAW.get_courts_dropdown_for_county(county_name, refresh))
+
+def county_court_at_law_for_county(county_name:str, court_name:str, refresh:bool = False) -> DAObject:
+    """
+    Return a given county court at law for the given county.
+
+    :param county_name: The name of the county.
+    :type county_name: str
+    :param court_name: The name of the court.
+    :type court_name: str
+    :param refresh: Whether to refresh the cache. (default: False)
+    :type refresh: bool
+    :rtype: dict
+    """
+    return COUNTY_COURTS_AT_LAW.get_court(county_name, court_name, refresh)
 
 def district_clerk_for_county(county_name:str, refresh:bool = False) -> DAObject:
     """
