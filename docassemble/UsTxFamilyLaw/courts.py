@@ -11,12 +11,14 @@ import json
 from docassemble.base.util import DAFile, DAObject
 
 __all__ = [
-    'TexasJPCourts'
+    'TexasJPCourts',
+    'TexasDistrictCourts',
+    'TexasDistrictClerks'
 ]
 
-class TexasJPCourts:
-    def __init__(self, cache_file='jp_courts_cache.json'):
-        self.url = 'https://card.txcourts.gov/ExcelExportPublic.aspx?type=C&export=E&SortBy=tblCounty.Sort_ID,%20tblCourt.Court_Identifier&Active_Flg=true&Court_Type_CD=56&Court_Sub_Type_CD=0&County_ID=0&City_CD=0&Court=&DistrictPrimaryLocOnly=0&AdminJudicialRegion=0&COADistrictId=0'
+class Courts:
+    def __init__(self, url, cache_file):
+        self.url = url
         self.cache_file = cache_file
         self.courts_data = None
 
@@ -32,7 +34,7 @@ class TexasJPCourts:
 
     def _load_cache(self):
         """Loads the data from the cache file if it exists"""
-        da_cache_file = DAFile('jp_court_cache')
+        da_cache_file = DAFile('court_cache')
         da_cache_file.initialize(filename=self.cache_file, mimetype='application/json')
         if os.path.exists(da_cache_file.path()):
             with open(da_cache_file.path(), 'r', encoding='utf-8') as f:
@@ -42,75 +44,61 @@ class TexasJPCourts:
 
     def _save_cache(self, data):
         """Saves the data to the cache file"""
-        da_cache_file = DAFile('jp_court_cache')
+        da_cache_file = DAFile('court_cache')
         da_cache_file.initialize(filename=self.cache_file, mimetype='application/json')
         with open(da_cache_file.path(), 'w', encoding='utf-8') as f:
             json.dump(data, f)
 
-    def _transform_data(self, df):
+    def _transform_data(self, df, county_field, court_fields):
         """Transforms the DataFrame into the desired dictionary format"""
         courts_dict = {}
         for _, row in df.iterrows():
-            county = f"{row['County']} County"
-            record = {
-                'Court': self._rename_court(row['Court']),
-                'Court_Type': row['Court Type'],
-                'Website': row['Website'],
-                'Address': row['Address'],
-                'City': row['City'],
-                'Zip_Code': row['Zip Code'],
-                'Phone': row['Phone'],
-                'Email': row['Email']
-            }
+            county = f"{row[county_field]} County"
+            record = {field: row[court_fields[field]] for field in court_fields}
+            record['Court'] = self._rename_court(row[court_fields['Court']])
             if record['Court'] == "(do not use)":
                 continue
             if county not in courts_dict:
                 courts_dict[county] = []
             courts_dict[county].append(record)
         return courts_dict
-    
+
     def _rename_court(self, court_name):
         """Renames the court name to a more readable format"""
-        if court_name.lower().startswith('jail'):
-            return "(do not use)"
-        if court_name.lower().startswith('truancy'):
-            return "(do not use)"
+        # This method can be overridden in the subclass to provide custom renaming logic
         return court_name
-    
-    def _refresh_cache(self):
+
+    def _refresh_cache(self, county_field, court_fields):
         """Refreshes the cache by downloading new data and saving it"""
         try:
             df = self._download_data()
-            self.courts_data = self._transform_data(df)
+            self.courts_data = self._transform_data(df, county_field, court_fields)
             self._save_cache(self.courts_data)
         except requests.RequestException as e:
             print(f"Error downloading data: {e}")
             raise RuntimeError("Failed to download and no cache available.") if not self._load_cache() else print("Loaded data from cache after failed download.")
 
-    def get_courts_for_county(self, county_name, refresh=False):
+    def get_courts_for_county(self, county_name, county_field, court_fields, refresh=False):
         """Returns the list of court records for a given county"""
         if refresh:
-            self._refresh_cache()
+            self._refresh_cache(county_field, court_fields)
 
         if self.courts_data is None:
             # Load data from cache or download if necessary
             if not self._load_cache():
-                self._refresh_cache()
+                self._refresh_cache(county_field, court_fields)
         
         # Get the list of court records for the given county, or None if the county is not found
-        courts = self.courts_data.get(county_name, [])
+        return self.courts_data.get(county_name, [])
 
-        # Transform list into dict with 'Court' as key
-        return courts
-    
-    def get_courts_dropdown_for_county(self, county_name, refresh=False):
+    def get_courts_dropdown_for_county(self, county_name, county_field, court_fields, refresh=False):
         """Returns the list of court records for a given county in a dropdown format"""
-        courts = self.get_courts_for_county(county_name, refresh)
+        courts = self.get_courts_for_county(county_name, county_field, court_fields, refresh)
         return [court['Court'] for court in courts]
     
-    def get_court(self, county_name, court_name, refresh=False):
+    def get_court(self, county_name, court_name, county_field, court_fields, refresh=False):
         """Returns the court record for a given court in a county"""
-        courts: list = self.get_courts_for_county(county_name, refresh)
+        courts = self.get_courts_for_county(county_name, county_field, court_fields, refresh)
 
         # Find the court record with the given court name
         for court in courts:
@@ -123,23 +111,90 @@ class TexasJPCourts:
         da_court.init(Court="Court not found", Court_Type="", Website="", Address="", City="", Zip_Code="", Phone="", Email="")
         return da_court
 
+
+class TexasJPCourts(Courts):
+    def __init__(self):
+        super().__init__(
+            url='https://card.txcourts.gov/ExcelExportPublic.aspx?type=C&export=E&SortBy=tblCounty.Sort_ID,%20tblCourt.Court_Identifier&Active_Flg=true&Court_Type_CD=56&Court_Sub_Type_CD=0&County_ID=0&City_CD=0&Court=&DistrictPrimaryLocOnly=0&AdminJudicialRegion=0&COADistrictId=0',
+            cache_file='jp_courts_cache.json'
+        )
+
+    def _rename_court(self, court_name):
+        """Renames the court name to a more readable format"""
+        if court_name.lower().startswith('jail') or court_name.lower().startswith('truancy'):
+            return "(do not use)"
+        return court_name
+
+    def get_courts_for_county(self, county_name, refresh=False):
+        county_field = 'County'
+        court_fields = {
+            'Court': 'Court',
+            'Court_Type': 'Court Type',
+            'Website': 'Website',
+            'Address': 'Address',
+            'City': 'City',
+            'Zip_Code': 'Zip Code',
+            'Phone': 'Phone',
+            'Email': 'Email'
+        }
+        return super().get_courts_for_county(county_name, county_field, court_fields, refresh)
+
+
+class TexasDistrictCourts(Courts):
+    def __init__(self):
+        super().__init__(
+            url='https://card.txcourts.gov/ExcelExportPublic.aspx?type=C&export=E&SortBy=tblCounty.Sort_ID,%20tblCourt.Court_Identifier&Active_Flg=true&Court_Type_CD=55&Court_Sub_Type_CD=0&County_ID=0&City_CD=0&Court=&DistrictPrimaryLocOnly=1&AdminJudicialRegion=0&COADistrictId=0',
+            cache_file='district_courts_cache.json'
+        )
+
+    def _rename_court(self, court_name):
+        """Renames the court name to a more readable format"""
+        if court_name.lower().startswith('district clerk'):
+            return "(do not use)"
+        return court_name
+
+    def get_courts_for_county(self, county_name, refresh=False):
+        county_field = 'County'
+        court_fields = {
+            'Court': 'Court',
+            'Court_Type': 'Court Type',
+            'Website': 'Website',
+            'Address': 'Address',
+            'City': 'City',
+            'Zip_Code': 'Zip Code',
+            'Phone': 'Phone',
+            'Email': 'Email'
+        }
+        return super().get_courts_for_county(county_name, county_field, court_fields, refresh)
+    
+class TexasDistrictClerks(TexasDistrictCourts):
+    def _rename_court(self, court_name):
+        """Renames the court name to a more readable format"""
+        if court_name.lower().startswith('district clerk'):
+            return court_name
+        return "(do not use)"
+    
+    def get_clerk(self, county_name, refresh=False):
+        clerk = self.get_court(county_name, 'District Clerk Office', refresh)
+        da_clerk = DAObject('DistrictClerk')
+        try:
+            da_clerk.init(**{'Name': clerk['Court'], 'Website': clerk['Website'], 'Address': clerk['Address'], 'City': clerk['City'], 'Zip_Code': clerk['Zip Code'], 'Phone': clerk['Phone'], 'Email': clerk['Email']})
+        except KeyError:
+            da_clerk.init(Name="District Clerk Office", Website="", Address="", City="", Zip_Code="", Phone="", Email="")
+        return da_clerk
+
 # Example usage:
 if __name__ == "__main__":
-    tc = TexasJPCourts()
-    county_name = 'Anderson'  # Example county name
-    courts_in_county = tc.get_courts_by_county(county_name)
-    print(courts_in_county)
-# Output:
-# [
-#     {
-#        "Court": "Precinct 1 Place 1",
-#        "Court Type": "Justice of the Peace",
-#        "Website": "http://www.co.anderson.tx.us/",
-#        "Address": "P O Box 348",
-#        "City": "Elkhart",
-#        "Zip Code": "75839",
-#        "Phone": "(903)764-5661",
-#        "Email": "gthomas@co.anderson.tx.us"
-#    },
-#    ...
-#]
+    jp_courts = TexasJPCourts()
+    district_courts = TexasDistrictCourts()
+    
+    # Example county name
+    county_name = 'Anderson'
+    
+    # Get Justice of the Peace courts for a county
+    jp_courts_in_county = jp_courts.get_courts_for_county(county_name)
+    print(jp_courts_in_county)
+    
+    # Get District courts for a county
+    district_courts_in_county = district_courts.get_courts_for_county(county_name)
+    print(district_courts_in_county)
