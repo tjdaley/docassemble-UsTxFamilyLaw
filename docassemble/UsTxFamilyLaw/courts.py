@@ -90,7 +90,7 @@ class Courts:
             print(f"Error downloading data: {e}")
             raise RuntimeError("Failed to download and no cache available.") if not self._load_cache() else print("Loaded data from cache after failed download.")
 
-    def get_courts_for_county(self, county_name, refresh=False):
+    def get_courts_for_county(self, county_name, refresh=False) -> list:
         """Returns the list of court records for a given county"""
         if refresh:
             self._refresh_cache()
@@ -103,12 +103,12 @@ class Courts:
         # Get the list of court records for the given county, or None if the county is not found
         return self.courts_data.get(county_name, [])
 
-    def get_courts_dropdown_for_county(self, county_name, refresh=False):
+    def get_courts_dropdown_for_county(self, county_name, refresh=False)-> list:
         """Returns the list of court records for a given county in a dropdown format"""
         courts = self.get_courts_for_county(county_name, refresh)
         return [court['Court'] for court in courts]
     
-    def get_court(self, county_name, court_name, refresh=False):
+    def get_court(self, county_name, court_name, refresh=False) -> DAObject:
         """Returns the court record for a given court in a county"""
         courts = self.get_courts_for_county(county_name, refresh)
 
@@ -151,7 +151,7 @@ class TexasDistrictCourts(Courts):
             return "(do not use)"
         return court_name
 
-   
+
 class TexasDistrictClerks(TexasDistrictCourts):
     def _rename_court(self, court_name):
         """Renames the court name to a more readable format"""
@@ -163,7 +163,7 @@ class TexasDistrictClerks(TexasDistrictCourts):
         clerk = self.get_court(county_name, 'District Clerk Office', refresh)
         da_clerk = DAObject('DistrictClerk')
         try:
-            da_clerk.init(**{'Name': clerk['Court'], 'Website': clerk['Website'], 'Address': clerk['Address'], 'City': clerk['City'], 'Zip_Code': clerk['Zip Code'], 'Phone': clerk['Phone'], 'Email': clerk['Email']})
+            da_clerk = clerk
         except KeyError:
             da_clerk.init(Name="District Clerk Office", Website="", Address="", City="", Zip_Code="", Phone="", Email="")
         return da_clerk
