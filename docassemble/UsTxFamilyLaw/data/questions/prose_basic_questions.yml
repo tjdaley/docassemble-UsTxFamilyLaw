@@ -234,10 +234,10 @@ id: idx_contact_info
 decoration: document
 generic object: Individual
 question: |
-  $( x.name.first }'s contact information
+  ${ x.name.first }'s contact information
 fields: 
   - Telephone: x.phone_number
-    required: True
+  required: True
   - Fax: x.fax_number
     required: False
   - Email: x.email
@@ -248,7 +248,7 @@ id: idx_address
 decoration: map
 generic object: Individual
 question: |
-  $( x.name.first }'s address
+  ${ x.name.first }'s address
 fields: 
   - Address: x.address.address
     address autocomplete: True
