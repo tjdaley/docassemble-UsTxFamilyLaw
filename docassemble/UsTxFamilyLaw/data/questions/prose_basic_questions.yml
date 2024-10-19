@@ -213,7 +213,7 @@ fields:
 id: idx_about_oc
 decoration: scalesofjustice
 question: |
-  About $( case.op.object_possession('name') } Attorney
+  About $( case.op.name.first }'s Attorney
 fields:
   - First Name: case.oc.name.first
     required: True
@@ -234,7 +234,7 @@ id: idx_contact_info
 decoration: document
 generic object: Individual
 question: |
-  ${ x.object_possessive('name') } contact information
+  $( x.name.first }'s contact information
 fields: 
   - Telephone: x.phone_number
     required: True
@@ -248,7 +248,7 @@ id: idx_address
 decoration: map
 generic object: Individual
 question: |
-  ${ x.object_possessive('name') } address
+  $( x.name.first }'s address
 fields: 
   - Address: x.address.address
     address autocomplete: True
