@@ -71,7 +71,7 @@ fields:
     datatype: date
 ---
 code: |
-  if method_of_service == 'USPS Certified Mail':
+  if demand_service_method == 'USPS Certified Mail':
     certified = True
   else:
     certified = False
@@ -82,9 +82,9 @@ fields:
   - no label: item_number
 ---
 question: |
-  Date Notice will be Signed
+  Date this document will be Signed
 fields:
-  - no label: notice_signed_date
+  - no label: execution_date
     datatype: date
 ---
 id: idx_rent_amounts
@@ -109,19 +109,19 @@ fields:
 ---
 id: idx_affidavit_execution_state
 question: |
-  U.S. state where this documentwill be signed.
+  U.S. state where this document will be signed.
 fields:
-  - U.S. State: state_of_execution
+  - U.S. State: execution_state
     choices:
       code: states_list()
 ---
 id: idx_affidavit_execution_county
 question: |
-  County within ${state_of_execution} where this document will be signed.
+  County within ${execution_state} where this document will be signed.
 fields:
-  - County: county_of_execution
+  - County: execution_county
     choices:
-      code: us_counties(state_of_execution)
+      code: us_counties(execution_state)
 ---
 id: idx_email_service
 question: |
@@ -151,6 +151,7 @@ question: Who is your attorney?
 fields:
   - First name: attorney.name.first
   - Middle name: attorney.name.middle
+    required: False
   - Last name: attorney.name.last
   - Suffix: attorney.name.suffix
     required: False
@@ -194,6 +195,7 @@ fields:
     datatype: phone
   - Fax: attorney.fax
     datatype: fax
+    required: False
   - Email: attorney.email
     datatype: email
 ---
@@ -212,13 +214,26 @@ choices:
   - Termination of tenancy at will
   - OTHER
 ---
+id: idx_lease_expiration_date
+question: On what date did the lease expire?
+fields:
+  - Date: lease_expiration_date
+    datatype: date
+---
+id: idx_other_violation_description
+question: Describe the violation(s).
+fields:
+  - Description: other_violation_description
+    input type: area
+    rows: 10
+---
 signature: client_signature
 question: |
   Your Signature
 subquestion: |
   Sign using your tablet's pen, your finger, or mouse pointer.
 under: |
-  ${petitioner.name.full()}
+  ${plaintiff.name.full()}
 ---
 id: idx_client_dob
 question: What is your date of birth?
