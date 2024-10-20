@@ -1,0 +1,269 @@
+include:
+  - basic-questions.yml
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.UsTxFamilyLaw:prose_basic_questions.yml
+---
+modules:
+  - docassemble.UsTxFamilyLaw.objects
+  - docassemble.UsTxFamilyLaw.functions
+---
+objects:
+  - case: Case
+  - plaintiff: Individual
+  - client: Individual
+  - defendant: DAList.using(
+        object_type=Individual,
+        there_are_any=True,
+        minimum_number=1)
+  - attorney: Individual
+  - the_property: Address
+---
+mandatory: True
+code: |
+  if user_understands_no_attorney_client_relationship != 'understands':
+      dont_understand
+  jury_fee_amount = 22.00
+  case.us_state = "TX"
+  court_type = "County Court at Law"
+  plaintiff.name.first
+  defendant.gather()
+  the_property.normalize()
+---
+mandatory: True
+code: client = plaintiff
+---
+mandatory: True
+question: |
+  Your Answers
+subquestion: |
+  ### Plaintiff:
+  
+  ${plaintiff.name.full()}
+
+  Plaintiff is represented? ${plaintiff_is_represented}
+
+  Plaintiff's DOB: ${declaration_date_of_birth}
+
+  ### Defendants:
+
+  ${defendant.comma_and_list()}
+
+  ### Property:
+
+  ${the_property.on_one_line()}
+
+  ### Court:
+
+  ${case.county}
+
+  Court: ${justice_court_precinct}
+  Court info: ${court_info.Court}
+
+  ### Rent Information:
+
+  Subsidy: ${rent_subsidy}
+  Tenant: ${rent_tenant}
+  TOTAL: ${rent_total}
+
+  Rent not paid: ${first_date} - ${last_date}
+  Amount not paid: ${unpaid_rent_amount}
+
+  ### Eviction Reason:
+
+  ${eviction_basis}
+
+  ### Demand Information:
+
+  Service date: ${demand_service_date}
+  Service method: ${demand_service_method}
+
+  ### Flags:
+
+  Immediate possession: ${immediate_possession_requested}
+  Jury: ${jury_demanded}
+  email_service_consented: ${email_service_consented}
+  State of execution: ${state_of_execution}
+  County of execution: ${county_of_execution}
+---
+id: idx_total_rent
+sets: rent_total
+code: |
+  rent_total = rent_subsidy + rent_tenant
+---
+id: idx_court_info
+sets: court_info
+code: |
+  court_info = jp_court_for_county(case.county, justice_court_precinct)
+---
+id: idx_demand_information
+question: |
+  Service of Notice to Vacate
+fields:
+  - Service method: demand_service_method
+    choices:
+      - USPS First Class Mail
+      - USPS Certified Mail
+      - Personal Service
+      - Hand Delivery
+      - Affixing to Inside of Front Door
+      - Affixing to Outside of Front Door
+  - Service date: demand_service_date
+    datatype: date
+---
+code: |
+  if method_of_service == 'USPS Certified Mail':
+    certified = True
+  else:
+    certified = False
+---
+question: |
+  Certified mail item number
+fields:
+  - no label: item_number
+---
+question: |
+  Date Notice will be Signed
+fields:
+  - no label: notice_signed_date
+    datatype: date
+---
+id: idx_rent_amounts
+question: |
+  Rent amount
+fields:
+  - Tenant portion of rent: rent_tenant
+    datatype: currency
+  - Rent subsidy amount: rent_subsidy
+    datatype: currency
+---
+id: idx_unpaid_rent
+question: |
+  Unpaid Rent
+fields:
+  - Total unpaid rent: unpaid_rent_amount
+    datatype: currency
+  - First missed payment: first_date
+    datatype: date
+  - Last missed payment: last_date
+    datatype: date
+---
+id: idx_affidavit_execution_state
+question: |
+  U.S. state where this document be signed.
+fields:
+  - U.S. State: state_of_execution
+    choices:
+      code: states_list()
+---
+id: idx_affidavit_execution_county
+question: |
+  County within ${state_of_execution} where this document will be signed.
+fields:
+  - County: county_of_execution
+    choices:
+      code: us_counties(state_of_execution)
+---
+id: idx_email_service
+question: |
+  Is it OK for the court and others to send you documents via email?
+yesno: email_service_consented
+---
+id: idx_immediate_possession
+question: |
+  Are you posting a bond for immediate possession?
+yesno: immediate_possession_requested
+---
+id: idx_plaintiff_represented
+question: |
+  Have you or will you hire an attorney to represent you?
+yesno: plaintiff_is_represented
+---
+id: idx_jury_demanded
+question: Do you want a jury to decide your case?
+yesno: jury_demanded
+---
+id: idx_plaintiff_email
+question: What is your email address?
+email: plaintiff_email
+---
+id: idx_attorney_identification
+question: Who is your attorney?
+fields:
+  - First name: attorney.name.first
+  - Middle name: attorney.name.middle
+  - Last name: attorney.name.last
+  - Suffix: attorney.name.suffix
+    required: False
+    code: |
+      name_suffix()
+  - Law firm: attorney.firm
+  - State bar number: attorney.bar_no
+---
+id: idx_attorney_address
+decoration: map
+question: What is ${attorney.name.full()}'s address?
+fields:
+  - Street: attorney.address.address
+    address autocomplete: True
+  - Unit: attorney.address.unit
+    required: false
+  - City: attorney.address.city
+  - State: attorney.address.state
+    code: states_list()
+  - ZIP: attorney.address.zip
+  - County: attorney.address.county
+---
+id: idx_property_address
+decoration: map
+question: What is address of the property from which ${defendant.comma_and_list()} are being evicted?
+fields:
+  - Street: the_property.address
+    address autocomplete: True
+  - Unit: the_property.unit
+    required: false
+  - City: the_property.city
+  - State: the_property.state
+    code: states_list()
+  - ZIP: the_property.zip
+  - County: the_property.county
+---
+id: idx_attorney_contact_information
+question: What is ${attorney.name.full()}'s contact information?
+fields:
+  - Telephone: attorney.phone
+    datatype: phone
+  - Fax: attorney.fax
+    datatype: fax
+  - Email: attorney.email
+    datatype: email
+---
+# If you modify these choices, you must also modify the corresponding choices
+# in the Notice to Vacate template and the Eviction Petition template.
+question: |
+  Reason for Notice
+field: eviction_basis
+choices:
+  - Expiration of lease
+  - Failure to pay rent as required under the lease agreement
+  - Sale of residence
+  - Damage to property
+  - Condemnation of property
+  - Non-compliance with lease agreement
+  - Termination of tenancy at will
+  - OTHER
+---
+signature: client_signature
+question: |
+  Your Signature
+subquestion: |
+  Sign using your tablet's pen, your finger, or mouse pointer.
+under: |
+  ${petitioner.name.full()}
+---
+id: idx_client_dob
+question: What is your date of birth?
+subquestion: This is required for the declaration portion of the document.
+fields:
+  - Date of birth: declaration_date_of_birth
+    datatype: date
+---

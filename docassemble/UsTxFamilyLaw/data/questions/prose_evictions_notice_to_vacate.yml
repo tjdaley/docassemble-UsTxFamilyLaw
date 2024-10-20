@@ -76,15 +76,17 @@ subquestion: |
 under: |
   ${host_name}
 ---
+# If you modify these choices, you must also modify the corresponding choices
+# in the Notice to Vacate template and the Eviction Petition template.
 question: |
   Reason for Notice
 field: reason
 choices:
-  - expiration of lease
-  - failure to pay rent as required under the lease agreement
-  - sale of residence
-  - damage to property
-  - condemnation of property
-  - non-compliance with lease agreement
-  - termination of tennancy at will
-  - OTHER REASON FOR NOTICE
+  - Expiration of lease
+  - Failure to pay rent as required under the lease agreement
+  - Sale of residence
+  - Damage to property
+  - Condemnation of property
+  - Non-compliance with lease agreement
+  - Termination of tenancy at will
+  - OTHER
