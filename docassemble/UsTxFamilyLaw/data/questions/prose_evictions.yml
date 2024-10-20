@@ -30,7 +30,13 @@ code: |
   the_property.normalize()
 ---
 mandatory: True
-code: client = plaintiff
+code: |
+  plaintiff.address
+  plaintiff.email
+  #plaintiff.alignment = "Plaintiff"
+  our_client = plaintiff
+  case.client = plaintiff
+  case.client.alignment = "Plaintiff"
 ---
 mandatory: True
 question: |
@@ -44,6 +50,14 @@ attachments:
   - name: Eviction Petition
     filename: Eviction_Petition
     docx template file: Eviction_Petition_Pro_Se.docx
+---
+id: idx_document_prepared_for
+question: Who is signing this document?
+subquestion: Select the party who is signing this document.
+fields:
+  - Signer: our_client
+    datatype: object
+    choices: plaintiff + defendant
 ---
 id: idx_total_rent
 sets: rent_total
@@ -95,6 +109,10 @@ fields:
     datatype: currency
   - Rent subsidy amount: rent_subsidy
     datatype: currency
+---
+id: idx_claim_unpaid_rent
+question: Are you asking the court for a judgment for unpaid rent?
+yesno: claiming_unpaid_rent
 ---
 id: idx_unpaid_rent
 question: |
