@@ -34,56 +34,16 @@ code: client = plaintiff
 ---
 mandatory: True
 question: |
-  Your Answers
+  Your Eviction Petition is ready.
 subquestion: |
-  ### Plaintiff:
-  
-  ${plaintiff.name.full()}
-
-  Plaintiff is represented? ${plaintiff_is_represented}
-
-  Plaintiff's DOB: ${declaration_date_of_birth}
-
-  ### Defendants:
-
-  ${defendant.comma_and_list()}
-
-  ### Property:
-
-  ${the_property.on_one_line()}
-
-  ### Court:
-
-  ${case.county}
-
-  Court: ${justice_court_precinct}
-  Court info: ${court_info.Court}
-
-  ### Rent Information:
-
-  Subsidy: ${rent_subsidy}
-  Tenant: ${rent_tenant}
-  TOTAL: ${rent_total}
-
-  Rent not paid: ${first_date} - ${last_date}
-  Amount not paid: ${unpaid_rent_amount}
-
-  ### Eviction Reason:
-
-  ${eviction_basis}
-
-  ### Demand Information:
-
-  Service date: ${demand_service_date}
-  Service method: ${demand_service_method}
-
-  ### Flags:
-
-  Immediate possession: ${immediate_possession_requested}
-  Jury: ${jury_demanded}
-  email_service_consented: ${email_service_consented}
-  State of execution: ${state_of_execution}
-  County of execution: ${county_of_execution}
+  Thank you for using this interview.
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachments:
+  - name: Eviction Petition
+    filename: Eviction_Petition
+    docx template file: Eviction_Petition_Pro_Se.docx
 ---
 id: idx_total_rent
 sets: rent_total
@@ -140,16 +100,16 @@ id: idx_unpaid_rent
 question: |
   Unpaid Rent
 fields:
-  - Total unpaid rent: unpaid_rent_amount
+  - Total unpaid rent: rent_unpaid_amount
     datatype: currency
-  - First missed payment: first_date
+  - First missed payment: rent_unpaid_first_date
     datatype: date
-  - Last missed payment: last_date
+  - Last missed payment: rent_unpaid_last_date
     datatype: date
 ---
 id: idx_affidavit_execution_state
 question: |
-  U.S. state where this document be signed.
+  U.S. state where this documentwill be signed.
 fields:
   - U.S. State: state_of_execution
     choices:
