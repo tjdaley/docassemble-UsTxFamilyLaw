@@ -1,0 +1,472 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.AssemblyLine:al_package.yml
+---
+metadata:
+  title: |
+    Client Intake Questionnaire
+---
+objects:
+  - your_opposing_party: ALIndividual
+---
+mandatory: True
+code: |
+  if not start_fresh:
+    load_existing_answers
+  users[0].name.first
+  users[0].mailing_address.city
+  users[0].mobile_number
+  users[0].birthdate
+  users[0].gender
+  users[0].pronouns
+  client_ssn_last4
+  client_dl_last4
+  users[0].is_employed
+  your_opposing_party.name.first
+  your_opposing_party.mailing_address.city
+  your_opposing_party.mobile_number
+  your_opposing_party.birthdate
+  your_opposing_party.gender
+  your_opposing_party.pronouns
+  your_opposing_party.is_employed
+  op_race
+  op_vehicle_year
+  are_married
+  at_least_6_months_in_state
+  history_of_family_violence_flag
+  children.gather()
+  reason_for_meeting
+  answers_saved
+  outro_message
+---
+code: |
+  # The user's answers are saved to the "saved session" area
+  save_interview_answers(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", metadata = {"title": str(users) } )
+  answers_saved = True
+---
+code: |
+  # Set the left header based on whether there's been family violence
+  if history_of_family_violence_flag:
+    left_header = "**FAMILY VIOLENCE**"
+  else:
+    left_header = ""
+---
+id: choose an answer set
+question: |
+  Choose an answer set
+fields:
+  - Start fresh: start_fresh
+    datatype: yesno
+    disable others: True
+  - Select one: selected_answers
+    datatype: combobox
+    code: |
+      [{idx: answer["title"]} for idx, answer in enumerate(all_answer_sets)]
+    required: False      
+---
+code: |
+  if user_has_privilege(['developer', 'admin']):
+    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", user_id="all", exclude_newly_started_sessions=False)
+  else:
+    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", exclude_newly_started_sessions=False)
+---
+code: |
+  load_interview_answers(all_answer_sets[int(selected_answers)]["filename"], all_answer_sets[int(selected_answers)]["key"])
+  load_existing_answers = True
+---
+id: welcome
+question: |
+  Client Intake Questionnaire
+subquestion: |
+  Tell us a little about yourself to help us prepare for our first meeting.
+fields:
+  - What are the most imporant topics you'd like to discuss?: reason_for_meeting
+    datatype: area
+---
+id: children names with birthdate and gender
+sets:
+  - children[i].name.first
+  - children[i].name.last
+  - children[i].name.middle
+  - children[i].name.suffix
+  - children[i].birthdate
+  - children[i].gender
+  - children[i].special_needs_flag
+question: |
+  % if hasattr(children, 'ask_number') and children.ask_number and children.target_number == 1 and i == 0:
+  Child's name
+  % else:
+  Name of ${ ordinal(i) } child
+  % endif
+fields:
+  - code: |
+      children[i].name_fields() + children[i].gender_fields()
+  - Birth date: children[i].birthdate
+    datatype: date
+  - Special needs? : children[i].special_needs_flag
+    datatype: yesnoradio
+---
+id: users[0]'s address fields with county
+sets:
+  - users[0].mailing_address.address
+  - users[0].mailing_address.unit
+  - users[0].mailing_address.city
+  - users[0].mailing_address.state
+  - users[0].mailing_address.zip
+  - users[0].mailing_address.country
+  - users[0].mailing_address.county
+question: |
+  Where are you currently residing?
+fields:
+  code: |
+    users[0].mailing_address.address_fields(country_code='US', default_state='TX', show_county=True)
+validation code: |
+  if (not showifdef('users[0].mailing_address.county')):
+    validation_error(word("We need the name of the county. If you enter the address in the first line and keep typing, Google should be able to locate the county for you."), field="x.county")
+---
+id: your_opposing_party's address fields with county
+sets:
+  - your_opposing_party.mailing_address.address
+  - your_opposing_party.mailing_address.unit
+  - your_opposing_party.mailing_address.city
+  - your_opposing_party.mailing_address.state
+  - your_opposing_party.mailing_address.zip
+  - your_opposing_party.mailing_address.country
+  - your_opposing_party.mailing_address.county
+question: |
+  Where is ${ your_opposing_party } currently residing?
+fields:
+  code: |
+    your_opposing_party.mailing_address.address_fields(country_code='US', default_state='TX', show_county=True)
+validation code: |
+  if (not showifdef('your_opposing_party.mailing_address.county')):
+    validation_error(word("We need the name of the county. If you enter the address in the first line and keep typing, Google should be able to locate the county for you."), field="x.county")
+---
+id: contact fields
+generic object: ALIndividual
+sets:
+  - x.mobile_number
+question: |
+  % if 'users' in x.object_name():
+  How should we contact you?
+  % else:
+  How should we contact ${ your_opposing_party }?
+  % endif
+subquestion: |
+  % if 'users' in x.object_name():
+  Include at least **one** way to reach you other than by mail.
+
+  ${ collapse_template(why_contact_info_needed_template) }
+  %else:
+  Include at least **one** way to reach ${ your_opposing_party } other than by mail.
+  % endif
+fields:  
+  - Mobile number: x.mobile_number
+    required: False
+  - Other phone number: x.phone_number
+    required: False
+  - Email address: x.email    
+    datatype: email
+    required: False
+validation code: |
+  if (not showifdef('x.phone_number')) and \
+      (not showifdef('x.mobile_number')) and \
+      (not showifdef('x.email')):
+    validation_error(word("You need to provide at least one contact method."), field="x.mobile_number")
+---
+#####
+# Fields for filing suit
+#####
+---
+id: last 4 digits SSN
+sets: |
+  - client_ssn_last4
+  - client_time_in_state
+  - client_time_in_county
+question: |
+  What are the last 4 digits of your Social Security number?
+fields:
+  - Last 4 digits: client_ssn_last4
+    required: False
+    under text: (Just the last 4 digits)
+    help: |
+      The Texas Rules of Civil Procedure require that the last 4 digits of
+      a party's Social Security number be included on the initial pleading.
+      If you do not have a Social Security number, just enter "0000".
+---
+id: last 4 digits driver's license
+sets: |
+  - client_dl_last4
+question: |
+  What are the last 4 digits of your driver's license number?
+fields:
+
+  - Last 4 digits: client_dl_last4
+    required: False
+    under text: (Just the last 4 digits)
+    help: |
+      The Texas Rules of Civil Procedure require that the last 4 digits of
+      a party's driver's license number be included on the initial pleading.
+      If you do not have a driver's license, just enter "0000".
+---
+#####
+# Jurisdiction
+#####
+id: time in county and time in state
+sets: |
+  - at_least_6_months_in_state
+  - at_least_90_days_in_county
+  - at_least_6_months_in_county
+question: |
+  How long have you lived in ${ users[0].mailing_address.county } and in ${ users[0].mailing_address.state}?
+subquestion: |
+  This information helps us determine the proper jurisdiction for your case.
+fields:
+  - In COUNTY at least 90 days: at_least_90_days_in_county
+    datatype: yesno
+    help: |
+      You must have resided in ${users[0].mailing_address.county} at least 90 days before filing for divorce.
+  - In COUNTY at least 6 months: at_least_6_months_in_county
+    datatype: yesno
+    help: |
+      Six months is a minimum time period of residency in your county if you want to transfer a custody case to a new county.
+  - In STATE at least 6 months: at_least_6_months_in_state
+    datatype: yesno
+---
+#####
+# Identification for Service of Process
+#####
+id: service identification fields
+sets: |
+  - op_race
+  - op_hair_color
+  - op_eye_color
+  - op_height
+  - op_weight
+question: |
+  Description of ${ your_opposing_party }.
+subquestion: |
+  The following information is used when we have to send a process server
+  to serve paperwork on ${your_opposing_party }.
+fields:
+  - Race: op_race
+    required: False                                                 
+  - Hair color: op_hair_color
+    required: False                                                 
+  - Eye color: op_eye_color
+    required: False
+  - Height: op_height
+    required: False
+  - Weight: op_weight
+    required: False
+---
+id: op vehicle details
+sets: |
+  - op_vehicle_year
+  - op_vehicle_make
+  - op_vehicle_model
+  - op_vehicle_color
+question: |
+  Description of ${ your_opposing_party}'s vehicle:
+subquestion: |
+  This information is also used when we have to send a process server
+  to serve paperwork on {$ your_opposing_party }.
+fields:
+  - Vehicle year: op_vehicle_year
+    required: False                                   
+  - Vehicle make: op_vehicle_make
+    required: False                                                 
+  - Vehicle model: op_vehicle_model
+    required: False                                 
+  - Vehicle color: op_vehicle_color
+    required: False                                 
+---
+id: gather employment information
+generic object: ALIndividual
+sets: |
+  - x.is_employed
+  - x.is_self_employed
+  - x.employer
+  - x.job_title
+  - x.work_address
+  - x.work_phone
+  - x.annual_income
+question: |
+  % if 'users' in x.object_name():
+  If you are employed or self-employed, please provide the following details about your **PRIMARY** source of employment.
+  % else:
+  If ${ your_opposing_party } is employed or self-employed, please provide the following details regarding ${ your_opposing_party.pronoun_possessive} **PRIMARY** source of employment.
+  % endif
+fields:
+  - Employed?: x.is_employed
+    datatype: yesnowide
+  - Self-employed?: x.is_self_employed
+    datatype: yesnowide
+  - Employer name: x.employer
+    required: False
+  - Job title: x.job_title
+    required: False
+  - Work address: x.work_address
+    required: False
+    under text: (Please provide street, city, and state)
+  - Work telephone: x.work_phone
+    required: False
+  - Annual income: x.annual_income
+    datatype: currency
+    min: 0
+    under text: (If you don't know, provide your best estimate)
+---
+id: are the parties married
+sets: |
+  - are_married
+  - date_of_marriage
+  - place_of_marriage
+  - is_informal_marriage
+question: |
+  Are you and ${your_opposing_party} currently married to each other?
+fields:
+  - no label: are_married
+    datatype: yesnoradio
+  - Date of marriage: date_of_marriage
+    datatype: date
+    show if:
+      variable: are_married
+      is: True
+  - Where where you married?: place_of_marriage
+    show if:
+      variable: are_married
+      is: True
+  - Is yours a common-law/informal marriage?: is_informal_marriage
+    datatype: yesnoradio
+    show if:
+      variable: are_married
+      is: True
+---
+id: history of family violence flag
+sets: |
+  - history_of_family_violence_flag
+question: |
+  Is there a history of family violence between you and ${your_opposing_party}?
+fields:
+  - no label: history_of_family_violence_flag
+    datatype: yesnoradio
+---
+event: outro_message
+question: |
+  Thank you!! You can download your responses for your records.
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachment:
+  - name: Client Intake
+    filename: Client_Intake
+    description: |
+      This document contains your responses to the intake questionnaire.
+    valid formats:
+      - pdf
+    metadata:
+      FirstHeaderCenter: |
+        **KOONSFULLER - CLIENT INTAKE**
+      HeaderCenter: |
+        **KOONSFULLER - CLIENT INTAKE**
+      FirstFooterLeft: |
+        Client Intake for ${users[0].name_full()}
+      FooterLeft: |
+        Client Intake for ${users[0].name_full()}
+      FirstFooterCenter: |
+        Submitted: ${ today() }
+      FooterCenter: |
+        Submitted: ${ today() }
+      FirstFooterRight: |
+        Page [PAGENUM] of [TOTALPAGES] Pages
+      FooterRight: |
+        Page [PAGENUM] of [TOTALPAGES] Pages
+      FirstHeaderLeft: |
+        ${left_header}
+      HeaderLeft: |
+        ${left_header}
+      FirstHeaderRight: |
+        **CONFIDENTIAL**
+      HeaderRight: |
+        **CONFIDENTIAL**
+      SingleSpacing: True
+      fontsize: 10pt
+    content: |
+        [BOLDCENTER]Client
+
+        Name | ${users[0].name_full()}
+        -----|-----
+        Personal | ${users[0].gender}: ${users[0].list_pronouns()}
+        Birth date | ${users[0].birthdate } (${users[0].formatted_age()})
+        Address | ${users[0].mailing_address.on_one_line()} - ${users[0].mailing_address.county}
+        Phone | Cell: ${phone_number_formatted(users[0].mobile_number)} // Other: ${phone_number_formatted(users[0].phone_number)}
+        Email | ${users[0].email}
+        ID | SSN: ${client_ssn_last4} // DL:  ${client_dl_last4}
+        Residency | In county at leat 90 days? ${at_least_90_days_in_county}
+        [NBSP]  | In county at least 6 months? ${at_least_6_months_in_county}
+        [NBSP]  | In state at least 6 months? ${at_least_6_months_in_state}
+        % if not users[0].is_employed and not users[0].is_self_employed:
+        Employer | **Unemployed**
+        % else:
+        Employer | ${users[0].employer}
+        Self Employed| ${users[0].is_self_employed}
+        Title | ${users[0].job_title}
+        Address | ${users[0].work_address}
+        Telephone | ${users[0].work_phone}
+        Income | ${currency(users[0].annual_income)}
+        % endif
+
+        [BOLDCENTER]Opposing Party
+        
+        Name | ${your_opposing_party.name_full()}
+        -----|-----
+        Personal | ${your_opposing_party.gender}: ${your_opposing_party.list_pronouns()}
+        Birth date | ${your_opposing_party.birthdate } (${your_opposing_party.formatted_age()})
+        Address | ${your_opposing_party.mailing_address.on_one_line()} - ${your_opposing_party.mailing_address.county}
+        Phone | Cell: ${phone_number_formatted(your_opposing_party.mobile_number)} // Other: ${phone_number_formatted(your_opposing_party.phone_number)}
+        Email | ${your_opposing_party.email}
+        % if not your_opposing_party.is_employed and not your_opposing_party.is_self_employed:
+        Employer | **Unemployed**
+        % else:
+        Employer | ${your_opposing_party.employer or '________________________________________'}
+        Self-Employed | ${your_opposing_party.is_self_employed}
+        Title | ${your_opposing_party.job_title}
+        Address | ${your_opposing_party.work_address or '________________________________________'}
+        Telephone | ${your_opposing_party.work_phone or '________________________________________'}
+        Income | ${currency(your_opposing_party.annual_income)}
+        % endif
+
+        [BOLDCENTER]Service Information
+        
+        Race | Eye Color | Hair Color | Height | Weight | Vehicle
+        -----|-----------|------------|--------|--------|--------
+        ${op_race} | ${op_eye_color} | ${op_hair_color} | ${op_height} | ${op_weight} | ${op_vehicle_color} ${op_vehicle_year} ${op_vehicle_make} ${op_vehicle_model}
+
+
+        [PAGEBREAK]
+        [BOLDCENTER]Marriage
+        % if are_married:
+        
+        Date | Place | Informal?
+        -----|-------|----------
+        ${date_of_marriage} | ${place_of_marriage} | ${is_informal_marriage}
+        
+        % else:
+        
+        ${users[0]} and ${your_opposing_party} are NOT married.
+        
+        % endif
+        
+        [BOLDCENTER]Children
+        
+        Name | Birth Date | Gender | Special Needs
+        -----|------------|--------|--------------
+        % for child in children:
+        ${child.name_full()} | ${child.birthdate} (${child.formatted_age()}) | ${child.gender} | ${child.special_needs_flag}
+        % endfor
+        
+        [BOLDCENTER]Reason for Meeting
+        
+        [BORDER] ${reason_for_meeting}
+---
