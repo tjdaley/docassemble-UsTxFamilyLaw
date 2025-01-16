@@ -10,6 +10,178 @@ metadata:
 objects:
   - your_opposing_party: ALIndividual
 ---
+event: review_answers
+section: review_answers
+need: children_table
+question: |
+  Review Your Answers!!
+action buttons:
+  - label: Your Name, Address, Description
+    action: your_name
+    color: info
+    css class: btn-block
+    icon: user-pen
+  - label: Your Employment
+    action: your_employment
+    color: info
+    css class: btn-block
+    icon: sack-dollar
+  - label: ${your_opposing_party}'s Name, Address
+    action: their_name
+    color: info
+    css class: btn-block
+    icon: user-pen
+  - label: ${your_opposing_party}'s Employment
+    action: their_employment
+    color: info
+    css class: btn-block
+    icon: sack-dollar
+  - label: Service Information
+    action: their_service_info
+    color: info
+    css class: btn-block
+    icon: file-contract
+  - label: Marriage and Family Violence
+    action: marriage_and_violence
+    color: info
+    css class: btn-block
+    icon: people-arrows
+  - label: Children (${len(children)} added so far)
+    action: edit_children
+    color: info
+    css class: btn-block
+    icon: baby
+  - label: Finish
+    action: outro_message
+    color: primary
+    css class: btn-block
+    icon: circle-right
+---
+event: your_name
+section: your_name
+question: |
+  Your Name, Address, and Descriptive Information
+review:
+  - Edit name: users[0].name.first
+    button: |
+      ${ users[0].name_full() }
+  - Edit address: users[0].mailing_address.city
+    button: |
+      ${ users[0].mailing_address.on_one_line() }
+  - Edit birth date: users[0].birthdate
+    button: |
+      ${ users[0].birthdate }
+  - Edit gender: users[0].gender
+    button: |
+      ${ users[0].gender }
+  - Edit pronouns: users[0].pronouns
+    button : |
+      ${ users[0].list_pronouns() }
+  - Edit email and telephone: users[0].mobile_number
+    button: |
+      ${ users[0].mobile_number } // ${ users[0].email }
+  - Edit SSN: client_ssn_last4
+    button: |
+      Last 4 digits: ${ client_ssn_last4 }
+  - Edit Driver's License: client_dl_last4
+    button: |
+      Last 4 digits: ${ client_dl_last4 }
+---
+event: your_employment
+section: your_employment
+question: |
+  Your Employment Information
+review:
+  - Edit employment: users[0].is_employed
+    button: |
+      ${ users[0].employer or "(No employer)"}
+---
+event: their_name
+section: their_name
+question: |
+  ${your_opposing_party}'s' Name, Address, and Descriptive Information
+review:
+  - Edit name: your_opposing_party.name.first
+    button: |
+      ${ your_opposing_party.name_full() }
+  - Edit address: your_opposing_party.mailing_address.city
+    button: |
+      ${ your_opposing_party.mailing_address.on_one_line() }
+  - Edit birth date: your_opposing_party.birthdate
+    button: |
+      ${ your_opposing_party.birthdate }
+  - Edit gender: your_opposing_party.gender
+    button: |
+      ${ your_opposing_party.gender }
+  - Edit pronouns: your_opposing_party.pronouns
+    button : |
+      ${ your_opposing_party.list_pronouns() }
+  - Edit email and telephone: your_opposing_party.mobile_number
+    button: |
+      ${ your_opposing_party.mobile_number } // ${ your_opposing_party.email }
+---
+event: their_employment
+section: their_employment
+question: |
+  ${ your_opposing_party }'s Employment Information
+review:
+  - Edit employment: your_opposing_party.is_employed
+    button: |
+      ${ your_opposing_party.employer or "(No employer)"}
+---
+event: their_service_info
+sectoin: their_service_info
+question: |
+  Information for Serving ${ your_opposing_party }.
+review:
+  - Edit description: op_race
+    button: |
+      Race: ${ op_race } Hair: ${ op_hair_color } Eyes: ${ op_eye_color }
+  - Edit vehicle: op_vehicle_year
+    button: |
+      ${ op_vehicle_color } ${ op_vehicle_year } ${ op_vehicle_make } ${ op_vehicle_model }
+---
+event: marriage_and_violence
+section: marriage_and_violence
+question: |
+  Marital Status, Family Violence, and Jurisdiction
+review:
+  - Edit marital status: are_married
+    button: |
+      Married? ${ are_married }
+  - Edit history of family violence: history_of_family_violence_flag
+    button: |
+      ${ history_of_family_violence_flag }
+  - Edit jurisdiction times: at_least_6_months_in_state
+    button: |
+      Jurisdiction Timeline
+---
+event: edit_children
+question: |
+  Children
+review:
+  - note: |
+      % if len(children):
+      ${ children_table }
+      ${ children.add_action() }
+      % else:
+      There are no children.
+
+      ${ children.add_action("I would like to add one.") }
+      % endif
+---
+table: children_table
+rows: children
+columns:
+  - Name: |
+      row_item.name.full()
+  - Age: |
+      row_item.formatted_age()
+  - Gender: |
+      row_item.gender
+edit:
+  - name.first
+---
 mandatory: True
 code: |
   if not start_fresh:
@@ -38,7 +210,7 @@ code: |
   children.gather()
   reason_for_meeting
   answers_saved
-  outro_message
+  review_answers
 ---
 code: |
   # The user's answers are saved to the "saved session" area
