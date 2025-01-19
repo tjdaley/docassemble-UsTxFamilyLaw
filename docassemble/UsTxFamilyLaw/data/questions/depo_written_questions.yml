@@ -37,7 +37,7 @@ sets:
 code: |
   if subpoena.subpoena_type == 'dwq':
     subpoena_description = "Subpoena for Deposition on Written Questions"
-    attachment_list = [all_cover_letter, dwq_notice, all_bra, dwq_subpoena]
+    attachment_list = [all_cover_letter, dwq_notice, all_bra, dwq_subpoena, dwq_deposition]
   else:
     subpoena_description = "Subpoena Duces Tecum"
     attachment_list = [all_cover_letter, sdt_notice, all_bra, sdt_subpoena]
@@ -118,4 +118,14 @@ attachment:
   valid formats:
     - docx
     - pdf
+---
+attachment:
+  name: Deposition on Written Questions
+  filename: ${subpoena.witness.name_full()} - Deposition Written Questions
+  description: Deposition on Written Questions
+  variable name: dwq_deposition
+  docx template file: docassemble.UsTxFamilyLaw:dwq_deposition_questions.docx
+  valid formats:
+    - docx
+    - pdf---
 ---
