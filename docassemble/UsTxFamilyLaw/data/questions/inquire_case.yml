@@ -34,11 +34,18 @@ fields:
 id: inquire attorney
 sets:
   - case.attorney.name.first
+  - case.attorney.gender
+  - case.attorney.mailing_address.address
+  - case.attorney.bar_number
+  - case.attorney.firm_name
+  - case.attorney.telephone_number
+  - case.attorney.fax_number
+  - case.attorney.email
 question: |
   Attorney issuing the subpoena.
 fields:
   - code: |
-      case.attorney.name_fields() + case.attorney.gender_fields() + case.attorney.mailing_address.address_fields()
+      case.attorney.name_fields() + case.attorney.gender_fields() + case.attorney.pronoun_fields() + case.attorney.mailing_address.address_fields()
   - Bar number: case.attorney.bar_number
   - Firm name: case.attorney.firm_name
   - Telephone: case.attorney.telephone_number
