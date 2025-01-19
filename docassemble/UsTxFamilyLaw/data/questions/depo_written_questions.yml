@@ -7,8 +7,8 @@ metadata:
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.AssemblyLine:al_package.yml
-  - inquire_case.yml
-  - inquire_subpoena.yml
+  - docassemble.UsTxFamilyLaw:inquire_case.yml
+  - docassemble.UsTxFamilyLaw:inquire_subpoena.yml
 ---
 mandatory: True
 code: |
@@ -64,7 +64,7 @@ attachment:
   filename: ${subpoena.witness.name_full()} - Cover Letter
   description: Cover Letter
   variable name: all_cover_letter
-  docx template file: dwq_notice_cover_letter.docx
+  docx template file: docassemble.UsTxFamilyLaw:dwq_notice_cover_letter.docx
   valid formats:
     - docx
     - pdf
@@ -74,7 +74,7 @@ attachment:
   filename: ${subpoena.witness.name_full()} - Notice
   description: Notice of Pending Subpoena Duces Tecum
   variable name: sdt_notice
-  docx template file: dwq_notice_of_sdt.docx
+  docx template file: docassemble.UsTxFamilyLaw:dwq_notice_of_sdt.docx
   valid formats:
     - docx
     - pdf
@@ -84,7 +84,7 @@ attachment:
   filename: ${subpoena.witness.name_full()} - Notice
   description: Notice of Pending Deposition on Written Questions
   variable name: dwq_notice
-  docx template file: dwq_notice_of_dwq.docx
+  docx template file: docassemble.UsTxFamilyLaw:dwq_notice_of_dwq.docx
   valid formats:
     - docx
     - pdf
@@ -94,7 +94,7 @@ attachment:
   filename: ${subpoena.witness.name_full()} - BRA
   description: Business Records Affidavit
   variable name: all_bra
-  docx template file: dwq_business_records_affidavit.docx
+  docx template file: docassemble.UsTxFamilyLaw:dwq_business_records_affidavit.docx
   valid formats:
     - docx
     - pdf
@@ -104,7 +104,7 @@ attachment:
   filename: ${subpoena.witness.name_full()} - Subpoea Duces Tecum
   description: Subpoena Duces Tecum
   variable name: sdt_subpoena
-  docx template file: dwq_subpoena_duces_tecum.docx
+  docx template file: docassemble.UsTxFamilyLaw:dwq_subpoena_duces_tecum.docx
   valid formats:
     - docx
     - pdf
@@ -114,7 +114,7 @@ attachment:
   filename: ${subpoena.witness.name_full()} - Subpoea Deposition Written Questions
   description: Subpoena for Deposition on Written Questions
   variable name: dwq_subpoena
-  docx template file: dwq_subpoena_depo_written_questions.docx
+  docx template file: docassemble.UsTxFamilyLaw:dwq_subpoena_depo_written_questions.docx
   valid formats:
     - docx
     - pdf
