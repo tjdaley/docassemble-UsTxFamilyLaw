@@ -1,0 +1,109 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.AssemblyLine:al_package.yml
+---
+modules:
+  - docassemble.UsTxFamilyLaw.functions
+---
+objects:
+  - court_info: DAObject
+  - case: DAObject
+  - case.petitioner: ALIndividual
+  - case.respondent: ALIndividual
+  - case.client: ALIndividual
+  - case.op: ALIndividual
+  - case.oc: ALIndividual
+  - case.child: ALPeopleList
+  - case.attorney: ALIndividual
+---
+id: inquire case
+question: |
+  Case Information
+fields:
+  - Cause number: case.id
+  - Court type: court_type
+  - Court name: court_info.court
+  - County: case.county
+    code: |
+      us_counties("TX")
+  - Is divorce?: case.is_dissolution
+    datatype: yesno
+  - Our billing number: case.billing_number
+---
+id: inquire attorney
+sets:
+  - case.attorney.name.first
+question: |
+  Attorney issuing the subpoena.
+fields:
+  - code: |
+      case.attorney.name_fields() + case.attorney.gender_fields() + case.attorney.mailing_address.address_fields()
+  - Bar number: case.attorney.bar_number
+  - Firm name: case.attorney.firm_name
+  - Telephone: case.attorney.telephone_number
+  - Fax: case.attorney.fax_number
+  - Email: case.attorney.email
+    datatype: email
+---
+id: case style
+sets:
+  - case.style
+  - case_style_set
+code: |
+  case.style = ""
+  if case.is_dissolution:
+    case.style = "In the Matter of the Marriage of " + case.petitioner.name_full() + " and " + case.respondent.name_full()
+  if case.child.number_gathered() > 0:
+    if case.is_dissolution:
+      case.style += " and "
+    case.style += "In the interest of " + case.child.comma_and_list()
+  case_style_set = True
+---
+id: inquire petitioner
+question: |
+  Who is the petitioner?
+fields:
+  - code: |
+      case.petitioner.name_fields()
+  - Birth date: case.petitioner.birthdate
+    datatype: date
+  - SSN (last 4): case.petitioner.ssn_last4
+---
+id: inquire respondent
+question: |
+  Who is the respondent?
+fields:
+  - code: |
+      case.respondent.name_fields()
+  - Birth date: case.respondent.birthdate
+    datatype: date
+  - SSN (last 4): case.respondent.ssn_last4
+---
+id: inquire opposing counsel
+sets:
+  - case.oc.name.first
+question: |
+  Who is your opposing counse?
+fields:
+  - code: |
+      case.oc.name_fields()
+  - Email: case.oc.email
+---
+id: inquire client
+sets: case.client
+question: |
+  Please select our client from the following parties:
+fields:
+  - Client: case.client
+    datatype: object
+    choices: [case.petitioner, case.respondent]
+---
+id: set opposing party
+code: |
+  if case.client == case.petitioner:
+    case.op = case.respondent
+  else:
+    case.op = case.petitioner
+  op_set = True
+---
