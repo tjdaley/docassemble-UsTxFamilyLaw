@@ -1,0 +1,140 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.AssemblyLine:al_package.yml
+---
+objects:
+  - subpoena: DAObject
+  - subpoena.witness: ALIndividual
+  - subpoena.witness.registered_agent: ALIndividual
+  - subpoena.documents: DAList.using(object_type=DAObject, there_are_any=True)
+  - subpoena.paralegal: ALIndividual
+---
+id: there is another
+sets:
+  - subpoena.documents.there_is_another
+question: |
+  You've listed ${subpoena.documents.number_gathered()} documents.
+  
+  Would you like to add another document?
+yesno: subpoena.documents.there_is_another
+---
+id: get paralegal
+sets:
+  - subpoena.paralegal.name.first
+question: |
+  Paralegal supporting this subponea.
+fields:
+  - code: |
+      subpoena.paralegal.name_fields() + subpoena.paralegal.gender_fields()
+  - Email: subpoena.paralegal.email
+    datatype: email
+  - Telephone: subpoena.paralegal.telephone_number
+---
+id: get upload link
+sets:
+  - subpoena.secure_link
+question: |
+  Secure link for uploading documents for this subpoena.
+fields:
+  - Link: subpoena.secure_link
+---
+id: get subponea type
+mandatory: True
+sets:
+  - subpoena.subpoena_type
+question: |
+  What type of subpoena are you issuing?
+fields:
+  - Subponea type: subpoena.subpoena_type
+    choices:
+      - Duces Tecum: sdt
+      - Written Questions: dwq
+---
+id: get witness
+sets: 
+  - subpoena.witness.name.first
+question: |
+  Who is the witness?
+subquestion: |
+  The witness is often "Custodian of Records"
+fields:
+  code: |
+    subpoena.witness.name_fields(person_or_business="unsure") + subpoena.witness.mailing_address.address_fields(show_county=True, default_state="TX")
+---
+id: usps registered mail item number
+sets:
+  - subpoena.notice_usps_item_number
+question: |
+  USPS Registered Mail Item Number for Notice to Witness
+fields:
+  - USPS Item number: subpoena.notice_usps_item_number
+---
+id: get registered agent
+sets:
+  - subpoena.witness.registered_agent.name.first
+question: |
+  ${subpoena.witness}'s Registered Agent
+fields:
+  - code: |
+      subpoena.witness.registered_agent.name_fields(person_or_business="unsure") + subpoena.witness.registered_agent.mailing_address.address_fields()
+---
+id: get subpoena
+sets:
+  - subpoena.issue_date
+  - subpoena.notice_date
+  - subpoena.due_date
+  - subpoena.is_bank_flag
+question: |
+  About the subpoena.
+fields:
+  - Is the wittness a bank?: subpoena.bank_flag
+    datatype: yesno
+  - Is the witness CPS?: subpoena.cps_flag
+    datatype: yesno
+  - When will notice be served?: subpoena.notice_date
+    datatype: date
+  - When will the subpoena be issued?: subpoena.issue_date
+    datatype: date
+  - When will responses be due?: subpoena.due_date
+    datatype: date
+  - Beginning date of production: subpoena.beginning_production_date
+    datatype: date
+---
+table: document_table
+rows: subpoena.documents
+columns:
+  - Description: |
+      row_item.description
+edit:
+  - description
+delete: True
+---
+id: review documents
+event: review_documents
+question: |
+  Documents to be Produced
+subquestion: |
+  % if len(subpoena.documents):
+  
+  ${ document_table }
+  
+  ${ subpoena.documents.add_action() }
+  % else:
+  There are no documents yet.
+  
+  ${ subpoena.documents.add_action("Add a document") }
+  % endif
+action buttons:
+  - label: Continue
+    action: continue_subpoena
+    color: info
+    icon: circle-arrow-right
+---
+id: gather subpoena document
+question: |
+  Describe the ${ ordinal(subpoena.documents.current_index()) } document to be produced.
+fields:
+  - Description: subpoena.documents[i].description
+    required: True
+---
