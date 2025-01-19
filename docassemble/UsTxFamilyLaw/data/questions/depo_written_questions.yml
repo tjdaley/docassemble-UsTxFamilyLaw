@@ -15,8 +15,8 @@ code: |
   subpoena.subpoena_type
   case.id
   case.attorney.name.first
-  case.petitioner.name.first
-  case.respondent.name.first
+  case.petitioner.ssn_last4
+  case.respondent.ssn_last4
   case.client
   case.oc.name.first
   op_set
