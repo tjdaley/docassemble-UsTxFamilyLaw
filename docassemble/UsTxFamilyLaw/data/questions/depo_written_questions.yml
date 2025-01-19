@@ -1,0 +1,121 @@
+metadata:
+  title: Deposition on Written Questions
+  short title: Depo - Written Questions
+  tags:
+    - 002:DISCOVERY
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.AssemblyLine:al_package.yml
+  - inquire_case.yml
+  - inquire_subpoena.yml
+---
+mandatory: True
+code: |
+  subpoena.subpoena_type
+  case.id
+  case.attorney.name.first
+  case.petitioner.name.first
+  case.respondent.name.first
+  case.client
+  case.oc.name.first
+  op_set
+  case_style_set
+  subpoena.witness.name.first
+  subpoena.issue_date
+  subpoena.documents[0].description
+  review_documents
+  subpoena.paralegal.name.first
+  subpoena.secure_link
+  subpoena_description_set
+---
+id: set subpoena description
+sets:
+  - subpoena_description
+  - subpoena_description_set
+  - attachment_list
+code: |
+  if subpoena.subpoena_type == 'dwq':
+    subpoena_description = "Subpoena for Deposition on Written Questions"
+    attachment_list = [all_cover_letter, dwq_notice, all_bra, dwq_subpoena]
+  else:
+    subpoena_description = "Subpoena Duces Tecum"
+    attachment_list = [all_cover_letter, sdt_notice, all_bra, sdt_subpoena]
+  subpoena_description_set = True
+---
+event: continue_subpoena
+id: generate subpoena
+needs: parties.table
+mandatory: True
+question: |
+  Your ${subpoena_description} is Ready
+subquestion: |
+  You will need each of the following documents. Gathering documents from non-parties requires three steps:
+
+  1. Email these documents to yourself and save them to the client's file.
+  1. Mail and e-serve the cover letter and notice.
+  1. Next, serve and e-serve the subponea on ${subpoena.issue_date}.
+  1. Finally, on ${subpoena.due_date}, contact ${subpoena.witness.name_full()} (not their registered agent) to arrange to collect the documents along with an executed business records affidavit.
+attachment code: |
+  attachment_list
+---
+attachment:
+  name: Cover Letter
+  filename: ${subpoena.witness.name_full()} - Cover Letter
+  description: Cover Letter
+  variable name: all_cover_letter
+  docx template file: dwq_notice_cover_letter.docx
+  valid formats:
+    - docx
+    - pdf
+---
+attachment:
+  name: Notice of Pending Subpoena Duces Tecum
+  filename: ${subpoena.witness.name_full()} - Notice
+  description: Notice of Pending Subpoena Duces Tecum
+  variable name: sdt_notice
+  docx template file: dwq_notice_of_sdt.docx
+  valid formats:
+    - docx
+    - pdf
+---
+attachment:
+  name: Notice of Pending Deposition on Written Questions
+  filename: ${subpoena.witness.name_full()} - Notice
+  description: Notice of Pending Deposition on Written Questions
+  variable name: dwq_notice
+  docx template file: dwq_notice_of_dwq.docx
+  valid formats:
+    - docx
+    - pdf
+---
+attachment:
+  name: Business Records Affidavit
+  filename: ${subpoena.witness.name_full()} - BRA
+  description: Business Records Affidavit
+  variable name: all_bra
+  docx template file: dwq_business_records_affidavit.docx
+  valid formats:
+    - docx
+    - pdf
+---
+attachment:
+  name: Subpoena Duces Tecum
+  filename: ${subpoena.witness.name_full()} - Subpoea Duces Tecum
+  description: Subpoena Duces Tecum
+  variable name: sdt_subpoena
+  docx template file: dwq_subpoena_duces_tecum.docx
+  valid formats:
+    - docx
+    - pdf
+---
+attachment:
+  name: Subpoena for Deposition on Written Questions
+  filename: ${subpoena.witness.name_full()} - Subpoea Deposition Written Questions
+  description: Subpoena for Deposition on Written Questions
+  variable name: dwq_subpoena
+  docx template file: dwq_subpoena_depo_written_questions.docx
+  valid formats:
+    - docx
+    - pdf
+---
