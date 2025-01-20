@@ -2,7 +2,7 @@ mandatory: True
 question: |
   PRIVACY POLICY
 subquestion: |
-  **Effective Date:** January 9, 2025
+  **Effective Date:** January 20, 2025
   
   **Introduction**
   
@@ -35,14 +35,18 @@ subquestion: |
   - All user data, including personal information and document history, is stored on our secure servers.
   - Data is retained until the user requests the deletion of their account.
   - When a user deletes their account, all associated data and usage history are permanently deleted from our servers.
-  
+  - EXCEPTION: If you click the EXIT button at the end of an interview, we delete all of the information related to the interview from the server, including database, uploaded documents, and assembled documents.
+  - All data are encypted with YOUR password. We cannot read your data nor read your password. If you lose your password, we can reset it for you, but you will lose 100% of your saved, encypted data.
+  - If you use the phone login or any external authentication method, interview answers are still encrypted, but a resourceful hacker could figure out the encyption key for your data (no one else's).
+  - Interview sessions are deleted after 90 days. You can delete your own interview by going to "My Interview" and clicking the "Delete All" button or by deleting individual interviews.
+  - You can delete your entire account by going to "Profile", "Other Settings", "Manage Account."
    ---
   
   **4. Data Sharing and Disclosure**
   
   - We do not share, sell, or disclose user information to any third-party partners or affiliates.
   - User data is used solely for the purposes of providing our Service.
-  
+  - We do not have the ability to share or disclose your information to any, even pursuant to court order or subpoena because 100% of user data are encrypted using the user's password, which we do not have access to.
    ---
   
   **5. Data Security**
