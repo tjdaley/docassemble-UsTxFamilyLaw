@@ -6,6 +6,8 @@ metadata:
     Welcome to JDBOT.US Forms
   description: |
     A welcome screen that acts as a landing page.
+  required privileges:
+    - anonymous
   authors:
     - name: Thomas J. Daley, J.D.
       organization: JDBOT.US, LLC
