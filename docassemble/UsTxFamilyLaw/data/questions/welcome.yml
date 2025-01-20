@@ -13,36 +13,79 @@ metadata:
 features:
   wide side by side: True
 ---
+id: set image variables
+code: |
+  img_classes = "rounded-4 shadow-sm"
+  img_path = "https://da.jdbot.us/packagestatic/docassemble.playground1"
+  img_legal_docs = "legal_docs_16x9.png"
+  img_texas_justice = "textas_justice_723x483.png"
+  img_not_your_lawyer = "on_your_own_814x429.png"
+---
 mandatory: True
 question: |
-  Welcome to JDBOT.US forms
+  <div class="xtext-muted text-info fst-italic fs-6 text-center pe-3">Navigate Texas Law Confidently</div>
 subquestion: |
-  We empower you to navigate the legal system confidently by providing professionally vetted legal forms designed specifically for self-represented litigants in Texas.
-
-  ### What Makes Us Different?
-
-  Our forms have been developed by licensed Texas attorneys who use these same documents in their daily practice. Each form is tailored to meet the unique customs, standards, and legal requirements of Texas, ensuring they are practical and relevant for your specific needs.
-
-  ### Please Note:
-
-  While our forms are thorough and reliable, we do not provide legal advice. Using these forms does not create an attorney-client relationship. If you need personalized legal guidance, we encourage you to consult a qualified attorney.
-
-  We’re here to help make your legal journey easier and more accessible. Let’s get started!
-
-  ### Getting Started
-
-  If you create an account, you will be able to save your answers and use them across multiple forms. You do not have to create an account, but if you don't, you will have to re-enter your answers every time.
-
+  <!-- Hero Section with Background Image -->
+  <div class="container-fluid px-0 my-1">
+      <div class="position-relative">
+          <div class="w-100" style="height: 600px; background: url('${img_path}/${img_legal_docs}') no-repeat center center; background-size: cover;">
+              <div class="position-absolute top-0 start-0 w-100 h-100 bg-light" style="opacity: 0.7;"></div>
+          </div>
+          <div class="position-absolute top-50 start-50 translate-middle text-center text-black w-75">
+              <h1 class="display-4 fw-bold mb-3">Welcome to JDBOT.US</h1>
+              <h2 class="display-6 mb-4">Document Assembly</h2>
+              <p class="lead">Navigate the legal system confidently with professionally vetted legal forms designed for attorneys and self-represented litigants in Texas.</p>
+          </div>
+      </div>
+  </div>
+  
+  <!-- What Makes Us Different Section with Background Image -->
+  <div class="container-fluid px-0 my-1">
+      <div class="position-relative">
+          <div class="w-100" style="height: 500px; background: url('${img_path}/${img_texas_justice}') no-repeat center center; background-size: cover;">
+              <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.7;"></div>
+          </div>
+          <div class="position-absolute top-50 start-50 translate-middle text-center text-white w-75">
+              <h2 class="display-6 mb-4">What Makes Us Different?</h2>
+              <p class="lead">Our forms have been developed by licensed Texas attorneys who use these same documents in their daily practice. Each form is tailored to meet the unique customs, standards, and legal requirements of Texas, ensuring they are practical and relevant for your specific needs.</p>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Important Notice Section with Background Image -->
+  <div class="container-fluid px-0 my-1">
+      <div class="position-relative">
+          <div class="w-100" style="height: 400px; background: url('${img_path}/${img_not_your_lawyer}') no-repeat center center; background-size: cover;">
+              <div class="position-absolute top-0 start-0 w-100 h-100 bg-info" style="opacity: 0.5;"></div>
+          </div>
+          <div class="position-absolute top-50 start-50 translate-middle text-center text-white w-75">
+              <h2 class="display-6 mb-4 text-white">Please Note:</h2>
+              <div class="bg-dark bg-opacity-50 p-4 rounded-4">
+                  <p class="lead mb-0">While our forms are thorough and reliable, we do not provide legal advice. Using these forms does not create an attorney-client relationship. If you need personalized legal guidance, we encourage you to consult a qualified attorney.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Getting Started Section -->
+  <div class="container py-5">
+      <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+              <h2 class="display-6 mb-4">Getting Started</h2>
+              <p class="lead mb-4">Start by creating an account. All data on our servers is encrypted with your password--even we can't read you data. There is no charge for an account.</p>
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                  <a data-linknum="1" class="btn btn-primary btn-lg px-4 gap-3" href="/user/register">Create Account</a>
+                  <button type="button" class="btn btn-outline-primary btn-lg px-4">Continue as Guest</button>
+              </div>
+          </div>
+      </div>
+  </div>
 action buttons:
   - label: Create Account
-    action: /user/register?next=/
-    color: primary
+    action: /user/register
+    css class: btn-primary btn-lg px-4 gap-3
     icon: plus
   - label: Login
     action: /user/sign-in?next=/
-    color: success
     icon: arrow-right-to-bracket
-  - label: Go to Forms List
-    action: /list
-    color: info
-    icon: list-ul
+    css class: btn-outline-primary btn-lg px-4
