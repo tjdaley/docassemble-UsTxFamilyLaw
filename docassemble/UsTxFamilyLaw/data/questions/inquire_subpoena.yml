@@ -57,21 +57,21 @@ fields:
       - Deposition on Written Questions: dwq
 help:
   - content: |
-    **Subpoena Duces Tecum:**
-    ✓ Quick and cheap
-    ✓ Just gets documents
-    ✓ 100-mile limit
-    ✓ No court reporter needed
-    
-    **Deposition on Written Questions + Duces Tecum:**
-    ✓ Creates business records affidavit
-    ✓ Can ask questions about documents
-    ✓ Works beyond 100 miles
-    ✓ Requires court reporter
-    ✓ More expensive
-    ✓ Usually needed for out-of-state discovery
-    Choose Subpoena: When you just need the documents quickly and cheaply.
-    Choose DWQ: When you need authentication or have complex document issues or are sending the subponea out of state.
+      **Subpoena Duces Tecum:**
+      ✓ Quick and cheap
+      ✓ Just gets documents
+      ✓ 100-mile limit
+      ✓ No court reporter needed
+      
+      **Deposition on Written Questions + Duces Tecum:**
+      ✓ Creates business records affidavit
+      ✓ Can ask questions about documents
+      ✓ Works beyond 100 miles
+      ✓ Requires court reporter
+      ✓ More expensive
+      ✓ Usually needed for out-of-state discovery
+      Choose Subpoena: When you just need the documents quickly and cheaply.
+      Choose DWQ: When you need authentication or have complex document issues or are sending the subponea out of state.
 ---
 id: get witness
 sets: 
