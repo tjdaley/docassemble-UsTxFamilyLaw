@@ -16,7 +16,7 @@ code: |
 ---
 mandatory: True
 question: |
-  Available Forms
+  <i class="fa-solid fa-landmark" style="color: #FFD43B;"></i> Available Forms
 subquestion: |
   <%
   grouped_interviews = {}
@@ -91,12 +91,12 @@ subquestion: |
       align-items: center;
       cursor: pointer;
       padding: 5px;
-      background-color: #f8f9fa;
+      background-color: #a7e0f6;
       border-radius: 4px;
     }
     
     .topic-header:hover {
-      background-color: #e9ecef;
+      background-color: #dbf2fb;
     }
     
     .topic-header h5 {
