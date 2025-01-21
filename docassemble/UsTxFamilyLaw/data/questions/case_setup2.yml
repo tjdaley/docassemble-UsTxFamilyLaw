@@ -4,6 +4,8 @@ metadata:
     Case Setup
   tags:
     - 000:SETUP
+  required privileges:
+    - user
 ---
 include:
   - basic-questions.yml
