@@ -1,10 +1,15 @@
 metadata:
   title: Promissory Note - Legal Fees
   short title: Note for Legal Fees
+  tab title: Note for Legal Fees
   tags:
     - 900:MISCELLANEOUS
   required privileges:
     - user
+  require login: True
+  authors:
+    - name: Thomas J. Daley, JD
+      organization: JDBOT.US, LLC
 ---
 mandatory: True
 question: |
