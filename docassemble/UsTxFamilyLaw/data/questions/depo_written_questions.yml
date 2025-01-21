@@ -55,7 +55,7 @@ id: generate subpoena
 needs: parties.table
 mandatory: True
 question: |
-  <i class="fa-thin fa-face-smile" style="color: #B197FC;"></i> Your ${subpoena_description} is Ready
+  <i class="fa-regular fa-face-smile" style="color: #B197FC;"></i> Your ${subpoena_description} is Ready
 subquestion: |
   You will need each of the following documents. Gathering documents from non-parties requires these steps:
   
