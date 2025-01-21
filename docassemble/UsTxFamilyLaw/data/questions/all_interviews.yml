@@ -1,16 +1,19 @@
 metadata:
-  title: Available Interviews
+  title: Avilable Forms
+  short title: Available Forms
+  tab title: Forms
+  unlisted: True
+  hidden: True
   tags:
     - 000:Navigation
-  description: |
-    A replacement for the standard list of available interviews.
+  require login: True
   required privileges:
     - user
 ---
+id: query a list of available interviews.
 code: |
   available_interviews = interview_menu()
 ---
-prevent going back: True
 mandatory: True
 question: |
   Available Forms
@@ -24,12 +27,109 @@ subquestion: |
      grouped_interviews[first_tag].append(interview)
   sorted_grouped_interviews = dict(sorted(grouped_interviews.items()))
   %>
-  % for tag, interviews_in_group in sorted_grouped_interviews.items():
-    <h5>${tag[4:]}</h5>
-    <ul>
-    % for interview in interviews_in_group:
-      <li> <a href="${interview['link']}">${interview['title']}</a></li>
+  <div class="interview-groups">
+    % for tag, interviews_in_group in sorted_grouped_interviews.items():
+      <div class="topic-group">
+        <div class="topic-header" data-tag="${tag}">
+          <h5>${tag[4:]}</h5>
+          <span class="toggle-icon">+</span>
+        </div>
+        <ul class="interview-list" style="display: none;">
+          % for interview in sorted(interviews_in_group, key=lambda x: x['title'].lower()):
+            <li><a href="${interview['link']}">${interview['title']}</a></li>
+          % endfor
+        </ul>
+      </div>
     % endfor
-    </ul>
-  % endfor
----
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all topic headers
+      const topicHeaders = document.querySelectorAll('.topic-header');
+      
+      // Add click event listener to each header
+      topicHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+          // Get the associated list and icon
+          const list = this.nextElementSibling;
+          const icon = this.querySelector('.toggle-icon');
+          
+          // Toggle visibility with animation
+          if (list.style.display === 'none') {
+            list.style.display = 'block';
+            // Trigger reflow to enable animation
+            list.getBoundingClientRect();
+            list.style.maxHeight = list.scrollHeight + 'px';
+            list.style.opacity = '1';
+            icon.textContent = '-';
+          } else {
+            list.style.maxHeight = '0';
+            list.style.opacity = '0';
+            icon.textContent = '+';
+            // Wait for animation to complete before hiding
+            setTimeout(() => {
+              list.style.display = 'none';
+            }, 300);
+          }
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .interview-groups {
+      margin: 20px 0;
+    }
+    
+    .topic-group {
+      margin-bottom: 10px;
+    }
+    
+    .topic-header {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 5px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+    .topic-header:hover {
+      background-color: #e9ecef;
+    }
+    
+    .topic-header h5 {
+      margin: 0;
+      flex-grow: 1;
+    }
+    
+    .toggle-icon {
+      font-size: 18px;
+      font-weight: bold;
+      margin-right: 10px;
+      color: #6c757d;
+    }
+    
+    .interview-list {
+      margin: 0;
+      padding: 10px 20px;
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    
+    .interview-list li {
+      margin: 5px 0;
+    }
+    
+    .interview-list a {
+      text-decoration: none;
+      color: #007bff;
+    }
+    
+    .interview-list a:hover {
+      text-decoration: underline;
+    }
+  </style>
