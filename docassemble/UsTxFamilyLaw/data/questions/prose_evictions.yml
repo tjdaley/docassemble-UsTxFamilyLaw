@@ -1,10 +1,15 @@
 metadata:
   title: Pro Se Petition for Eviction
   short title: Pro Se Petition for Eviction
+  tab title: Eviction
   tags:
     - 300:LANDLORD-TENANT
   required privileges:
     - user
+  require login: True
+  authors:
+    - name: Thomas J. Daley, JD
+      organization: JDBOT.US, LLC
 ---
 include:
   - basic-questions.yml
