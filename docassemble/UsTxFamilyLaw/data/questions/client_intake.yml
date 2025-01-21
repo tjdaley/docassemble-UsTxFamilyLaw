@@ -6,6 +6,10 @@ include:
 metadata:
   title: |
     Client Intake Questionnaire
+  tags:
+    - 000:STARTUP
+  required privileges:
+    - user
 ---
 objects:
   - your_opposing_party: ALIndividual
