@@ -19,7 +19,7 @@ objects:
 ---
 id: inquire case
 question: |
-  Case Information
+  <i class="fa-thin fa-gavel" style="color: #74C0FC;"></i> Case Information
 fields:
   - Cause number: case.id
   - Court type: court_type
@@ -42,7 +42,7 @@ sets:
   - case.attorney.fax_number
   - case.attorney.email
 question: |
-  Attorney issuing the subpoena.
+  <i class="fa-thin fa-user-tie" style="color: #74C0FC;"></i> Attorney issuing the subpoena.
 fields:
   - code: |
       case.attorney.name_fields() + case.attorney.gender_fields() + case.attorney.pronoun_fields() + case.attorney.mailing_address.address_fields()
@@ -69,7 +69,7 @@ code: |
 ---
 id: inquire petitioner
 question: |
-  Who is the petitioner?
+  <i class="fa-thin fa-user-tie" style="color: #74C0FC;"></i> Who is the petitioner?
 fields:
   - code: |
       case.petitioner.name_fields()
@@ -79,7 +79,7 @@ fields:
 ---
 id: inquire respondent
 question: |
-  Who is the respondent?
+  <i class="fa-thin fa-user-tie" style="color: #74C0FC;"></i> Who is the respondent?
 fields:
   - code: |
       case.respondent.name_fields()
@@ -91,7 +91,7 @@ id: inquire opposing counsel
 sets:
   - case.oc.name.first
 question: |
-  Who is your opposing counse?
+  <i class="fa-thin fa-user-tie" style="color: #74C0FC;"></i> Who is your opposing counse?
 fields:
   - code: |
       case.oc.name_fields()
@@ -100,7 +100,7 @@ fields:
 id: inquire client
 sets: case.client
 question: |
-  Please select our client from the following parties:
+  <i class="fa-thin fa-people-arrows" style="color: #74C0FC;"></i> Please select our client from the following parties:
 fields:
   - Client: case.client
     datatype: object
