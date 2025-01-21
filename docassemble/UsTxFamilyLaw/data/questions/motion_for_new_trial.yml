@@ -1,14 +1,16 @@
 metadata:
   title: Motion for New Trial
   short title: MNT
+  tab title: MNT
   tags:
     - 700:POST-JUDGMENT
   authors:
     - name: Thomas J. Daley, J.D.
-      organization: jdbot.us
+      organization: JDBOT.US, LLC
   revision_date: 2024-03-14
   required privileges:
     - user
+  require login: True
 ---
 mandatory: True
 question: |
