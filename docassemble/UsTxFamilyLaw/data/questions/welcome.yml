@@ -1,4 +1,4 @@
----
+s---
 metadata:
   title: |
     JDBOT.US
@@ -82,10 +82,10 @@ subquestion: |
   </div>
 action buttons:
   - label: Create Account
-    action: /user/register
+    action: /user/register?next=/list
     css class: btn-primary btn-lg px-4 gap-3
     icon: plus
   - label: Login
-    action: /user/sign-in?next=/
+    action: /user/sign-in?next=/list
     icon: arrow-right-to-bracket
-    css class: btn-outline-primary btn-lg px-4
+    css class: btn-success btn-lg px-4
