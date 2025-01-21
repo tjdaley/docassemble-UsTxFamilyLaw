@@ -7,6 +7,8 @@ metadata:
   short title: Pro Se Notice to Vacate
   tags:
     - 300:LANDLORD-TENANT
+  required privileges:
+    - user
 ---
 mandatory: True
 question: |
