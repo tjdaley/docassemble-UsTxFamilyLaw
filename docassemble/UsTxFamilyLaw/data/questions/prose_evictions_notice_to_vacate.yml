@@ -5,10 +5,15 @@ features:
 metadata:
   title: Pro Se Notice to Vacate
   short title: Pro Se Notice to Vacate
+  tab title: Notice to Vacate
   tags:
     - 300:LANDLORD-TENANT
+  require login: True
   required privileges:
     - user
+  authors:
+    - name: Thomas J. Daley, J.D.
+      organization: JDBOT.US, LLC
 ---
 mandatory: True
 question: |
