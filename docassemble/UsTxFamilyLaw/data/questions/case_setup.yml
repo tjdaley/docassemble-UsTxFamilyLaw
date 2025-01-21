@@ -1,10 +1,15 @@
 metadata:
   title: Case Setup
   short title: Case Setup
+  tab title: Setup
   tags:
     - 000:STARTUP
   required privileges:
     - user
+  require login: True
+  authors:
+    - name: Thomas J. Daley, JD
+      organization: JDBOT.US, LLC
 ---
 include:
   - basic-questions.yml
