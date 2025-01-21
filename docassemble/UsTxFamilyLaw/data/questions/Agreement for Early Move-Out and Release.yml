@@ -3,6 +3,8 @@ metadata:
   short title: Moveout and Release Agreement
   tags:
     - 300:LANDLORD-TENANT
+  required privileges:
+    - user
 ---
 mandatory: True
 question: |
