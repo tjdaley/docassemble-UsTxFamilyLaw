@@ -4,12 +4,17 @@ include:
   - docassemble.AssemblyLine:al_package.yml
 ---
 metadata:
-  title: |
-    Client Intake Questionnaire
+  title: Client Intake Questionnaire
+  short title: Client Intake
+  tab title: Intake
   tags:
     - 000:STARTUP
   required privileges:
     - user
+  require login: True
+  authors:
+    - name: Thomas J. Daley, JD
+      organization: JDBOT.US, LLC
 ---
 objects:
   - your_opposing_party: ALIndividual
