@@ -3,6 +3,8 @@ metadata:
   require login: True
   temporary session: True
   hidden: True
+  required privileges:
+    - user
 ---
 mandatory: True
 code: |
