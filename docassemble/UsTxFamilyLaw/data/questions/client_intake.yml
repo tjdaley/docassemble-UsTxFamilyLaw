@@ -8,7 +8,7 @@ metadata:
   short title: Client Intake
   tab title: Intake
   tags:
-    - 000:STARTUP
+    - 000:SET UP
   required privileges:
     - user
   require login: True
