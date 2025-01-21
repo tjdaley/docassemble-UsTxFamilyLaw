@@ -1,10 +1,15 @@
 metadata:
   title: Agreement for Early Move-Out Incentive and General Release
-  short title: Moveout and Release Agreement
+  short title: Moveout Agreement
   tags:
     - 300:LANDLORD-TENANT
+  tab title: Moveout Agreement
+  require login: True
   required privileges:
     - user
+  authors:
+    - name: Thomas J. Daley, JD
+      organization: JDBOT.US, LLC
 ---
 mandatory: True
 question: |
