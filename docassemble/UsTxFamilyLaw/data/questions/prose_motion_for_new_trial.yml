@@ -11,6 +11,8 @@ metadata:
     - name: Thomas J. Daley, J.D.
       organization: jdbot.us
   revision_date: 2024-03-14
+  required privileges:
+    - user
 ---
 include:
   - docassemble.UsTxFamilyLaw:prose_basic_questions.yml
