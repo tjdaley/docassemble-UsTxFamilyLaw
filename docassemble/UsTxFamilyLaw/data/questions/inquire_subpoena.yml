@@ -47,11 +47,12 @@ question: |
   What type of subpoena are you issuing?
 subquestion: |
   **Choose Subpoena**: When you just need the documents quickly and cheaply.
+  
   **Choose Deposition**: When you need authentication or have complex document issues or are sending the subponea out of state.
 
   See the HELP tab for additional help on this question.
 fields:
-  - Subponea type: subpoena.subpoena_type
+  - Subpoena type: subpoena.subpoena_type
     choices:
       - Subpoena Duces Tecum: sdt
       - Deposition on Written Questions: dwq
