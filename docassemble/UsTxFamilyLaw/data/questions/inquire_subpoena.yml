@@ -14,7 +14,6 @@ id: there is another
 sets:
   - subpoena.documents.there_is_another
 question: |
-  question: |
   <i class="fa-regular fa-circle-question" style="color: #74C0FC;"></i> You've listed ${subpoena.documents.number_gathered()} documents.
   
   Would you like to add another document?
