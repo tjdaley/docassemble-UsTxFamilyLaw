@@ -58,9 +58,13 @@ question: |
   <i class="fa-thin fa-face-smile" style="color: #B197FC;"></i> Your ${subpoena_description} is Ready
 subquestion: |
   You will need each of the following documents. Gathering documents from non-parties requires these steps:
+  
   1. Email these documents to yourself and save them to the client's file.
+  
   1. Mail and e-serve the cover letter and notice.
+  
   1. Next, serve and e-serve the subponea on ${subpoena.issue_date}.
+  
   1. Finally, on ${subpoena.due_date}, contact ${subpoena.witness.name_full()} (not their registered agent) to arrange to collect the documents along with an executed business records affidavit.
 attachment code: |
   attachment_list
