@@ -3,6 +3,8 @@ metadata:
   short title: Pro Se Petition for Eviction
   tags:
     - 300:LANDLORD-TENANT
+  required privileges:
+    - user
 ---
 include:
   - basic-questions.yml
