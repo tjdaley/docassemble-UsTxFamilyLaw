@@ -1,3 +1,12 @@
+metadata:
+  title: Available Interviews
+  tags:
+    - 000:Navigation
+  description: |
+    A replacement for the standard list of available interviews.
+  required privileges:
+    - user
+---
 code: |
   available_interviews = interview_menu()
 ---
