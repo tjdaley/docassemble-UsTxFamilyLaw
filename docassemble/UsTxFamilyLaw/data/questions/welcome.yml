@@ -6,8 +6,6 @@ metadata:
     Welcome to JDBOT.US Forms
   description: |
     A welcome screen that acts as a landing page.
-  required privileges:
-    - anonymous
   authors:
     - name: Thomas J. Daley, J.D.
       organization: JDBOT.US, LLC
@@ -75,10 +73,10 @@ subquestion: |
           <div class="col-lg-8 text-center">
               <h2 class="display-6 mb-4">Getting Started</h2>
               <p class="lead mb-4">Start by creating an account. All data on our servers is encrypted with your password--even we can't read you data. There is no charge for an account.</p>
-              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <!--div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                   <a data-linknum="1" class="btn btn-primary btn-lg px-4 gap-3" href="/user/register">Create Account</a>
                   <button type="button" class="btn btn-outline-primary btn-lg px-4">Continue as Guest</button>
-              </div>
+              </div-->
           </div>
       </div>
   </div>
