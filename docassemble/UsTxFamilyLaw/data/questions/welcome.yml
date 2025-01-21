@@ -17,8 +17,9 @@ id: set image variables
 code: |
   img_classes = "rounded-4 shadow-sm"
   img_path = "https://da.jdbot.us/packagestatic/docassemble.playground1"
+  img_path = "https://da.jdbot.us/packagestatic/docassemble.UsTxFamilyLaw"
   img_legal_docs = "legal_docs_16x9.png"
-  img_texas_justice = "textas_justice_723x483.png"
+  img_texas_justice = "texas_justice_723x483.png"
   img_not_your_lawyer = "on_your_own_814x429.png"
 ---
 mandatory: True
