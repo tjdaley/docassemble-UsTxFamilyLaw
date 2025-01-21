@@ -3,7 +3,7 @@ metadata:
   short title: Case Setup
   tab title: Setup
   tags:
-    - 000:STARTUP
+    - 000:SET UP
   required privileges:
     - user
   require login: True
