@@ -3,6 +3,8 @@ metadata:
   short title: Depo - Written Questions
   tags:
     - 002:DISCOVERY
+  required privileges:
+    - user
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
