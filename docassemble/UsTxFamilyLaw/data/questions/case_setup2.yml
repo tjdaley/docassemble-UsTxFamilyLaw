@@ -4,7 +4,7 @@ metadata:
   short title: Case Setup
   tabl title: Setup
   tags:
-    - 000:STARTUP
+    - 000:SET UP
   required privileges:
     - user
   require login: True
