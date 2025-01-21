@@ -2,18 +2,15 @@ metadata:
   title: Inventory &amp; Appraisement
   short title: I&amp;A
   tab title: Inventory
+  tags:
   authors:
     - name: Thomas J. Daley, J.D.
-      organization: jdbot.us
-  revision_date: 2024-02-05
+      organization: JDBOT.US, LLC
   footer: |
     <span class="text-primary">Inventory</span> <span class="text-dark">* da.jdbot.us * Copyright &copy; 2024 by Thomas J. Daley, J.D. All Rights Reserved</span>
+  require login: True
   required privileges:
     - user
-  require login: True
-  authors:
-    - name: Thomas J. Daley, JD
-      organization: JDBOT.US, LLC
 ---
 include:
   - basic-questions.yml
