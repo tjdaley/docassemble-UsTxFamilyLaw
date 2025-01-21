@@ -1,10 +1,15 @@
 metadata:
-  title: Deposition on Written Questions
-  short title: Depo - Written Questions
+  title: Request for Documents to Non-Party
+  short title: Non-Party Doc Request
+  tab title: Non-Party Docs
   tags:
     - 002:DISCOVERY
   required privileges:
     - user
+  require login: True
+  authors:
+    - name: Thomas J. Daley, JD
+      organization: JDBOT.US, LLC
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
