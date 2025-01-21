@@ -14,7 +14,8 @@ id: there is another
 sets:
   - subpoena.documents.there_is_another
 question: |
-  You've listed ${subpoena.documents.number_gathered()} documents.
+  question: |
+  <i class="fa-regular fa-circle-question" style="color: #74C0FC;"></i> You've listed ${subpoena.documents.number_gathered()} documents.
   
   Would you like to add another document?
 yesno: subpoena.documents.there_is_another
@@ -23,7 +24,7 @@ id: get paralegal
 sets:
   - subpoena.paralegal.name.first
 question: |
-  Paralegal supporting this subponea.
+  <i class="fa-thin fa-person-circle-question" style="color: #FFD43B;"></i> Paralegal supporting this subponea.
 fields:
   - code: |
       subpoena.paralegal.name_fields() + subpoena.paralegal.gender_fields()
@@ -35,7 +36,7 @@ id: get upload link
 sets:
   - subpoena.secure_link
 question: |
-  Secure link for uploading documents for this subpoena.
+  <i class="fa-thin fa-file-shield" style="color: #74C0FC;"></i> Secure link for uploading documents for this subpoena.
 fields:
   - Link: subpoena.secure_link
 ---
@@ -44,7 +45,7 @@ mandatory: True
 sets:
   - subpoena.subpoena_type
 question: |
-  What type of subpoena are you issuing?
+  <i class="fa-regular fa-circle-question" style="color: #74C0FC;"></i> What type of subpoena are you issuing?
 subquestion: |
   **Choose Subpoena**: When you just need the documents quickly and cheaply.
   
@@ -56,29 +57,44 @@ fields:
     choices:
       - Subpoena Duces Tecum: sdt
       - Deposition on Written Questions: dwq
-help:
-  - content: |
-      **Subpoena Duces Tecum:**
-      ✓ Quick and cheap
-      ✓ Just gets documents
-      ✓ 100-mile limit
-      ✓ No court reporter needed
-      
-      **Deposition on Written Questions + Duces Tecum:**
-      ✓ Creates business records affidavit
-      ✓ Can ask questions about documents
-      ✓ Works beyond 100 miles
-      ✓ Requires court reporter
-      ✓ More expensive
-      ✓ Usually needed for out-of-state discovery
-      Choose Subpoena: When you just need the documents quickly and cheaply.
-      Choose DWQ: When you need authentication or have complex document issues or are sending the subponea out of state.
+help: |
+  # Subpoea Type:
+  
+  **Subpoena Duces Tecum**
+  
+    ✓ Quick and cheap
+  
+    ✓ Requests business records affidavit
+    
+    ✓ Just gets documents
+    
+    ✓ 100-mile limit
+    
+    ✓ No court reporter needed
+  
+  **Deposition on Written Questions + Duces Tecum**
+  
+    ✓ Creates business records affidavit
+    
+    ✓ Can ask questions about documents - More than basic authentication details
+    
+    ✓ Works beyond 100 miles
+    
+    ✓ Requires court reporter
+    
+    ✓ More expensive
+    
+    ✓ Usually needed for out-of-state discovery
+  
+  **Choose Subpoena**: When you just need the documents quickly and cheaply.
+  
+  **Choose DWQ**: When you need authentication or have complex document issues or are sending the subponea out of state.
 ---
 id: get witness
 sets: 
   - subpoena.witness.name.first
 question: |
-  Who is the witness?
+  <i class="fa-thin fa-person-half-dress" style="color: #FFD43B;"></i> Who is the witness?
 subquestion: |
   The witness is often "Custodian of Records"
 fields:
@@ -89,7 +105,7 @@ id: usps registered mail item number
 sets:
   - subpoena.notice_usps_item_number
 question: |
-  USPS Registered Mail Item Number for Notice to Witness
+  <i class="fa-thin fa-envelope" style="color: #74C0FC;"></i> USPS Registered Mail Item Number for Notice to Witness
 fields:
   - USPS Item number: subpoena.notice_usps_item_number
 ---
@@ -97,7 +113,7 @@ id: get registered agent
 sets:
   - subpoena.witness.registered_agent.name.first
 question: |
-  ${subpoena.witness}'s Registered Agent
+  <i class="fa-thin fa-person-half-dress" style="color: #FFD43B;"></i> ${subpoena.witness}'s Registered Agent
 fields:
   - code: |
       subpoena.witness.registered_agent.name_fields(person_or_business="unsure") + subpoena.witness.registered_agent.mailing_address.address_fields()
@@ -109,7 +125,7 @@ sets:
   - subpoena.due_date
   - subpoena.is_bank_flag
 question: |
-  About the subpoena.
+  <i class="fa-thin fa-calendar-days" style="color: #74C0FC;"></i> About the subpoena.
 fields:
   - Is the wittness a bank?: subpoena.bank_flag
     datatype: yesno
@@ -136,7 +152,7 @@ delete: True
 id: review documents
 event: review_documents
 question: |
-  Documents to be Produced
+  <i class="fa-thin fa-folder-tree" style="color: #74C0FC;"></i> Documents to be Produced
 subquestion: |
   % if len(subpoena.documents):
   
@@ -156,7 +172,7 @@ action buttons:
 ---
 id: gather subpoena document
 question: |
-  Describe the ${ ordinal(subpoena.documents.current_index()) } document to be produced.
+  <i class="fa-thin fa-folder-tree" style="color: #74C0FC;"></i> Describe the ${ ordinal(subpoena.documents.current_index()) } document to be produced.
 fields:
   - Description: subpoena.documents[i].description
     required: True
