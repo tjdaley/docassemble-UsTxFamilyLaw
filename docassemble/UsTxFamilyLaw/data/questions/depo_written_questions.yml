@@ -17,6 +17,11 @@ include:
   - docassemble.UsTxFamilyLaw:inquire_case.yml
   - docassemble.UsTxFamilyLaw:inquire_subpoena.yml
 ---
+# Turn off document caching so user can edit a few
+# fields and regenerate a new subpoena.
+features:
+  cache documents: False
+---
 mandatory: True
 code: |
   subpoena.subpoena_type
@@ -37,6 +42,7 @@ code: |
   subpoena_description_set
 ---
 id: set subpoena description
+event: build_attachment_list
 sets:
   - subpoena_description
   - subpoena_description_set
@@ -66,6 +72,11 @@ subquestion: |
   1. Next, serve and e-serve the subponea on ${subpoena.issue_date}.
   
   1. Finally, on ${subpoena.due_date}, contact ${subpoena.witness.name_full()} (not their registered agent) to arrange to collect the documents along with an executed business records affidavit.
+action buttons:
+  - label: Revise
+    action: review_screen
+    color: success
+    icon: pencil
 attachment code: |
   attachment_list
 ---
@@ -138,4 +149,69 @@ attachment:
   valid formats:
     - docx
     - pdf
+---
+event: review_screen
+question: |
+  Review and Edit Your Answers
+review:
+  - raw html: |
+      ${ start_accordian("Case Details") }
+  - Edit: case.id
+    button: |
+      Cause # ${case.id} in ${case.county}, Texas
+
+  - raw html: |
+      ${ start_accordian("Attorney's and Parties")}
+  - Edit: case.attorney.name.first
+    button: |
+      Attorney issuing: ${ case.attorney }
+  - Edit: subpoena.paralegal.name.first
+    button: |
+      Paralegal managing subpoena: ${subpoena.paralegal}
+  - Edit: case.petitioner.ssn_last4
+    button: |
+      Petitioner: ${ case.petitioner }
+  - Edit: case.respondent.ssn_last4
+    button: |
+      Respondent: ${ case.respondent }
+  - Edit: case.client
+    button: |
+      Select our client: ${ case.client }
+  - Edit: case.oc.name.first
+    button: |
+      Opposing council: ${ case.oc }
+
+  - raw html: |
+      ${ start_accordian("Subponea Details ")}
+  - Edit: subpoena.subpoena_type
+    button: |
+      Subpoena type: ${ subpoena.subpoena_type }
+  - Edit: subpoena.issue_date
+    button: |
+      Notice/Issue/Due Dates: ${subpoena.issue_date}
+  - Edit: subpoena.witness.name.first
+    button: |
+      Witness: ${subpoena.witness}
+  - Edit: review_documents
+    button: |
+      Review/Edit Exhibit A Document List
+  - Edit: subpoena.secure_link
+    button: |
+      Secure link: ${subpoena.secure_link}
+  - note: |
+      #### Exhibit A Documents
+
+      ${ document_table }
+
+      ${ subpoena.documents.add_action("Add a document.")}
+action buttons:
+  - label: Rebuild subpoena
+    action: force_refresh
+    color: success
+---
+id: force the regeneration of all attachments
+event: force_refresh
+code: |
+  reconsider('attachment_list')
+  continue_subpoena
 ---
