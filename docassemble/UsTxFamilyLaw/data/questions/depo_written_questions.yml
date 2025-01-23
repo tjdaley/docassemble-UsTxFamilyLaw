@@ -212,6 +212,8 @@ action buttons:
 id: force the regeneration of all attachments
 event: force_refresh
 code: |
+  for each_file in attachment_list:
+    del each_file
   reconsider('attachment_list')
   continue_subpoena
 ---
