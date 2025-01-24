@@ -17,6 +17,9 @@ include:
   - docassemble.UsTxFamilyLaw:inquire_case.yml
   - docassemble.UsTxFamilyLaw:inquire_subpoena.yml
 ---
+modules:
+  - docassemble.demo.accordion
+---
 # Turn off document caching so user can edit a few
 # fields and regenerate a new subpoena.
 features:
@@ -155,16 +158,33 @@ question: |
   Review and Edit Your Answers
 review:
   - raw html: |
-      ${ start_accordian("Case Details") }
+      ${ start_accordion("Update to Reuse Subpoena", showing=True) }
+  - Edit: subpoena.witness.name.first
+    button: |
+      Witness: ${subpoena.witness}
+  - Edit: subpoena.witness.registered_agent.name.first
+    button: |
+      Registered agent: ${subpoena.witness.registered_agent}
+  - Edit: subpoena.secure_link
+    button: |
+      Secure link: ${subpoena.secure_link}
+  - Edit: subpoena.notice_usps_item_number
+    button: |
+      Certified Mail #: ${subpoena.notice_usps_item_number}
+  - raw html: |
+      ${ end_accordion() }
+
+  - raw html: |
+      ${ start_accordion("Case Details") }
   - Edit: case.id
     button: |
       Cause # ${case.id} in ${case.county}, Texas
 
   - raw html: |
-      ${ start_accordian("Attorney's and Parties")}
+      ${ next_accordion("Attorney's and Parties")}
   - Edit: case.attorney.name.first
     button: |
-      Attorney issuing: ${ case.attorney }
+      Attorney issuing subpoena: ${ case.attorney }
   - Edit: subpoena.paralegal.name.first
     button: |
       Paralegal managing subpoena: ${subpoena.paralegal}
@@ -176,34 +196,31 @@ review:
       Respondent: ${ case.respondent }
   - Edit: case.client
     button: |
-      Select our client: ${ case.client }
+      Our client: ${ case.client }
   - Edit: case.oc.name.first
     button: |
       Opposing council: ${ case.oc }
 
   - raw html: |
-      ${ start_accordian("Subponea Details ")}
+      ${ next_accordion("Subponea Details ")}
   - Edit: subpoena.subpoena_type
     button: |
       Subpoena type: ${ subpoena.subpoena_type }
   - Edit: subpoena.issue_date
     button: |
       Notice/Issue/Due Dates: ${subpoena.issue_date}
-  - Edit: subpoena.witness.name.first
-    button: |
-      Witness: ${subpoena.witness}
   - Edit: review_documents
     button: |
       Review/Edit Exhibit A Document List
-  - Edit: subpoena.secure_link
-    button: |
-      Secure link: ${subpoena.secure_link}
+
   - note: |
       #### Exhibit A Documents
 
       ${ document_table }
 
       ${ subpoena.documents.add_action("Add a document.")}
+  - raw html: |
+      ${ end_accordion() }
 action buttons:
   - label: Rebuild subpoena
     action: force_refresh
@@ -214,6 +231,13 @@ event: force_refresh
 code: |
   for each_file in attachment_list:
     del each_file
+  undefine('all_cover_letter')
+  undefine('dwq_notice')
+  undefine('all_bra')
+  undefine('dwq_subpoena')
+  undefine('dwq_deposition')
+  undefine('sdt_notice')
+  undefine('sdt_subpoena')
   reconsider('attachment_list')
   continue_subpoena
 ---
