@@ -37,6 +37,8 @@ code: |
   op_set
   case_style_set
   subpoena.witness.name.first
+  subpoena.bank_flag
+  subpoena.notice_date
   subpoena.issue_date
   subpoena.documents[0].description
   review_documents
@@ -206,9 +208,15 @@ review:
   - Edit: subpoena.subpoena_type
     button: |
       Subpoena type: ${ subpoena.subpoena_type }
+  - Edit: subpoena.bank_flag
+    button: |
+      CPS and Bank Flags (CPS: ${subpoena.cps_flag} // Bank: ${subpoena.bank_flag})
+  - Edit: subpoena.notice_date
+    button: |
+      Notice date: ${ subpoena.notice_date }
   - Edit: subpoena.issue_date
     button: |
-      Notice/Issue/Due Dates: ${subpoena.issue_date}
+      Issue/Due/Production From Dates: ${subpoena.issue_date}
   - Edit: review_documents
     button: |
       Review/Edit Exhibit A Document List
