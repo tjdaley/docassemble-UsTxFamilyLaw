@@ -120,25 +120,61 @@ fields:
   - code: |
       subpoena.witness.registered_agent.name_fields(person_or_business="unsure") + subpoena.witness.registered_agent.mailing_address.address_fields()
 ---
-id: get subpoena
+id: get subponea target type (CPS or Bank)
 sets:
-  - subpoena.issue_date
-  - subpoena.notice_date
-  - subpoena.due_date
-  - subpoena.is_bank_flag
+  - subpoena.bank_flag
+  - subpoena.cps_flag
 question: |
-  <i class="fa-solid fa-calendar-days" style="color: #74C0FC;"></i> About the subpoena.
+  <i class="fa-solid fa-question" style="color: #74C0FC;"></i> Subpoena target
 fields:
   - Is the wittness a bank?: subpoena.bank_flag
     datatype: yesno
   - Is the witness CPS?: subpoena.cps_flag
     datatype: yesno
+---
+id: get notice date
+sets:
+  - subpoena.notice_date
+question: |
+  <i class="fa-solid fa-calendar-days" style="color: #74C0FC;"></i> What date will you provide notice of the issuance?
+fields:
   - When will notice be served?: subpoena.notice_date
     datatype: date
+---
+id: get default issuance and due date
+sets:
+  - default_issue_date
+  - default_due_date
+code: |
+  default_issue_date = subpoena.notice_date.plus(days=10)
+  if default_issue_date.dow == 6:
+    default_issue_date.plus(days=2)
+  if default_issue_date.dow == 7:
+    default_issue_date.plus(days=1)
+
+  if subpoena.bank_flag:
+    default_due_date = default_issue_date.plus(days=24)
+  else:
+    default_due_date = default_issue_date.plus(days=10)
+  if default_due_date.dow == 6:
+    default_due_date = default_due_date.plus(days=2)
+  if default_due_date.dow == 7:
+    default_due_date = default_due_date.plus(days=1)
+---
+id: get subpoena
+sets:
+  - subpoena.issue_date
+  - subpoena.due_date
+  - subpoena.beginning_production_date
+question: |
+  <i class="fa-solid fa-calendar-days" style="color: #74C0FC;"></i> About the subpoena.
+fields:
   - When will the subpoena be issued?: subpoena.issue_date
     datatype: date
+    default: default_issue_date
   - When will responses be due?: subpoena.due_date
     datatype: date
+    default: default_due_date
   - Beginning date of production: subpoena.beginning_production_date
     datatype: date
 ---
