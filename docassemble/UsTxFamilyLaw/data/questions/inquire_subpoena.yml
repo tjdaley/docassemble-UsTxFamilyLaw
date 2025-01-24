@@ -105,8 +105,11 @@ sets:
   - subpoena.notice_usps_item_number
 question: |
   <i class="fa-solid fa-envelope" style="color: #74C0FC;"></i> USPS Registered Mail Item Number for Notice to Witness
+subquestion: |
+  This is the 20-digit number from the U.S. Postal Service Certified Mail Receipt.
 fields:
-  - USPS Item number: subpoena.notice_usps_item_number
+  - USPS CMRR Item number: subpoena.notice_usps_item_number
+    
 ---
 id: get registered agent
 sets:
