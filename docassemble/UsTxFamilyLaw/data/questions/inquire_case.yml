@@ -72,7 +72,7 @@ question: |
   <i class="fa-solid fa-user-tie" style="color: #74C0FC;"></i> Who is the petitioner?
 fields:
   - code: |
-      case.petitioner.name_fields() + case.attorney.gender_fields() + case.attorney.pronoun_fields()
+      case.petitioner.name_fields() + case.petitioner.gender_fields() + case.petitioner.pronoun_fields()
   - Birth date: case.petitioner.birthdate
     datatype: date
   - SSN (last 4): case.petitioner.ssn_last4
@@ -82,7 +82,7 @@ question: |
   <i class="fa-solid fa-user-tie" style="color: #74C0FC;"></i> Who is the respondent?
 fields:
   - code: |
-      case.respondent.name_fields() + case.attorney.gender_fields() + case.attorney.pronoun_fields()
+      case.respondent.name_fields() + case.respondent.gender_fields() + case.respondent.pronoun_fields()
   - Birth date: case.respondent.birthdate
     datatype: date
   - SSN (last 4): case.respondent.ssn_last4
