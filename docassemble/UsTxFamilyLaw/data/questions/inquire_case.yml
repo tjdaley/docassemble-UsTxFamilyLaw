@@ -94,7 +94,7 @@ question: |
   <i class="fa-solid fa-user-tie" style="color: #74C0FC;"></i> Who is your opposing counsel?
 fields:
   - code: |
-      case.oc.name_fields() + case.attorney.gender_fields() + case.attorney.pronoun_fields()
+      case.oc.name_fields() + case.oc.gender_fields() + case.oc.pronoun_fields()
   - Email: case.oc.email
 ---
 id: inquire client
