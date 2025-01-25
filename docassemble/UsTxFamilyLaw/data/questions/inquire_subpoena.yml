@@ -179,7 +179,7 @@ code: |
     default_due_date = default_due_date.plus(days=1)
 
   default_year = year_of(today()) - 2
-  default_production_from_date = as_datetime("01/01/${default_year}")
+  default_production_from_date = as_datetime(f"01/01/{default_year}")
 ---
 id: get subpoena issue, due, and beginning production dates
 sets:
