@@ -89,6 +89,22 @@ help: |
   
   **Choose DWQ**: When you need authentication or have complex document issues or are sending the subponea out of state.
 ---
+id: get document subject
+sets: |
+  - subpoena.document_subect
+question: |
+  <i class="fa-solid fa-circle-question" style="color: #74C0FC;"></i> Who do the documents pertain to?
+subquestion: |
+  This determines whether Exhibit A contains the language "pertaining to X, SSN XXX, DOB MM/DD/YYYY" and, if so,
+  whom.
+fields:
+  - Document subject: subpoena.document_subject
+    choices:
+      - Petitioner - ${case.petitioner}: Petitioner
+      - Respondent - ${case.respondent}: Respondent
+      - Both Parties: Both
+      - Neither Party: Neither
+---
 id: get witness
 sets: 
   - subpoena.witness.name.first
@@ -161,7 +177,7 @@ code: |
   if default_due_date.dow == 7:
     default_due_date = default_due_date.plus(days=1)
 ---
-id: get subpoena
+id: get subpoena issue, due, and beginning production dates
 sets:
   - subpoena.issue_date
   - subpoena.due_date
