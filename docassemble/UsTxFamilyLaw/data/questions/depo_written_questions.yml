@@ -36,6 +36,7 @@ code: |
   case.oc.name.first
   op_set
   case_style_set
+  subpoena.document_subect
   subpoena.witness.name.first
   subpoena.bank_flag
   subpoena.notice_date
@@ -208,6 +209,9 @@ review:
   - Edit: subpoena.subpoena_type
     button: |
       Subpoena type: ${ subpoena.subpoena_type }
+  - Edit: subpoena.document_subect
+    button: |
+      Subpoena document subject: ${subpoena.document_subect}
   - Edit: subpoena.bank_flag
     button: |
       CPS and Bank Flags (CPS: ${subpoena.cps_flag} // Bank: ${subpoena.bank_flag})
