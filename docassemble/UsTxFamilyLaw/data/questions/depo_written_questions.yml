@@ -36,7 +36,7 @@ code: |
   case.oc.name.first
   op_set
   case_style_set
-  subpoena.document_subect
+  subpoena.document_subject
   subpoena.witness.name.first
   subpoena.bank_flag
   subpoena.notice_date
