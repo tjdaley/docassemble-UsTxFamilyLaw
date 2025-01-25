@@ -91,7 +91,7 @@ help: |
 ---
 id: get document subject
 sets: |
-  - subpoena.document_subect
+  - subpoena.document_subject
 question: |
   <i class="fa-solid fa-circle-question" style="color: #74C0FC;"></i> Who do the documents pertain to?
 subquestion: |
