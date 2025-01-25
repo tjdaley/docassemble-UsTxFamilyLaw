@@ -209,9 +209,9 @@ review:
   - Edit: subpoena.subpoena_type
     button: |
       Subpoena type: ${ subpoena.subpoena_type }
-  - Edit: subpoena.document_subect
+  - Edit: subpoena.document_subject
     button: |
-      Subpoena document subject: ${subpoena.document_subect}
+      Subpoena document subject: ${subpoena.document_subject}
   - Edit: subpoena.bank_flag
     button: |
       CPS and Bank Flags (CPS: ${subpoena.cps_flag} // Bank: ${subpoena.bank_flag})
