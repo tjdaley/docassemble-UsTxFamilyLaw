@@ -191,13 +191,16 @@ question: |
 fields:
   - When will the subpoena be issued?: subpoena.issue_date
     datatype: date
-    default: format_date(default_issue_date, format='MM/dd/yyyy')
+    default: ${format_date(default_issue_date, format='MM/dd/yyyy')}
+    under: ${format_date(default_issue_date, format='MM/dd/yyyy')}
   - When will responses be due?: subpoena.due_date
     datatype: date
-    default: format_date(default_due_date, format='MM/dd/yyyy')
+    default: ${format_date(default_due_date, format='MM/dd/yyyy')}
+    under: ${format_date(default_due_date, format='MM/dd/yyyy')}
   - Beginning date of production: subpoena.beginning_production_date
     datatype: date
-    default: default_production_from_date
+    default: ${default_production_from_date}
+    under: ${default_production_from_date}
 ---
 table: document_table
 rows: subpoena.documents
