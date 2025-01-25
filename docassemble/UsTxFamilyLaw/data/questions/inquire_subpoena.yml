@@ -148,6 +148,16 @@ fields:
   - Is the witness CPS?: subpoena.cps_flag
     datatype: yesno
 ---
+id: compute default notice date
+sets:
+  - default_notice_date
+code: |
+  default_notice_date = today()
+  if default_notice_date.dow == 6:
+    default_notice_date.plus(days=2)
+  if default_notice_date.dow == 7:
+    default_notice_date.plus(days=1)
+---
 id: get notice date
 sets:
   - subpoena.notice_date
@@ -156,8 +166,9 @@ question: |
 fields:
   - When will notice be served?: subpoena.notice_date
     datatype: date
+    default: ${default_notice_date}
 ---
-id: get default issuance and due date
+id: compute default issuance and due date
 sets:
   - default_issue_date
   - default_due_date
@@ -187,7 +198,7 @@ sets:
   - subpoena.due_date
   - subpoena.beginning_production_date
 question: |
-  <i class="fa-solid fa-calendar-days" style="color: #74C0FC;"></i> About the subpoena.
+  <i class="fa-solid fa-calendar-days" style="color: #74C0FC;"></i> Issuance and due dates.
 fields:
   - When will the subpoena be issued?: subpoena.issue_date
     datatype: date
@@ -198,12 +209,6 @@ fields:
   - Beginning date of production: subpoena.beginning_production_date
     datatype: date
     default: ${default_production_from_date}
-under: |
-   Default Issue: ${format_date(default_issue_date, format='MM/dd/yyyy')}
-   
-   Default Due  : ${format_date(default_due_date, format='MM/dd/yyyy')}
-   
-   Default From : ${default_production_from_date}
 ---
 table: document_table
 rows: subpoena.documents
