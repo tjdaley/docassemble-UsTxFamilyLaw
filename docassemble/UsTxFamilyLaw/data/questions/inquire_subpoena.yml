@@ -93,10 +93,11 @@ id: get document subject
 sets: |
   - subpoena.document_subject
 question: |
-  <i class="fa-solid fa-circle-question" style="color: #74C0FC;"></i> Who do the documents pertain to?
+  <i class="fa-solid fa-circle-question" style="color: #74C0FC;"></i> Which party should be named in the scope of Exhibit A?
 subquestion: |
-  This determines whether Exhibit A contains the language "pertaining to X, SSN XXX, DOB MM/DD/YYYY" and, if so,
-  whom.
+  This determines the scope of documents requested in Exhibit A to the subpoena. Generally, if you're seeking account statements, medical records, drug test results or other documents that only pertain to a party to this lawsuit, you'll pick one of **Petitioner**, **Respondent**, or **Both**.
+
+  However, if you're seeking general documents such as corporate formation documents, real estate closing documents, or other documents that pertain to a transaction or a business entity, you'll pick **Neither**.
 fields:
   - Document subject: subpoena.document_subject
     choices:
@@ -104,6 +105,34 @@ fields:
       - Respondent - ${case.respondent}: Respondent
       - Both Parties: Both
       - Neither Party: Neither
+help: |
+  ##### If you select PETITIONER, exhibit a will contain language similar to this:
+  
+  [...] the following documents 
+    pertaining to ${case.petitioner.name_full()}, with ${case.petitioner.pronoun_possessive("date of birth")} being ${case.petitioner.birthdate}, 
+  and the last ${quantity_noun(len(case.petitioner.ssn_last4), "digits")} of ${case.petitioner.pronoun_possessive("Social Security number")} 
+  being ${case.petitioner.ssn_last4}, whether in ${case.petitioner.pronoun_possessive("sole")} name or held jointly with another, are to be produced:
+
+  ##### If you select RESPONDENT, Exhibit A will contain language similar to this:
+  
+  [...] the following documents 
+    pertaining to ${case.respondent.name_full()}, with ${case.respondent.pronoun_possessive("date of birth")} being ${case.respondent.birthdate}, 
+  and the last ${quantity_noun(len(case.respondent.ssn_last4), "digits")} of ${case.respondent.pronoun_possessive("Social Security number")} 
+  being ${case.respondent.ssn_last4}, whether in ${case.respondent.pronoun_possessive("sole")} name or held jointly with another, are to be produced:
+
+  ##### If you select BOTH, Exhibit A will contain language similar to this:
+
+  [...] the following documents 
+  pertaining to ${case.petitioner.name_full()}, with ${case.petitioner.pronoun_possessive("date of birth")} being ${case.petitioner.birthdate},
+  and the last ${quantity_noun(len(case.petitioner.ssn_last4), "digits")} of ${case.petitioner.pronoun_possessive("Social Security number")}
+  being ${case.petitioner.ssn_last4} and ${case.respondent.name_full()}, with ${case. respondent.pronoun_possessive("date of birth")}
+  being ${case.respondent.birthdate}, and the last ${quantity_noun(len(case.respondent.ssn_last4), "digits")} 
+  of ${case.respondent.pronoun_possessive("Social Security number")} being ${case. respondent.ssn_last4}, 
+  whether in their joint names or their individual names or held jointly by either or both of them along with others, are to be produced:
+
+  ##### If you select NEITHER, Exhibit A will contain language similar to this:
+
+  [...] the following documents are to be produced:
 ---
 id: get witness
 sets: 
