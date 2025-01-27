@@ -20,12 +20,12 @@ objects:
 id: build case choices
 sets:
   - case_choices
-code:
+code: |
   case_choices = []
   cases = get_cases()
   for id in cases:
     the_case = cases[id]
-    case_choices.append({the_case: 'case.client', 'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"})
+    case_choices.append({the_case: case.client, 'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"})
 ---
 id: inquire case
 question: |
@@ -35,7 +35,7 @@ fields:
     datatype: yesno
   - Select case: case
     datatype: object
-    hide if: new_case_flag
+    required: False
     choices: case_choices
   - Cause number: case.id
     show if: new_case_flag
