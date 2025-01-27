@@ -24,6 +24,8 @@ fields:
   - Cause number: case.id
   - Court type: court_type
   - Court name: court_info.court
+  - State: case.us_state
+    default: TX
   - County: case.county
     code: |
       us_counties("TX")
@@ -113,4 +115,9 @@ code: |
   else:
     case.op = case.petitioner
   op_set = True
+---
+event: case_saved
+id: save case to the database
+code: |
+  save_case(case)
 ---
