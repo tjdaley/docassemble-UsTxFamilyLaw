@@ -17,6 +17,16 @@ objects:
   - case.child: ALPeopleList
   - case.attorney: ALIndividual
 ---
+id: build case choices
+sets:
+  - case_choices
+code:
+  case_choices = []
+  cases = get_cases()
+  for id in cases:
+    the_case = cases[id]
+    case_choices.append({the_case: 'case.client', 'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"})
+---
 id: inquire case
 question: |
   <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Information
@@ -25,13 +35,8 @@ fields:
     datatype: yesno
   - Select case: case
     datatype: object
-    code: |
-      choices = []
-      cases = get_cases()
-      for id in cases:
-        the_case = cases[id]
-        choices.append({the_case, 'case.client', 'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"})
-      choices
+    hide if: new_case_flag
+    choices: case_choices
   - Cause number: case.id
     show if: new_case_flag
   - Court type: court_type
