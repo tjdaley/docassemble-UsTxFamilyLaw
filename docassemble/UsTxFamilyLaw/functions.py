@@ -3,6 +3,7 @@ functions.py - functions for use in docassemble
 """
 from docassemble.UsTxFamilyLaw.courts import TexasJPCourts, TexasDistrictCourts, TexasDistrictClerks, TexasCountyCourtsAtLaw
 from docassemble.base.util import DAObject
+from docassemble.base.functions import user_info, write_record, read_records, delete_record
 
 JPCOURTS = TexasJPCourts()
 DISTRICTCOURTS = TexasDistrictCourts()
@@ -15,6 +16,175 @@ ALIGNMENTS = {
     'Intervenor': 'Intervenor',
     'Third Party': 'Third Party'
 }
+
+DB_DATAKEYS = ['cases', 'subpoenas', 'witnesses']
+
+def user_db_object_key(user_privs:list, user_id:str, datakey:str) -> str:
+    """
+    Return the applicable key for looking up objects in the database. The
+    key is either the user's first firm privilege (for firm-wide searches) or
+    the user's id if the user does not have a firm privilege.
+
+    :param user_privs: List of privileges for this user
+    :type user_privs: list[str]
+    :param user_id:str: User's id property
+    :type user_id: str
+    :param datakey: Key indicating what type of objects will be retrieved
+    :type datakey: str
+    :rtype: str
+
+    Throws ValueError exception if datakey is not in the allowed list of values.
+    """
+    lower_datakey = datakey.lower()
+    if lower_datakey not in DB_DATAKEYS:
+        raise ValueError(f"datakey '{datakey}' not found in allowed list: {', '.join(DB_DATAKEYS)")
+
+    if not user_id:
+        raise ValueError("Invalid 'user_id' parameter value. Use 'user_info().id' to get the correct value")
+
+    if not user_privs:
+        raise ValueError("Invalid 'privs' parameter value. Use 'user_privileges()' to get the correct value")
+
+    user_key = next((priv for priv in user_privs), None) || str(user_id)
+    db_key = f'{user_key}::{lower_datakey}'
+    return db_key
+
+def db_object_key(datakey:str) -> str:
+    """
+    Return the applicable key for looking up objects in the database.
+
+    :param datakey: Index into DB_DATAKEYS indicating which type of object to retrieve
+    :type datakey: str
+
+    Throws ValueError exception if datakey not in the allowed list of values.
+    """
+    the_user_info = user_info()
+    user_privs = the_user_info.privileges
+    user_id = the_user_info.id
+    db_key = user_db_object_key(user_privs, user_id, datakey)
+
+def validate_case(case: DAObject) -> bool:
+    """
+    Verify that a case has the minimal information that we need.
+    
+    Returns:
+        True if case passed validations. Otherwise an exception is thrown.
+
+    Throws:
+      ValueError: If the case is missing a required property
+
+    :param case: The case to validate
+    :type case: DAObject
+    :rtype: bool
+    """
+    
+    if case.get('id') is None:
+        raise ValueError('Case must have an "id" property, which is the cause number.')
+
+    if case.get('county') is None:
+        raise ValueError('Case must have a "county" property, which is the county in which the case is pending.')
+
+    if case.get('us_state') is None:
+        case['us_state'] = 'TX'
+
+    return True
+
+def find_case_id(db_key: str, case: DAObject) -> str:
+    """
+    Returns the ID of a case. This is the docassemble internal database id assigned when the case was saved.
+
+    Returns:
+      ID of the case, if found, otherwise None
+
+    Throws:
+      Any excpetion thrown by validate_case()
+    """
+    if not validate_case(case):
+        return None
+
+    saved_cases = read_records(db_key)
+    for id in saved_cases:
+        saved_case = saved_cases[id]
+        if cases_match(case, saved_case)
+            return save_case.get('id')
+    return None
+
+def cases_match(case1, case2) -> bool:
+    """
+    Compare two case objects to see if they match.
+    """
+    if case1.get('id') != case2.get('id'):
+        return False
+
+    if case1.get('county') != case2.get('county'):
+        return False
+
+    if case1.get('us_state', 'TX') != case2.get('us_state', 'TX'):
+        return False
+
+    return True
+
+def get_cases() -> DAList:
+    """
+    Returns a list of cases for this user or firm.
+    
+    TODO: Filter by "is_hidden".
+    TODO: Sort by Client Name + Cause Number
+
+    :rtype: DAList
+    """
+    db_key = db_object_key('cases')
+    return read_records(db_key)
+    
+def save_case(case: DAObject):
+    """
+    Saves a case. Wrapper for update_case().
+
+    Returns:
+      DB ID of the newly saved case record.
+
+    Throws:
+      Any excpetion thrown by validate_case()
+    """
+    return update_case(case)
+
+def delete_case(case: DAObject):
+    """
+    Deletes a case from the DB.
+
+    :param case: The case to delete
+    :type case: DAObject
+    :rtype: bool as to whether case was actually deleted
+    """
+    
+    if not validate_case(case):
+        return False
+
+    db_key = db_object_key('cases')
+    case_id = find_case_id(db_key, case)
+    if case_id:
+        delete_record(db_key, case_id)
+        return True
+    return False
+
+def update_case(case: DAObject):
+    """
+    Update a case in the database. First, delete any existing case record that matches this case.
+    Then save the case to the database.
+
+    Returns:
+      newly created database Id or None if not successful
+    """
+    if not validate_case(caes):
+        return None
+
+    # Delete the existing case recrod, if any
+    delete_case(case)
+    
+    # Save case information
+    new_case_id = write_record(db_key, case)
+    return new_case_id
+
 
 def jp_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
     """
