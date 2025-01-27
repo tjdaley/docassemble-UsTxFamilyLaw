@@ -139,8 +139,10 @@ code: |
     case.op = case.petitioner
   op_set = True
 ---
-event: case_saved
 id: save case to the database
+sets:
+  - case_saved
 code: |
   save_case(case)
+  case_saved = True
 ---
