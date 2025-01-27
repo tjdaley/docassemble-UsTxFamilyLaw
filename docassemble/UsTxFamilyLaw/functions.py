@@ -182,9 +182,9 @@ def update_case(case: DAObject):
     delete_case(case)
     
     # Save case information
+    db_key = db_object_key('cases')
     new_case_id = write_record(db_key, case)
     return new_case_id
-
 
 def jp_court_choices_for_county(county_name:str, refresh:bool = False) ->list:
     """
