@@ -37,7 +37,7 @@ def user_db_object_key(user_privs:list, user_id:str, datakey:str) -> str:
     """
     lower_datakey = datakey.lower()
     if lower_datakey not in DB_DATAKEYS:
-        raise ValueError(f"datakey '{datakey}' not found in allowed list: {', '.join(DB_DATAKEYS)")
+        raise ValueError(f"datakey '{datakey}' not found in allowed list: {', '.join(DB_DATAKEYS)}")
 
     if not user_id:
         raise ValueError("Invalid 'user_id' parameter value. Use 'user_info().id' to get the correct value")
