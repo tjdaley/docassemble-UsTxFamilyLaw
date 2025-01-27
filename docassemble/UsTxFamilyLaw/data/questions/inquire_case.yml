@@ -33,10 +33,10 @@ question: |
 fields:
   - Create a new case?: new_case_flag
     datatype: yesno
-  - Select case: case
-    datatype: object
-    required: False
-    choices: case_choices
+  #- Select case: case
+  #  datatype: object
+  #  required: False
+  #  choices: case_choices
   - Cause number: case.id
     show if: new_case_flag
   - Court type: court_type
