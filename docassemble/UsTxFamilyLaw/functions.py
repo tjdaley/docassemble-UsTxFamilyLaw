@@ -45,7 +45,7 @@ def user_db_object_key(user_privs:list, user_id:str, datakey:str) -> str:
     if not user_privs:
         raise ValueError("Invalid 'privs' parameter value. Use 'user_privileges()' to get the correct value")
 
-    user_key = next((priv for priv in user_privs), None) || str(user_id)
+    user_key = next((priv for priv in user_privs), None) or str(user_id)
     db_key = f'{user_key}::{lower_datakey}'
     return db_key
 
