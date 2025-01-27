@@ -2,7 +2,7 @@
 functions.py - functions for use in docassemble
 """
 from docassemble.UsTxFamilyLaw.courts import TexasJPCourts, TexasDistrictCourts, TexasDistrictClerks, TexasCountyCourtsAtLaw
-from docassemble.base.util import DAObject
+from docassemble.base.util import DAObject, DAList
 from docassemble.base.functions import user_info, write_record, read_records, delete_record
 
 JPCOURTS = TexasJPCourts()
