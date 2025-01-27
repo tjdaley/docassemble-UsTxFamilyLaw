@@ -105,7 +105,7 @@ def find_case_id(db_key: str, case: DAObject) -> str:
     saved_cases = read_records(db_key)
     for id in saved_cases:
         saved_case = saved_cases[id]
-        if cases_match(case, saved_case)
+        if cases_match(case, saved_case):
             return save_case.get('id')
     return None
 
