@@ -78,14 +78,14 @@ def validate_case(case: DAObject) -> bool:
     :rtype: bool
     """
     
-    if case.get('id') is None:
+    if case.id is None:
         raise ValueError('Case must have an "id" property, which is the cause number.')
 
-    if case.get('county') is None:
+    if case.county is None:
         raise ValueError('Case must have a "county" property, which is the county in which the case is pending.')
 
-    if case.get('us_state') is None:
-        case['us_state'] = 'TX'
+    if case.us_state is None:
+        case.us_state = 'TX'
 
     return True
 
@@ -113,13 +113,13 @@ def cases_match(case1, case2) -> bool:
     """
     Compare two case objects to see if they match.
     """
-    if case1.get('id') != case2.get('id'):
+    if case1.id != case2.id:
         return False
 
-    if case1.get('county') != case2.get('county'):
+    if case1.county != case2.county:
         return False
 
-    if case1.get('us_state', 'TX') != case2.get('us_state', 'TX'):
+    if (case1.us_state or 'TX') != (case2.us_state or 'TX'):
         return False
 
     return True
