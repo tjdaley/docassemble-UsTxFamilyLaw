@@ -21,17 +21,35 @@ id: inquire case
 question: |
   <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Information
 fields:
+  - Create a new case?: new_case_flag
+    datatype: yesno
+  - Select case: case
+    datatype: object
+    code: |
+      choices = []
+      cases = get_cases()
+      for id in cases:
+        the_case = cases[id]
+        choices.append({the_case, 'case.client', 'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"})
+      choices
   - Cause number: case.id
+    show if: new_case_flag
   - Court type: court_type
+    show if: new_case_flag
   - Court name: court_info.court
+    show if: new_case_flag
   - State: case.us_state
     default: TX
+    show if: new_case_flag
   - County: case.county
+    show if: new_case_flag
     code: |
       us_counties("TX")
   - Is divorce?: case.is_dissolution
     datatype: yesno
+    show if: new_case_flag
   - Our billing number: case.billing_number
+    show if: new_case_flag
 ---
 id: inquire attorney
 sets:
