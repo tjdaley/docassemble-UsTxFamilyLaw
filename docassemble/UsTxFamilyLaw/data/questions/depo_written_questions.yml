@@ -36,6 +36,7 @@ code: |
   case.oc.name.first
   op_set
   case_style_set
+  case_saved
   subpoena.document_subject
   subpoena.witness.name.first
   subpoena.bank_flag
@@ -251,5 +252,6 @@ code: |
   undefine('sdt_notice')
   undefine('sdt_subpoena')
   reconsider('attachment_list')
+  case_saved
   continue_subpoena
 ---
