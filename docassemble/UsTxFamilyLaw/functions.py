@@ -175,7 +175,7 @@ def update_case(case: DAObject):
     Returns:
       newly created database Id or None if not successful
     """
-    if not validate_case(caes):
+    if not validate_case(case):
         return None
 
     # Delete the existing case recrod, if any
