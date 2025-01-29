@@ -135,6 +135,31 @@ def get_cases() -> DAList:
     """
     db_key = db_object_key('cases')
     return read_records(db_key)
+
+def get_case(id) -> DAObject:
+    """
+    Return one case identified by the given id.
+    """
+    cases = get_cases()
+    for case_id in cases:
+        the_case = cases[case_id]
+        if id == case_id:
+            return the_case
+
+def case_choices() -> list:
+    """
+    Returns a list suitable for use as choices in a dropdown.
+    """
+    cases = get_cases()
+    choices = []
+    for case_id in cases:
+        the_case = cases[case_id]
+        choice = {
+            the_case: case.client,
+            'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"
+        }
+        choices.append(choice)
+    return choices
     
 def save_case(case: DAObject):
     """
