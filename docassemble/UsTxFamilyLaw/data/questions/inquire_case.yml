@@ -32,7 +32,7 @@ fields:
   - Load existing case?: load_case_flag
     datatype: yesno
   - Select case: case_db_id
-    showif: load_case_flag
+    show if: load_case_flag
     required: False
     code: |
       case_choices()
