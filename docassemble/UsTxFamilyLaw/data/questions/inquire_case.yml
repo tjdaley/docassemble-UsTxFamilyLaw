@@ -40,23 +40,16 @@ id: inquire case fields
 question: |
   <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Details
   - Cause number: case.id
-    show if: new_case_flag
   - Court type: court_type
-    show if: new_case_flag
   - Court name: court_info.court
-    show if: new_case_flag
   - State: case.us_state
     default: TX
-    show if: new_case_flag
   - County: case.county
-    show if: new_case_flag
     code: |
       us_counties("TX")
   - Is divorce?: case.is_dissolution
     datatype: yesno
-    show if: new_case_flag
   - Our billing number: case.billing_number
-    show if: new_case_flag
 ---
 id: inquire attorney
 sets:
