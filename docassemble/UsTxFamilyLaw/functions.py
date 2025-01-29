@@ -155,17 +155,17 @@ def case_choices() -> list:
     for case_id in cases:
         the_case = cases[case_id]
         choice = {
-            the_case: the_case.client,
+            case_id: the_case.client,
             'help': f"{the_case.county} Cause #{the_case.id} - {the_case.petitioner} v. {the_case.respondent}"
         }
         choices.append(choice)
     return [
         {
-            DAObject(): "DALEY, THOMAS",
+            10: "DALEY, THOMAS",
             'help': "Collin County Cause #416-55555-2024 - Thomas J. Daley v. Ava P. Daley"
         },
         {
-            DAObject(): "LASSO, TED",
+            'case_id': "LASSO, TED",
             'help': "Collin County Cause #494-55555-2025 - Ted Lasso v. Hollyhock, Inc."
         }
     ]
