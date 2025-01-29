@@ -29,6 +29,7 @@ mandatory: True
 code: |
   subpoena.subpoena_type
   case.id
+  case_is_loaded
   case.attorney.name.first
   case.petitioner.ssn_last4
   case.respondent.ssn_last4
