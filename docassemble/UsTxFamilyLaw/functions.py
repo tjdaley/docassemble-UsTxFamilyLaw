@@ -156,7 +156,7 @@ def case_choices() -> list:
         the_case = cases[case_id]
         choice = {
             the_case: case.client,
-            'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"
+            'help': f"{the_case.county} Cause #{the_case.id} - {the_case.petitioner} v. {the_case.respondent}"
         }
         choices.append(choice)
     return choices
