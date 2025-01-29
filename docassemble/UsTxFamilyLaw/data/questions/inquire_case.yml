@@ -21,20 +21,24 @@ id: load case from db
 sets:
   - case_is_loaded
 code: |
-  if not new_case_flag:
+  if load_case_flag:
     case = get_case(case_db_id)
   case_is_loaded = True
 ---
-id: inquire case
+id: inquire load case from db
 question: |
-  <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Information
+  <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Existing or New Case?
 fields:
-  - Create a new case?: new_case_flag
+  - Load existing case?: load_case_flag
     datatype: yesno
   - Select case: case_db_id
     required: False
     code: |
       case_choices()
+---
+id: inquire case fields
+question: |
+  <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Details
   - Cause number: case.id
     show if: new_case_flag
   - Court type: court_type
