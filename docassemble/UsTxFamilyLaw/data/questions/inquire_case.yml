@@ -17,15 +17,13 @@ objects:
   - case.child: ALPeopleList
   - case.attorney: ALIndividual
 ---
-id: build case choices
+id: load case from db
 sets:
-  - case_choices
+  - case_is_loaded
 code: |
-  case_choices = []
-  cases = get_cases()
-  for id in cases:
-    the_case = cases[id]
-    case_choices.append({the_case: case.client, 'help': f"{case.county} Cause #{case.id} - {case.petitioner} v. {case.respondent}"})
+  if not new_case_flag:
+    case = get_case(case_db_id)
+  case_is_loaded = True
 ---
 id: inquire case
 question: |
@@ -33,10 +31,10 @@ question: |
 fields:
   - Create a new case?: new_case_flag
     datatype: yesno
-  #- Select case: case
-  #  datatype: object
-  #  required: False
-  #  choices: case_choices
+  - Select case: case_db_id
+    required: False
+    code: |
+      case_choices()
   - Cause number: case.id
     show if: new_case_flag
   - Court type: court_type
