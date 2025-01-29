@@ -159,7 +159,16 @@ def case_choices() -> list:
             'help': f"{the_case.county} Cause #{the_case.id} - {the_case.petitioner} v. {the_case.respondent}"
         }
         choices.append(choice)
-    return choices
+    return [
+        {
+            DAObject(): "DALEY, THOMAS",
+            'help': "Collin County Cause #416-55555-2024 - Thomas J. Daley v. Ava P. Daley"
+        },
+        {
+            DAObject(): "LASSO, TED",
+            'help': "Collin County Cause #494-55555-2025 - Ted Lasso v. Hollyhock, Inc."
+        }
+    ]
     
 def save_case(case: DAObject):
     """
