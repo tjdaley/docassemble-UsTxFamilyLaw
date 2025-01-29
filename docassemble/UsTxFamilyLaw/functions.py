@@ -155,7 +155,7 @@ def case_choices() -> list:
     for case_id in cases:
         the_case = cases[case_id]
         choice = {
-            str(case_id}: the_case.client,
+            str(case_id): the_case.client,
             'help': f"{the_case.county} Cause #{the_case.id} - {the_case.petitioner} v. {the_case.respondent}"
         }
         choices.append(choice)
