@@ -253,6 +253,6 @@ code: |
   undefine('sdt_notice')
   undefine('sdt_subpoena')
   reconsider('attachment_list')
-  case_saved
+  reconsider(case_saved)
   continue_subpoena
 ---
