@@ -22,7 +22,7 @@ sets:
   - case_is_loaded
 code: |
   if load_case_flag:
-    case = get_case(case_db_id)
+    case = get_case(int(case_db_id))
   case_is_loaded = True
 ---
 id: inquire load case from db
@@ -32,6 +32,7 @@ fields:
   - Load existing case?: load_case_flag
     datatype: yesno
   - Select case: case_db_id
+    showif: load_case_flag
     required: False
     code: |
       case_choices()
@@ -39,6 +40,9 @@ fields:
 id: inquire case fields
 question: |
   <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Details
+fields:
+  - Description: case.description
+    help: Provide a short, descriptive name that will help you locate the case in a list. Ex: "Divorce", "Modification", or "Enforcement"
   - Cause number: case.id
   - Court type: court_type
   - Court name: court_info.court
