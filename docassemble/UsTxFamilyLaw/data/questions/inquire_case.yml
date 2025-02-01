@@ -37,20 +37,73 @@ fields:
     code: |
       case_choices()
 ---
+# For now, we only handle Texas so hard code that.
+# When ready to handle other states, remove this code block
+mandatory: True
+id: set default state -- if needed
+sets: |
+  case.us_state
+code: |
+  case.us_state = 'TX'
+---
+id: inquire state
+question: |
+  <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> In what U.S. state is the case pending?
+fields:
+  - State: case.us_state
+    code: |
+      state_list()
+---
+id: set state subdivision name
+sets: |
+  - subdivsion_name
+code: |
+  if case.us_state == 'AK':
+    subdivision_name = "Burrough"
+  elif case.us_state == 'LA':
+    subdivision_name = "Parish"
+  else:
+    subdivision_name = "County"
+---
+id: inquire county
+question: |
+  In what ${state_name(case.us_state)} ${subdivision_name} is the case pending?
+fields:
+  - ${subdivision_name}: case.county
+    code: |
+      us_counties(case.us_state)
+---
+id: inquire court type
+sets: |
+  case.court_type
+question: |
+  What type of court is hearing the case?
+fields:
+  - Court type: case.court_type
+    code: |
+      ['District Court', 'County Court at Law', 'Justice Court']
+---
+id: create court list
+set: |
+  - court_list
+code: |
+  if court_type == "District Court":
+    court_choices = district_court_choices_for_county(case.county)
+  elif court_type == 'County Court at Law':
+    court_choices = county_court_at_law_choices_for_county(case.county)
+  elif court_type == 'Justice Court':
+    court_choices = jp_court_choices_for_county(case.county)
+---
 id: inquire case fields
 question: |
-  <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Case Details
+  <i class="fa-solid fa-gavel" style="color: #74C0FC;"></i> Additional Case Details
 fields:
   - Description: case.description
     help: Provide a short, descriptive name that will help you locate the case in a list.
   - Cause number: case.id
-  - Court type: court_type
-  - Court name: court_info.court
-  - State: case.us_state
-    default: TX
-  - County: case.county
+  - Court name: case.court_name
     code: |
-      us_counties("TX")
+      court_choices
   - Is divorce?: case.is_dissolution
     datatype: yesno
   - Our billing number: case.billing_number
