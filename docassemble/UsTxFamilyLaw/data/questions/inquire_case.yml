@@ -87,11 +87,11 @@ id: create court list
 set: |
   - court_list
 code: |
-  if court_type == "District Court":
+  if case.court_type == "District Court":
     court_choices = district_court_choices_for_county(case.county)
-  elif court_type == 'County Court at Law':
+  elif case.court_type == 'County Court at Law':
     court_choices = county_court_at_law_choices_for_county(case.county)
-  elif court_type == 'Justice Court':
+  elif case.court_type == 'Justice Court':
     court_choices = jp_court_choices_for_county(case.county)
 ---
 id: inquire case fields
