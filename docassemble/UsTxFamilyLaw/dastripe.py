@@ -1,5 +1,6 @@
 import stripe
 import json
+import re
 from docassemble.base.util import word, get_config, action_argument, DAObject, prevent_going_back
 from docassemble.base.standardformatter import BUTTON_STYLE, BUTTON_CLASS
 from docassemble.base.util import user_info
@@ -24,31 +25,11 @@ class DAStripe(DAObject):
     self.is_setup = False
 
   def discounted_price(self):
-    float(self.amount)
-    str(self.currency)
-    user_details = user_info()
-    user_email = user_details.email
-    self.payor.email = user_email
-    result = stripe.Customer.search(query=f'email:"{user_email}"')
-    customers = result.get('data', [])
-    if not customers:
-      customer = stripe.Customer.create(description=self.payor.description, email=user_email, name=str(self.payor))
-    else:
-      customer = customers[0]
-    self.stripe_customer_id = customer.get('id', '')
-    discount = customer.get('discount', {}) or {}
-    coupon = discount.get('coupon')
-    list_price = self.amount
-    discount_price = list_price
-    if coupon:
-      coupon_id = coupon.get('id','')
-      percent_off = coupon.get('percent_off', 0.0) or 0.0
-      amount_off = coupon.get('amount_off', 0) or 0.0
-      if percent_off:
-        amount_off = float('%.2f' % float(percent_off / 100.0 * list_price))
-      if amount_off:
-        discount_price = list_price - amount_off
-
+    list_price = float(self.amount)
+    currency = str(self.currency)
+    discount_amount, discount_type = self.get_discount()
+    discount_price = apply_discount(list_price, discount_amount, discount_type)
+    
     if discount_price < .25:
       discount_price = 0.0
       self.amount = 0.0
@@ -57,6 +38,60 @@ class DAStripe(DAObject):
       self.result = {'payment_successful': True}
 
     return discount_price
+
+  def apply_discount(list_price: float, discount_amount: int, discount_type: str) -> float:
+    if discount_type not in ['$', '%']:
+      return list_price
+    if discount_amount < 0:
+      return list_price
+
+    if discount_type == '$':
+      discount_price = max(0, list_price - float(abs(discount_amount)))
+      return discount_price
+
+    if discount_type == '%':
+      if discount_amount > 100:
+        return list_price
+      discount_price = list_price * (100.00 - float(discount_amount)) / 100.00
+      return discount_price
+
+    return list_price # Should never get here.
+
+  def get_discount(self):
+    privileges = user_privileges()
+    for privilege in privileges:
+      discount_amount, discount_type = parse_discount(privilege)
+      if discount_amount:
+        return discount_amount, discount_type
+    return None, None
+
+  def parse_discount(self, privilege):
+    """
+    Parse the discount amount applicable to the current privilege.
+    Discounts are indicated by docassemble user privileges having the
+    form "DISCOUNT-(amount)(type)" where (amount) is the amount of the
+    discount and (type) is either '$" or "%", indicating a fixed dollar
+    amount to apply or a percentage to apply.
+
+    The calling code will be responsible for sanitizing this (making sure,
+    we don't have discounts that exceed 100% or negative dollar amounts.
+
+    Params:
+      privilege (str): The privilege to check
+
+    Returns:
+      Tuple: (amount to discount), (type, either "$" or "%")
+      None: No discount detected.
+    """
+    match = re.match(r'DISCOUNT-(\d+)([%$])', privilege)
+    if match:
+      try:
+        value = int(match.group(1))
+      except:
+        return None, None
+      discount_type = match.groupt(2)
+      return value, discount_type
+    return None, None
 
   def setup(self):
     float(self.amount)
