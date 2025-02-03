@@ -37,7 +37,7 @@ class DAStripe(DAObject):
 
     return discount_price
 
-  def apply_discount(list_price: float, discount_amount: int, discount_type: str) -> float:
+  def apply_discount(self, list_price: float, discount_amount: int, discount_type: str) -> float:
     if discount_type not in ['$', '%']:
       return list_price
     if discount_amount < 0:
