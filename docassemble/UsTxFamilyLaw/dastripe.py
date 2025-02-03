@@ -20,8 +20,6 @@ class DAStripe(DAObject):
       self.button_color = "primary"
     if not hasattr(self, 'error_message'):
       self.error_message = "Please try another payment method."
-    if not hasattr(self, 'stripe_customer_id'):
-      self.stripe_customer_id = ''
     self.is_setup = False
 
   def discounted_price(self):
@@ -97,16 +95,36 @@ class DAStripe(DAObject):
   def setup(self):
     float(self.amount)
     str(self.currency)
+    customer_id = get_customer_id()
     if self.amount > 0.0:
       self.intent = stripe.PaymentIntent.create(
         amount=int(float('%.2f' % float(self.amount))*100.0),
         currency=str(self.currency),
         statement_descriptor_suffix=self.description[:22],
         description=self.description,
-        customer=self.stripe_customer_id,
+        customer=customer_id,
         automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
       )
     self.is_setup = True
+
+  def get_customer_id(self) -> str:
+    """
+    Return the customer id of an eixsting customer. If the customer does not exist,
+    then create a new customer and return the id of that new customer.
+
+    Returns:
+      str: Customer ID or blank if none found.
+    """
+    user_details = user_info()
+    user_email = user_details.email
+    self.payor.email = user_email
+    result = stripe.Customer.search(query=f'email:"{user_email}"')
+    customers = result.get('data', [])
+    if not customers:
+      customer = stripe.Customer.create(description=self.payor.description, email=user_email, name=str(self.payor))
+    else:
+      customer = customers[0]
+    return customer.get('id', '')
 
   @property
   def html(self):
