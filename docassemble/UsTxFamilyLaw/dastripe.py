@@ -58,8 +58,9 @@ class DAStripe(DAObject):
     return list_price # Should never get here.
 
   def get_discount(self):
-    privileges = user_privileges()
-    for privilege in privileges:
+    the_user_info = user_info()
+    user_privs = the_user_info.privileges
+    for privilege in user_privs:
       discount_amount, discount_type = parse_discount(privilege)
       if discount_amount:
         return discount_amount, discount_type
