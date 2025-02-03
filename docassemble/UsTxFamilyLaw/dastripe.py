@@ -26,7 +26,7 @@ class DAStripe(DAObject):
     list_price = float(self.amount)
     currency = str(self.currency)
     discount_amount, discount_type = self.get_discount()
-    discount_price = apply_discount(list_price, discount_amount, discount_type)
+    discount_price = self.apply_discount(list_price, discount_amount, discount_type)
     
     if discount_price < .25:
       discount_price = 0.0
