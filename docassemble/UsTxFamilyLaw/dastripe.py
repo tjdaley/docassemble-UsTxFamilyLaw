@@ -88,7 +88,7 @@ class DAStripe(DAObject):
         value = int(match.group(1))
       except:
         return None, None
-      discount_type = match.groupt(2)
+      discount_type = match.group(2)
       return value, discount_type
     return None, None
 
