@@ -95,7 +95,7 @@ class DAStripe(DAObject):
   def setup(self):
     float(self.amount)
     str(self.currency)
-    customer_id = get_customer_id()
+    customer_id = self.get_customer_id()
     if self.amount > 0.0:
       self.intent = stripe.PaymentIntent.create(
         amount=int(float('%.2f' % float(self.amount))*100.0),
