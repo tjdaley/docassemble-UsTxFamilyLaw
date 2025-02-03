@@ -19,6 +19,8 @@ class DAStripe(DAObject):
       self.button_color = "primary"
     if not hasattr(self, 'error_message'):
       self.error_message = "Please try another payment method."
+    if not hasattr(self, 'stripe_customer_id'):
+      self.stripe_customer_id = ''
     self.is_setup = False
 
   def discounted_price(self):
@@ -33,7 +35,7 @@ class DAStripe(DAObject):
       customer = stripe.Customer.create(description=self.payor.description, email=user_email, name=str(self.payor))
     else:
       customer = customers[0]
-    self.stripe_customer = customer
+    self.stripe_customer_id = customer.get('id', '')
     discount = customer.get('discount', {}) or {}
     coupon = discount.get('coupon')
     list_price = self.amount
@@ -65,7 +67,7 @@ class DAStripe(DAObject):
         currency=str(self.currency),
         statement_descriptor_suffix=self.description,
         description=self.description,
-        customer=self.stripe_customer.get('id'),
+        customer=self.stripe_customer_id,
         automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
       )
     self.is_setup = True
