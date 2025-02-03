@@ -65,7 +65,7 @@ class DAStripe(DAObject):
       self.intent = stripe.PaymentIntent.create(
         amount=int(float('%.2f' % float(self.amount))*100.0),
         currency=str(self.currency),
-        statement_descriptor_suffix=self.description,
+        statement_descriptor_suffix=self.description[:22],
         description=self.description,
         customer=self.stripe_customer_id,
         automatic_payment_methods={"enabled": True, "allow_redirects": "never"}  # Our flow won't work properly if we allow redirects
