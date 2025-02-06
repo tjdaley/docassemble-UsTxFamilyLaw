@@ -44,16 +44,22 @@ class DAStripe(DAObject):
       return list_price
 
     if discount_type == '$':
-      discount_price = max(0, list_price - float(abs(discount_amount)))
+      discount_price = truncate_price(max(0, list_price - float(abs(discount_amount))))
       return discount_price
 
     if discount_type == '%':
       if discount_amount > 100:
         return list_price
-      discount_price = list_price * (100.00 - float(discount_amount)) / 100.00
+      discount_price = truncate_price(list_price * (100.00 - float(discount_amount)) / 100.00)
       return discount_price
 
     return list_price # Should never get here.
+
+  def truncate_price(price: float) -> float:
+    """
+    Truncate a price to two decimals. This is not rounding.
+    """
+    return float(int(price * 100)) / 100
 
   def get_discount(self):
     the_user_info = user_info()
