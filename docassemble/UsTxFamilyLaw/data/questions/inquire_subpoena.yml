@@ -265,7 +265,7 @@ subquestion: |
   % endif
 action buttons:
   - label: Continue
-    action: continue_subpoena
+    action: final_subpoena_questions
     color: info
     icon: circle-arrow-right
 ---
