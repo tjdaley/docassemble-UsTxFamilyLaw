@@ -19,14 +19,24 @@ include:
 ---
 modules:
   - docassemble.demo.accordion
+  - docassemble.UsTxFamilyLaw.dastripe
 ---
 # Turn off document caching so user can edit a few
 # fields and regenerate a new subpoena.
 features:
   cache documents: False
+  javascript: https://js.stripe.com/v3
+---
+objects:
+  - payment: DAStripe.using(payor=payor, currency='USD')
+  - payor: ALIndividual
+  - payor.billing_address: ALAddress
 ---
 mandatory: True
 code: |
+  list_price = 149.99
+  payment.amount = list_price
+  payment.amount = payment.discounted_price()
   subpoena.subpoena_type
   case_is_loaded
   case.id
@@ -48,6 +58,43 @@ code: |
   subpoena.paralegal.name.first
   subpoena.secure_link
   subpoena_description_set
+  if payment.amount > .25:
+    if not payment.paid:
+      payor.name.first
+      payment_screen
+---
+id: payor information
+sets:
+  - payor.name
+  - payor.billing_address
+  - payor.email
+  - payor.phone_number
+question: |
+  Payor Details
+fields:
+  - code: |
+      payor.name_fields() + payor.billing_address.address_fields()
+  - Email: payor.email
+    datatype: email
+  - Telephone: payor.telephone
+---
+event: payment.demand
+question: |
+  Payment
+subquestion: |
+  %if payment.amount < list_price:
+  You will be charged $ ${'{0:.2f}'.format(payment.amount)} (discounted from $ ${'{0:.2f}'.format(list_price)}).
+  %else:
+  You will be charged ${payment.amount}.
+  %endif
+  
+  ${payment.html}
+script: |
+  ${payment.javascript}
+---
+event: payment.success
+code: |
+  payment.process()
 ---
 id: set subpoena description
 event: build_attachment_list
