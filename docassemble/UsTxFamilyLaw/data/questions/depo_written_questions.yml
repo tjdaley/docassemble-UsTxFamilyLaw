@@ -15,7 +15,7 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.UsTxFamilyLaw:inquire_case.yml
-  - docassemble.UsTxFamilyLaw:inquire_subpoena.yml
+  - inquire_subpoena.yml
 ---
 modules:
   - docassemble.demo.accordion
@@ -34,9 +34,6 @@ objects:
 ---
 mandatory: True
 code: |
-  list_price = 149.99
-  payment.amount = list_price
-  payment.amount = payment.discounted_price()
   subpoena.subpoena_type
   case_is_loaded
   case.id
@@ -50,27 +47,43 @@ code: |
   case_saved
   subpoena.document_subject
   subpoena.witness.name.first
+  subpoena.witness.registered_agent.name.first
   subpoena.bank_flag
   subpoena.notice_date
   subpoena.issue_date
+  subpoena.secure_link
+  subpoena.notice_usps_item_number
+  subpoena.paralegal.name.first
   subpoena.documents[0].description
   review_documents
-  subpoena.paralegal.name.first
-  subpoena.secure_link
-  subpoena_description_set
+---
+id: initiate payment
+event: initiate_payment
+sets:
+  - payment_considered
+code: |
+  list_price = 149.99
+  payment.amount = list_price
+  payment.amount = payment.discounted_price()
   if payment.amount > .25:
+    payor.name.first
+    payment.description = f"{subpoena_description} - {subpoena.witness.name_full()}"
     if not payment.paid:
-      payor.name.first
       payment_screen
+  payment_considered = True
 ---
 id: payor information
 sets:
-  - payor.name
+  - payor.name.first
   - payor.billing_address
   - payor.email
   - payor.phone_number
 question: |
   Payor Details
+subquestion: |
+  The fee for generating this subpoena and all supporting documents is ${'${0:.2f}'.format(payment.amount)} (discounted from ${'${0:.2f}'.format(list_price)}).
+
+  Please provide the name, billing address, and contact information for the person submitting payment.
 fields:
   - code: |
       payor.name_fields() + payor.billing_address.address_fields()
@@ -97,19 +110,28 @@ code: |
   payment.process()
 ---
 id: set subpoena description
-event: build_attachment_list
 sets:
   - subpoena_description
-  - subpoena_description_set
-  - attachment_list
 code: |
   if subpoena.subpoena_type == 'dwq':
     subpoena_description = "Subpoena for Deposition on Written Questions"
-    attachment_list = [all_cover_letter, dwq_notice, all_bra, dwq_subpoena, dwq_deposition]
-  else:
+  elif subpoena.subpoena_type == 'sdt':
     subpoena_description = "Subpoena Duces Tecum"
-    attachment_list = [all_cover_letter, sdt_notice, all_bra, sdt_subpoena]
+  else:
+    subpoena_description = "(Unknown)"  # Coding error somewhere. Probably in dropdown
   subpoena_description_set = True
+---
+id: build attachment list
+event: build_attachment_list
+sets:
+  - attachment_list
+code: |
+  if subpoena.subpoena_type == 'dwq':
+    attachment_list = [all_cover_letter, dwq_notice, all_bra, dwq_subpoena, dwq_deposition]
+  elif subpoena.subpoena_type == 'sdt':
+    attachment_list = [all_cover_letter, sdt_notice, all_bra, sdt_subpoena]
+  else:
+    attachment_list = []  # Coding error somewhere. Probably in dropdown
 ---
 event: continue_subpoena
 id: generate subpoena
@@ -118,6 +140,13 @@ mandatory: True
 question: |
   <i class="fa-solid fa-face-smile" style="color: #B197FC;"></i> Your ${subpoena_description} is Ready
 subquestion: |
+  %if payment_considered:
+  %if payment.paid and payment.amount > .25:
+  Thank you for your payment.
+
+  %endif
+  %endif
+  
   You will need each of the following documents. Gathering documents from non-parties requires these steps:
   
   1. Email these documents to yourself and save them to the client's file.
