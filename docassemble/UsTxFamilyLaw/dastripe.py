@@ -27,7 +27,7 @@ class DAStripe(DAObject):
       self.button_color = "primary"
     if not hasattr(self, 'error_message'):
       self.error_message = "Please try another payment method."
-    if hassattr(self, 'amount'):
+    if hasattr(self, 'amount'):
       list_price = amount
       self.amount = self.discounted_price()
     self.is_setup = False
