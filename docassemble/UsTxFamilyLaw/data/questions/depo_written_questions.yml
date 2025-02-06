@@ -15,7 +15,7 @@ include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.UsTxFamilyLaw:inquire_case.yml
-  - inquire_subpoena.yml
+  - docassemble.UsTxFamilyLaw:inquire_subpoena.yml
 ---
 modules:
   - docassemble.demo.accordion
