@@ -9,6 +9,13 @@ stripe.api_key = get_config('stripe secret key')
 
 __all__ = ['DAStripe']
 
+def truncate_price(price: float) -> float:
+  """
+  Truncate a price to two decimals. This is not rounding.
+  """
+  return float(int(price * 100)) / 100
+
+
 class DAStripe(DAObject):
   def init(self, *pargs, **kwargs):
     if get_config('stripe public key') is None or get_config('stripe secret key') is None:
@@ -20,6 +27,9 @@ class DAStripe(DAObject):
       self.button_color = "primary"
     if not hasattr(self, 'error_message'):
       self.error_message = "Please try another payment method."
+    if hassattr(self, 'amount'):
+      list_price = amount
+      self.amount = self.discounted_price()
     self.is_setup = False
 
   def discounted_price(self):
@@ -54,12 +64,6 @@ class DAStripe(DAObject):
       return discount_price
 
     return list_price # Should never get here.
-
-  def truncate_price(price: float) -> float:
-    """
-    Truncate a price to two decimals. This is not rounding.
-    """
-    return float(int(price * 100)) / 100
 
   def get_discount(self):
     the_user_info = user_info()
