@@ -150,8 +150,12 @@ subquestion: |
   You will need each of the following documents. Gathering documents from non-parties requires these steps:
   
   1. Email these documents to yourself and save them to the client's file.
+
+  1. The **NOTICE** of a deposition on written must be filed with the clerk's office. [TRCP 191.4(b)(1)]
   
   1. Mail and e-serve the cover letter and notice.
+
+  1. The subpoena must be filed with the clerk's office. [TRCP 191.4(b)(1)]
   
   1. Next, serve and e-serve the subponea on ${subpoena.issue_date}.
   
